@@ -10,13 +10,16 @@
     <title>{{ config('app.name', 'Sistem Akademik IDN') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
+    <script src="{{ asset('js/app.js') }}" ></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
 
     <!-- Styles -->
+    
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/mdb.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 </head>
 <body>
@@ -27,15 +30,17 @@
         </div>
         <div id="page-content-wrapper">
             <nav class="navbar shadow-sm p-0 justify-content-space-around justify-content-lg-end">
+            
             <a id="sidebarCollapse" class="d-block d-lg-none p-3">
                 <i data-feather="menu" style="color:#349ce4"></i>
 </a>
                 <div class="col-5 d-flex align-items-center justify-content-end">
                     <b class="mr-3">{{ Auth::user()->name }}</b>
-                    <img class="mr-3 img-fluid" src="{{ Auth::user()->image ? asset('storage/'.Auth::user()->image) : asset('images/ic_profile.svg') }}" alt="profil">
+                    
+                    <img class="mr-3 img-responsive img-rounded img-fluid" src="{{ Auth::user()->image_small ? asset('storage/'.env('UPLOAD_USER').'/'.Auth::user()->id.'/'.Auth::user()->image_small) : asset('images/ic_profile.svg') }}" alt="profil">
                     <div class="dropdown">
-                        <a href="#" data-toggle="dropdown" class="dropdown-toggle"></a>
-                        <div class="dropdown-menu dropdown-menu-right mt-3">
+                        <a type="button" id="dropdown" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true" aria-haspopup="true"></a>
+                        <div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdown">
                             <a class="dropdown-item" href="{{ route('profile') }}">
                                 {{ __('Ubah Profil') }}
                             </a>
@@ -47,8 +52,13 @@
             @yield('content')  
         </div>
     </div>
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/axios.min.js') }}"></script>
+    
+    <script src="{{ asset('theme/js/feather.min.js') }}"></script>
+
+    <script src="{{ asset('theme/js/popper.min.js') }}"></script>
+    <script src="{{ asset('theme/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('theme/js/axios.min.js') }}"></script>
+
     <script>
 	    $(document).ready(function(){
             sidebarCollapseStatus = $('#sidebarCollapse').css('display');
@@ -68,8 +78,12 @@
 		});  
 	</script>
     <script>
+        //axios
         window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+        feather.replace()
     </script>
     @yield('js')
+    
+    <script src="{{ asset('js/mdb.min.js') }}"></script>
 </body>
 </html>

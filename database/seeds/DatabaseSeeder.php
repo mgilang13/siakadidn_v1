@@ -16,5 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call(Routes::class);
         $this->call(RolesRoutes::class);
         $this->call(RolesUsers::class);
+        $this->call(Juz::class);
+        $this->call(Soorah::class);
     }
 }

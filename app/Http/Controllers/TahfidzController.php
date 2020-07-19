@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Model\Tahfidz;
+use App\Model\Ref\RefHalaqah;
+use App\Model\Ref\RefStudent;
+use App\Model\Soorah;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TahfidzController extends Controller
 {
@@ -17,6 +22,27 @@ class TahfidzController extends Controller
         return view('tahfidz.index');
     }
 
+    public function listHalaqah()
+    {
+        $halaqahs = DB::table('halaqahs')
+                                ->join('users', 'users.id', '=', 'halaqahs.id_teacher')
+                                ->select('halaqahs.id', 'users.name as teacherName', 'halaqahs.name as halaqahName', 'description')
+                                ->get();
+        return view('tahfidz.list-halaqah', compact('halaqahs'));
+    }
+
+    public function listSantri()
+    {
+        $user_students = DB::table('users')
+                        ->join('students', 'students.id_student', '=', 'users.id')
+                        ->join('halaqahs', 'halaqahs.id', '=', 'students.id_halaqah')
+                        ->select('*', 'users.name as santriName', 'halaqahs.name as halaqahName')
+                        ->get();
+        
+
+        return view('tahfidz.list-santri', compact('user_students'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -24,7 +50,7 @@ class TahfidzController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -35,7 +61,30 @@ class TahfidzController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validateData = $request->validate([
+            'id_student' => '',
+            'id_halaqah' => '',
+            'id_teacher' => '',
+            'tanggal_setor' => '',
+            'soorah_start' => '', 
+            'soorah_end' => '', 
+            'verse_start' => '', 
+            'verse_end' => '',
+            'type' => '',
+            'assessment' => '',
+            'line' => '',
+            'page' => '',
+            'absen' => '' 
+        ]);
+        $tahfidz_note = Tahfidz::create($validateData);
+        if(empty($request->input('page'))) {
+            $tahfidz_note->page = 0;
+            $tahfidz_note->save();
+        }
+        $student = RefStudent::findOrFail($tahfidz_note->id_student);
+        $tahfidzs = Tahfidz::where('id_student', $tahfidz_note->student)->get();
+
+        return redirect()->route('tahfidz.show', $student->id_student)->with('success', 'Tambah Catatan sukses');
     }
 
     /**
@@ -44,9 +93,55 @@ class TahfidzController extends Controller
      * @param  \App\Model\Tahfidz  $tahfidz
      * @return \Illuminate\Http\Response
      */
-    public function show(Tahfidz $tahfidz)
+    public function show($id)
     {
-        //
+        $student = RefStudent::findOrFail($id);
+
+        $tahfidzs = DB::table('tahfidzs')->where('id_student', $id)->paginate(20);
+        
+        $tahfidzs->currentTotal = ($tahfidzs->currentPage() - 1) * $tahfidzs->perPage() + $tahfidzs->count();
+        $tahfidzs->startNo = ($tahfidzs->currentPage() - 1) * $tahfidzs->perPage() + 1;
+        $tahfidzs->no = ($tahfidzs->currentPage() - 1) * $tahfidzs->perPage() + 1;
+
+        $soorahs = Soorah::all();
+        $tahfidz_total_sabaq = DB::select('call tahfidz_total_sabaq(?)', array($id));
+
+        $tahfidz_total_manzil = DB::select('call tahfidz_total_manzil(?)', array($id));
+        
+        $tahfidz_report_sabaq = DB::select('call tahfidz_report_sabaq(?)', array($id));
+        $tgl_bln_sabaq = array();
+        $total_line_sabaq = array();
+        foreach($tahfidz_report_sabaq as $tc){
+            array_push($tgl_bln_sabaq, $tc->tgl_bln);
+            array_push($total_line_sabaq, $tc->total_line);
+        }
+
+        $tahfidz_report_manzil = DB::select('call tahfidz_report_manzil(?)', array($id));
+        
+        $tgl_bln_manzil = array();
+        $total_line_manzil = array();
+        foreach($tahfidz_report_manzil as $tc){
+            array_push($tgl_bln_manzil, $tc->tgl_bln);
+            array_push($total_line_manzil, $tc->total_line);
+        }
+
+        $tahfidz_absensi = DB::select('call tahfidz_absensi(?)', array($id));
+        $tahfidz_absensi = $tahfidz_absensi[0];
+        
+
+        $soorah_name = array();
+        foreach($tahfidzs as $tahfidz){
+            foreach($soorahs as $soorah) {
+                if($tahfidz->soorah_start == $soorah->id) {
+                    $tahfidz->soorah_start = $soorah->name;
+                }
+                if ($tahfidz->soorah_end == $soorah->id){
+                    $tahfidz->soorah_end = $soorah->name;
+                }
+            }
+        }
+        
+        return view('tahfidz.show', compact('student', 'tahfidzs', 'tahfidz_total_sabaq', 'tahfidz_total_manzil', 'tgl_bln_sabaq', 'total_line_sabaq', 'tgl_bln_manzil', 'total_line_manzil', 'tahfidz_absensi'));
     }
 
     /**
@@ -57,7 +152,12 @@ class TahfidzController extends Controller
      */
     public function edit(Tahfidz $tahfidz)
     {
-        //
+        $student = RefStudent::findOrFail($tahfidz->id_student);
+        $halaqah = RefHalaqah::findOrFail($tahfidz->id_halaqah);
+        $soorahs = Soorah::all()->sortByDesc('order');
+        $tanggal_sekarang = date('Y-m-d');
+
+        return view('tahfidz.edit', compact('tahfidz', 'student', 'halaqah', 'soorahs', 'tanggal_sekarang'));
     }
 
     /**
@@ -69,7 +169,28 @@ class TahfidzController extends Controller
      */
     public function update(Request $request, Tahfidz $tahfidz)
     {
-        //
+        $validateData = $request->validate([
+            'id_student' => '',
+            'id_halaqah' => '',
+            'id_teacher' => '',
+            'tanggal_setor' => '',
+            'soorah_start' => '', 
+            'soorah_end' => '', 
+            'verse_start' => '', 
+            'verse_end' => '',
+            'type' => '',
+            'assessment' => '',
+            'line' => '',
+            'page' => '',
+            'absen' => '' 
+        ]);
+        $tahfidz->update($validateData);
+        if(empty($request->input('page'))) {
+            $tahfidz->page = 0;
+            $tahfidz->save();
+        }
+
+        return redirect()->route('tahfidz.show', $tahfidz->id_student)->with('success', 'Ubah Catatan sukses');
     }
 
     /**
@@ -78,8 +199,73 @@ class TahfidzController extends Controller
      * @param  \App\Model\Tahfidz  $tahfidz
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tahfidz $tahfidz)
+    public function showJson($id)
     {
-        //
+        $tahfidz = Tahfidz::findOrFail($id);
+        return $tahfidz->toJson();
+    }
+
+    public function destroy(Tahfidz $tahfidz)
+    {   $id_student = $tahfidz->id_student;
+
+        $tahfidz->delete();
+        return redirect()->route('tahfidz.show', $id_student)->with('success', 'Hapus Catatan Sukses');
+    }
+
+    public function showMember(RefHalaqah $halaqah)
+    {
+        $listed_members = DB::table('students')
+                                ->join('users', 'users.id', '=', 'students.id_student')
+                                ->where('students.id_halaqah', $halaqah->id)
+                                ->get();
+
+        return view('tahfidz.show-member', compact('listed_members', 'halaqah'));
+    }
+
+    public function addNotes($id)
+    {
+        $student = RefStudent::findOrFail($id);
+        $halaqah = RefHalaqah::findOrFail($student->id_halaqah);
+        $soorahs = Soorah::all()->sortByDesc('order');
+        $tanggal_sekarang = date('Y-m-d');
+        // dd($tanggal_sekarang);
+        return view('tahfidz.add-notes', compact('student', 'halaqah', 'soorahs', 'tanggal_sekarang'));
+    }
+
+    public function reportMurid($id)
+    {
+        $student = RefStudent::findOrFail($id);
+        
+        return view('tahfidz.report-murid', compact('laporan_tahfidz_murid'));
+    }
+
+    public function reportParent($id)
+    {
+        
+        $tahfidz_total_sabaq = DB::select('call tahfidz_total_sabaq(?)', array($id));
+
+        $tahfidz_total_manzil = DB::select('call tahfidz_total_manzil(?)', array($id));
+        
+        $tahfidz_report_sabaq = DB::select('call tahfidz_report_sabaq(?)', array($id));
+        $tgl_bln_sabaq = array();
+        $total_line_sabaq = array();
+        foreach($tahfidz_report_sabaq as $tc){
+            array_push($tgl_bln_sabaq, $tc->tgl_bln);
+            array_push($total_line_sabaq, $tc->total_line);
+        }
+
+        $tahfidz_report_manzil = DB::select('call tahfidz_report_manzil(?)', array($id));
+        
+        $tgl_bln_manzil = array();
+        $total_line_manzil = array();
+        foreach($tahfidz_report_manzil as $tc){
+            array_push($tgl_bln_manzil, $tc->tgl_bln);
+            array_push($total_line_manzil, $tc->total_line);
+        }
+
+        $tahfidz_absensi = DB::select('call tahfidz_absensi(?)', array($id));
+        $tahfidz_absensi = $tahfidz_absensi[0];
+
+        return view('tahfidz.report.parent', compact('tahfidz_total_sabaq', 'tahfidz_total_manzil', 'tgl_bln_sabaq', 'total_line_sabaq', 'tgl_bln_manzil', 'total_line_manzil', 'tahfidz_absensi'));
     }
 }

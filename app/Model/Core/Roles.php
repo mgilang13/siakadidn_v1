@@ -13,6 +13,10 @@ class Roles extends Model
         'name', 'description', 'group'
     ];
 
+    public function users() {
+        return $this->belongsToMany(\App\Model\User::class, 'roles_users', 'roles_id', 'users_id');
+    }
+
     public function routes()
     {
         return $this->belongsToMany(\App\Model\Core\Routes::class, 'roles_routes', 'roles_id', 'routes_id')->orderBy('routes.order', 'asc');

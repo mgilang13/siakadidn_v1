@@ -30,15 +30,60 @@ Route::get('/logout', function () {
 Route::middleware(['auth', 'core'])->group(function () {
 
     // Tahfidz Menu 
-    // Route::name('tahfidz.')->prefix('/tahfidz')->group(function () {
-
-    // });
+    Route::name('tahfidz.')->prefix('/tahfidz')->group(function () {
+        Route::get('report.parent/{id}', 'TahfidzController@reportParent')->name('report.parent');
+        Route::get('list-halaqah', 'TahfidzController@listHalaqah')->name('list-halaqah');
+        Route::get('list-santri', 'TahfidzController@listSantri')->name('list-santri');
+        Route::get('add-notes/{id}', 'TahfidzController@addNotes')->name('add-notes');
+        Route::get('show-member/{halaqah}', 'TahfidzController@showMember')->name('show-member');
+        Route::get('report-murid/{id}', 'TahfidzController@reportMurid')->name('report-murid');
+        Route::get('show-json/{id}', 'TahfidzController@showJson')->name('show-json');
+    });
     Route::resource('tahfidz', 'TahfidzController');
 
     // Ref Menu 
     Route::name('ref.')->prefix('/ref')->namespace('Ref')->group(function() {
+        
+        // Teacher Menu
+        Route::name('teacher.')->prefix('/teacher')->group(function() {
+            Route::get('show-json/{id}', 'RefTeacherController@showJson')->name('show-json');
+        });
         Route::resource('teacher', 'RefTeacherController');
+
+        // Orang tua / wali murid
+        Route::name('parent.')->prefix('/parent')->group(function() {
+            Route::get('show-json/{id}', 'RefParentsController@showJson')->name('show-json');
+        });
+        Route::resource('parent', 'RefParentsController');
+        
+        //Tahun ajaran
+        Route::name('schoolyear.')->prefix('/schoolyear')->group(function() {
+            Route::get('show-json/{id}', 'RefSchoolYearController@showJson')->name('show-json');
+        });
+        Route::resource('schoolyear', 'RefSchoolYearController');
+        
+        // Subject Menu
+        Route::name('subject.')->prefix('/subject')->group(function() {
+            Route::get('show-json/{id}', 'RefSubjectController@showJson')->name('show-json');
+        });
         Route::resource('subject', 'RefSubjectController');
+
+        Route::name('halaqah.')->prefix('/halaqah')->group(function() {
+            Route::get('show/add/{halaqah}', 'RefHalaqahController@addMember')->name('show.add');
+            Route::patch('show/add/process/{id}', 'RefHalaqahController@addMemberProcess')->name('show.add.process');
+        });
+
+        // Halaqah Menu
+        Route::name('halaqah.')->prefix('/halaqah')->group(function() {
+            Route::get('show-json/{id}', 'RefHalaqahController@showJson')->name('show-json');
+        });
+        Route::resource('halaqah', 'RefHalaqahController');
+
+        // Student Menu
+        Route::name('student.')->prefix('/student')->group(function() {
+            Route::get('show-json/{id}', 'RefStudentController@showJson')->name('show-json');
+        });
+        Route::resource('student', 'RefStudentController');
     });
 
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTahfidzsTable extends Migration
+class CreateSoorahsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateTahfidzsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tahfidzs', function (Blueprint $table) {
+        Schema::create('soorahs', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->integer('order');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateTahfidzsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tahfidzs');
+        Schema::dropIfExists('soorahs');
     }
 }

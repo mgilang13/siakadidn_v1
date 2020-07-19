@@ -15,7 +15,17 @@ class RefSubjectController extends Controller
      */
     public function index()
     {
-        return view('ref.subject.index');
+        $subjects = RefSubject::all();
+        foreach($subjects as $subject) {
+            if($subject->subject == "it") {
+                $subject->subject = "Komputer dan Informatika";
+            } else if ($subject->subject == "din") {
+                $subject->subject = "Ilmu Agama";
+            } else {
+                $subject->subject = "Bahasa Inggris";
+            }
+        }
+        return view('ref.subject.index', compact('subjects'));
     }
 
     /**
@@ -36,13 +46,14 @@ class RefSubjectController extends Controller
      */
     public function store(Request $request)
     {
-        // validasi
+        // validasi     
         $request->validate([
             'name' => 'required|string|max:255',
             'subject' => '',
             'description' => '',
         ]);
         RefSubject::create($request->only(['name', 'subject', 'description']));
+        
         $request->session()->flash('success', 'Tambah Materi Sukses');
     }
 
@@ -63,9 +74,9 @@ class RefSubjectController extends Controller
      * @param  \App\Model\Subject  $subject
      * @return \Illuminate\Http\Response
      */
-    public function edit(Subject $subject)
+    public function edit(RefSubject $subject)
     {
-        //
+        return view('ref.subject.edit', compact('subject'));
     }
 
     /**
@@ -75,17 +86,17 @@ class RefSubjectController extends Controller
      * @param  \App\Model\Subject  $subject
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Subject $subject)
+    public function update(Request $request, RefSubject $subject)
     {
         // validasi
-        $request->validate([
+        $validateData = $request->validate([
             'name' => 'required|string|max:255',
             'subject' => '',
             'description' => '',
         ]);
-        $subject->update($request->only(['name', 'subject', 'description']));
-        $request->session()->flash('success', 'Ubah Materi Sukses');
+        $subject->update($validateData);
 
+        return redirect()->route('ref.subject.index')->with('success', 'Ubah Materi Pelajaran berhasil!');
     }
 
     /**
@@ -94,9 +105,15 @@ class RefSubjectController extends Controller
      * @param  \App\Model\Subject  $subject
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Subject $subject)
+    public function destroy(RefSubject $subject)
     {
         $subject->delete();
-        $request->session()->flash('success', 'Hapus Materi Sukses');
+        return redirect()->route('ref.subject.index')->with('success', 'Hapus Materi Pelajaran berhasil!');
+    }
+
+    public function showJson($id)
+    {
+        $subject = RefSubject::findOrFail($id);
+        return $subject->toJson();
     }
 }

@@ -35,39 +35,49 @@
                         <h5>Data User</h5>
                     </div>
                     @include('layouts.notification')
-                    <div class="form-group input-with-icon">
-                        <i width="18" data-feather="edit-3" class="mr-15"></i>
-                        <input class="form-control @error('name') is-invalid @enderror" id="name" type="text" name="name" placeholder="Nama Pengguna" value="{{ old('name', Auth::user()->name) }}">
+                    <div class="form-group">
+                        <div class="col input-with-icon d-flex">
+                            <i width="18" data-feather="edit-3" class="align-self-center ml-3"></i>
+                            <input class="form-control @error('name') is-invalid @enderror" id="name" type="text" name="name" placeholder="Nama Pengguna" value="{{ old('name', Auth::user()->name) }}">
+                        </div>
                         @error('name')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="form-group input-with-icon">
-                        <i width="18" data-feather="align-center" class="mr-15"></i>
-                        <input class="form-control @error('email') is-invalid @enderror" id="email" type="email" name="email" placeholder="Email" value="{{ old('email', Auth::user()->email) }}">
+                    <div class="form-group">
+                        <div class="col input-with-icon d-flex">
+                            <i width="18" data-feather="mail" class="align-self-center ml-3"></i>
+                            <input class="form-control @error('email') is-invalid @enderror" id="email" type="email" name="email" placeholder="Email" value="{{ old('email', Auth::user()->email) }}">
+                        </div>
                         @error('email')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="form-group input-with-icon">
-                        <i width="18" data-feather="phone" class="mr-15"></i>
-                        <input class="form-control @error('phone') is-invalid @enderror" id="phone" type="text" name="phone" placeholder="Nomor Handphone" value="{{ old('phone', Auth::user()->phone) }}">
-                        @error('phone')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                    <div class="form-group row">
+                        <div class="col input-with-icon d-flex">
+                            <i width="18" data-feather="phone" class="align-self-center ml-3"></i>
+                            <input class="form-control @error('phone') is-invalid @enderror" id="phone" type="number" name="phone" placeholder="Telepon" value="{{ old('phone', Auth::user()->phone) }}">
+                            @error('phone')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
-                    <div class="form-group input-with-icon">
-                        <i width="18" data-feather="user" class="mr-15"></i>
-                        <input class="form-control @error('username') is-invalid @enderror" id="username" type="text" name="username" placeholder="Username Login" value="{{ old('username', Auth::user()->username) }}">
+                    <div class="form-group">
+                        <div class="col input-with-icon d-flex">
+                            <i width="18" data-feather="user" class="align-self-center ml-3"></i>
+                            <input class="form-control @error('username') is-invalid @enderror" id="user" type="text" name="username" placeholder="Username Login" value="{{ old('username', Auth::user()->username) }}">
+                        </div>
                         @error('username')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="form-group input-with-icon">
-                        <i width="18" data-feather="key" class="mr-15"></i>
-                        <input class="form-control @error('password') is-invalid @enderror" id="password" type="password" name="password" placeholder="Password Login">
+                    <div class="form-group">
+                        <div class="col input-with-icon d-flex">
+                            <i width="18" data-feather="key" class="align-self-center ml-3"></i>
+                            <input class="form-control @error('password') is-invalid @enderror" id="password" type="password" name="password" placeholder="Password Login">
+                        </div>
                         @error('password')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <i class="text-muted">* Kosongkan jika password tidak diganti</i>
                     </div>

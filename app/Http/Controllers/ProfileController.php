@@ -34,6 +34,7 @@ class ProfileController extends Controller
             'username' => 'required|string|max:255|unique:users,username,' . $user->id . ',id,deleted_at,NULL',
             'email' => 'required|string|max:255|email:rfc,dns|unique:users,email,' . $user->id . ',id,deleted_at,NULL',
             'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20|unique:users,phone,' . $user->id . ',id,deleted_at,NULL',
             'password' => '',
         ]);
         DB::transaction(function () use ($request, $user) {

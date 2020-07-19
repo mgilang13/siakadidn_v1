@@ -5,12 +5,12 @@ namespace App\Model;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     use Notifiable;
-    use SoftDeletes;
+    // use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -45,5 +45,10 @@ class User extends Authenticatable
     public function teacher()
     {
         return $this->hasOne(\App\Model\Ref\RefTeacher::class, 'teachers', 'id_teacher', 'id');
+    }
+
+    public function student()
+    {
+        return $this->hasOne(\App\Model\Ref\RefStudent::class, 'students', 'id_student', 'id');
     }
 }

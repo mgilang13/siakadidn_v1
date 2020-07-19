@@ -10,19 +10,50 @@
                 </a>
             </div>
             <div class="card-body">
+            @include('layouts.notification')
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>No.</th>
                                 <th>Nama Guru</th>
-                                <th>Bidang</th>
                                 <th>Materi Pelajaran</th>
+                                <th>Bidang</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            
+                        @php $no = 1; @endphp
+                        @forelse ($teacher_subjects as $ts)
+                            <tr>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $ts->userName }}</td>
+                                <td>{{ $ts->subjectName}}</td>
+                                <td>{{ $ts->subject}}</td>
+                                <td>
+                                    <div class="btn-action d-flex justify-content-around">
+                                        <a href="{{ route('ref.teacher.edit', $ts->teacherID) }}">
+                                            <i width="14" color="#04396c" data-feather="edit"></i>
+                                        </a>
+                                        <a title="Delete" id="deleteData" data-toggle="modal" data-target="#deleteModal" data-id="{{ $ts->teacherID }}" href="#" class="text-danger" data-action="{{ route('ref.teacher.destroy', $ts->teacherID) }}">
+                                            <i width="14" color="red" data-feather="trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @include('layouts.form-delete', [
+                            'method' => 'POST',
+                            'methodx' => 'DELETE',
+                            'bgDanger' => '',
+                            'boxConfirmHeader' => 'box-confirm-header',
+                            'textWhite' => '',
+                            'title_modal' => 'Delete Data',
+                            'showdata' => "ref.teacher.show-json",
+                            'title_menu' => 'teacher'])
+
+                        @empty
+                            <tr><td colspan="5" class="text-center">Data Kosong</td></tr>
+                        @endforelse
                         </tbody>
                     </table>
                 </div>

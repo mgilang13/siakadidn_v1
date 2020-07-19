@@ -20,6 +20,10 @@ class RolesRoutes extends Seeder
         MRolesRoutes::create([ 'roles_id' => 1, 'routes_id' => 6 ]);
         MRolesRoutes::create([ 'roles_id' => 1, 'routes_id' => 7 ]);
         MRolesRoutes::create([ 'roles_id' => 1, 'routes_id' => 8 ]);
+        
+        MRolesRoutes::create([ 'roles_id' => 1, 'routes_id' => 9 ]);
+        MRolesRoutes::create([ 'roles_id' => 1, 'routes_id' => 10 ]);
+        MRolesRoutes::create([ 'roles_id' => 1, 'routes_id' => 11 ]);
 
         MRolesRoutes::create([ 'roles_id' => 1, 'routes_id' => 18 ]);
         MRolesRoutes::create([ 'roles_id' => 1, 'routes_id' => 19 ]);
@@ -37,6 +41,9 @@ class RolesRoutes extends Seeder
         MRolesRoutes::create([ 'roles_id' => 1, 'routes_id' => 31 ]);
         MRolesRoutes::create([ 'roles_id' => 1, 'routes_id' => 32 ]);
         MRolesRoutes::create([ 'roles_id' => 1, 'routes_id' => 33 ]);
+
+        MRolesRoutes::create([ 'roles_id' => 4, 'routes_id' => 1 ]);
+        MRolesRoutes::create([ 'roles_id' => 4, 'routes_id' => 11 ]);
 
         // MRolesRoutes::create([ 'roles_id' => 1, 'routes_id' => 34 ]);
     }

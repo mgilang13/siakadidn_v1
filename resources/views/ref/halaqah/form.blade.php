@@ -1,0 +1,45 @@
+<form action="" method="post">
+    @csrf
+     <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="message"></div>
+                    <div class="form-group">
+                        <label for="name" class="col-form-label">Nama Halaqah</label>
+                        <input type="text" name="name" class="form-control" id="name">
+                        <div class="invalid-feedback" id="name-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_teacher" class="col-form-label">Pengampu</label>
+                        <select name="id_teacher" id="id_teacher" class="form-control">
+                            @forelse ($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @empty
+                                <option value="">Belum ada data</option>
+                            @endforelse
+                        </select>
+                        <div class="invalid-feedback" id="id_teacher-message"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description" class="col-form-label">Deskripsi Halaqah</label>
+                        <textarea name="description" id="description" rows="5" class="form-control"></textarea>
+                        <div class="invalid-feedback" id="description-message"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn">Reset</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form

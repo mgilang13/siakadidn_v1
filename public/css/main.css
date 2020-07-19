@@ -191,6 +191,8 @@ body {
 
 .sidebar a:hover {
     text-decoration: none;
+    color: #fff;
+    background-color: rgba(3, 31, 75, 0.7);
 }
 
 .sidebar a svg {
@@ -231,8 +233,8 @@ body {
 
 .card-header {
     display: flex;
-    background-color: #ffffff;
     justify-content: space-between;
+    border-bottom: 1px solid #fff;
 }
 
 .card-header a {
@@ -256,6 +258,7 @@ body {
 .table thead tr th {
     text-transform: uppercase;
     color: #035b96;
+    font-weight: 600;
 }
 
 .btn-action a {
@@ -272,4 +275,28 @@ body {
 
 #avatar-preview-body {
     display: none;
+}
+
+/* Modal delete */
+
+.box-confirm-header {
+    background-color: #fbd76c !important;
+}
+.btn-confirm-delete {
+    width: 50px;
+    padding: 12px 15px !important;
+    color: #dc3545 !important;
+    border: 1px solid #eee;
+    box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    border-radius: 50px;
+}
+.btn-confirm-cancel {
+    width: 50px;
+    padding: 12px 15px !important;
+    color: #9e9e9e !important;
+    border: 1px solid #eee;
+    box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    border-radius: 50px;
 }

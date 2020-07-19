@@ -36,7 +36,9 @@ class Core
         // format
         foreach ($all_parent as $parent) {
             $active = stripos($parent->name, $current_route) !== false || stripos($current_route, $parent->name) !== false ? 'active' : '';
+            
             $link = Route::has($parent->name) ? route($parent->name) : '#'. $parent->name;
+            
             $icon = $parent->icon ? '<i width="18" data-feather="' . $parent->icon . '" class="mr-15"></i>' : '';
             
             $html .= '<a class="' .$active. '" href="' .$link. '">' .$icon. ' ' .$parent->title. '</a>';

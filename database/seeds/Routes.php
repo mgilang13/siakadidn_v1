@@ -13,11 +13,18 @@ class Routes extends Seeder
     public function run()
     {
         MRoutes::create([ 'id' => 1, 'icon' => 'home', 'name' => 'dashboard', 'title' => 'Dashboard', 'order' => 1, 'menu' => 'yes' ]);
+        
+        // Menu Tahfidz
+        MRoutes::create([ 'id' => 11, 'icon' => 'book-open', 'name' => 'tahfidz.index', 'title' => 'Tahfidz', 'order' => 10, 'menu' => 'yes' ]);
 
         // Menu Referensi
         MRoutes::create([ 'id' => 6, 'icon' => 'list', 'name' => 'reference', 'title' => 'Referensi', 'order' => 20, 'menu' => 'yes' ]);
         MRoutes::create([ 'id' => 7, 'name' => 'ref.teacher.index', 'title' => 'Guru', 'order' => 1001, 'menu' => 'yes', 'parent' => 6 ]);
         MRoutes::create([ 'id' => 8, 'name' => 'ref.subject.index', 'title' => 'Mata Pelajaran', 'order' => 1002, 'menu' => 'yes', 'parent' => 6 ]);
+        MRoutes::create([ 'id' => 9, 'name' => 'ref.halaqah.index', 'title' => 'Halaqah', 'order' => 1004, 'menu' => 'yes', 'parent' => 6 ]);
+        MRoutes::create([ 'id' => 10, 'name' => 'ref.student.index', 'title' => 'Murid', 'order' => 1000, 'menu' => 'yes', 'parent' => 6 ]);
+        MRoutes::create([ 'id' => 13, 'name' => 'ref.parent.index', 'title' => 'Orang Tua / Wali Murid', 'order' => 1005, 'menu' => 'yes', 'parent' => 6 ]);
+        MRoutes::create([ 'id' => 14, 'name' => 'ref.schoolyear.index', 'title' => 'Tahun Ajaran', 'order' => 1006, 'menu' => 'yes', 'parent' => 6 ]);
 
         MRoutes::create([ 'id' => 2, 'icon' => 'settings', 'name' => 'core', 'title' => 'Pengaturan', 'order' => 10000, 'menu' => 'yes' ]);
         MRoutes::create([ 'id' => 3, 'name' => 'core.menu', 'title' => 'Menu', 'order' => 10001, 'menu' => 'yes', 'parent' => 2 ]);

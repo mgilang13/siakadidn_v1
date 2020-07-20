@@ -31,6 +31,7 @@ Route::middleware(['auth', 'core'])->group(function () {
 
     // Tahfidz Menu 
     Route::name('tahfidz.')->prefix('/tahfidz')->group(function () {
+        Route::get('halaqah/{id}', 'TahfidzController@halaqah')->name('halaqah');
         Route::get('report.parent/{id}', 'TahfidzController@reportParent')->name('report.parent');
         Route::get('list-halaqah', 'TahfidzController@listHalaqah')->name('list-halaqah');
         Route::get('list-santri', 'TahfidzController@listSantri')->name('list-santri');

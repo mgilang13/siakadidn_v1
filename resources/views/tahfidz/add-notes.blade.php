@@ -24,7 +24,7 @@
                         <div class="row bg-primary rounded p-1">
                             <div class="form-group col-md-5">
                                 <label for="tanggal_setor" class="col-for-label text-light">Tanggal Setor</label>
-                                <input type="date" class="form-control" name="tanggal_setor" value="{{ $tanggal_sekarang }}">
+                                <input type="date" class="form-control" name="tanggal_setor" max="{{ $tanggal_sekarang }}" value="{{ $tanggal_sekarang }}">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="absen" class="col-for-label text-light font-weight">Absensi</label>

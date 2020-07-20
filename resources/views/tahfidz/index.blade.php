@@ -16,6 +16,12 @@
                         </a>
                     </div>
                 @elseif( Auth::user()->roles->first()->pivot->roles_id == 3)
+                <div class="col-md-6">
+                        <a href="{{ route('tahfidz.halaqah', Auth::user()->id) }}" class="btn btn-primary btn-lg w-100">
+                            <i class="text-white mr-2 mb-1" data-feather="list" width="20"></i>Halaqah Tahfidz
+                        </a>
+                </div>
+                @elseif( Auth::user()->roles->first()->pivot->roles_id == 5)
                     <div class="col-md-6">
                         <a href="{{ route('tahfidz.report.parent', Auth::user()->id) }}" class="btn btn-primary btn-lg w-100">
                             <i class="text-white mr-2 mb-1" data-feather="list" width="20"></i>Laporan untuk Orang Tua

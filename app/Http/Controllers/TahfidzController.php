@@ -268,4 +268,17 @@ class TahfidzController extends Controller
 
         return view('tahfidz.report.parent', compact('tahfidz_total_sabaq', 'tahfidz_total_manzil', 'tgl_bln_sabaq', 'total_line_sabaq', 'tgl_bln_manzil', 'total_line_manzil', 'tahfidz_absensi'));
     }
+
+    public function halaqah($id)
+    {
+        // dd($id);
+        // $halaqah = DB::table('halaqahs')->where('id_teacher', $id)->first();
+        $halaqah = RefHalaqah::where('id_teacher', $id)->get()->first();
+        // dd($halaqah);
+        $listed_members = DB::table('students')
+                                ->join('users', 'users.id', '=', 'students.id_student')
+                                ->where('students.id_halaqah', $halaqah->id)
+                                ->get();
+        return view('tahfidz.show-member', compact('listed_members', 'halaqah'));
+    }
 }

@@ -11,6 +11,7 @@
             </div>
             <div class="card-body">
             @include('layouts.notification')
+            @include('layouts.form-search', ['name' => 'Halaqah'])
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -26,7 +27,7 @@
                         @php $no = 1; @endphp
                         @forelse ($halaqah_teacher as $halaqah)
                             <tr>
-                                <td>{{ $no++ }}</td>
+                                <td>{{ $halaqah_teacher->no++ }}</td>
                                 <td>{{ $halaqah->halaqahName }}</td>
                                 <td>{{ $halaqah->teacherName }}</td>
                                 <td>{{ $halaqah->description}}</td>
@@ -60,6 +61,10 @@
                         @endforelse
                         </tbody>
                     </table>
+                </div>
+                <div class="table-footer">
+                    <p>Menampilkan {{ $halaqah_teacher->startNo }} - {{ $halaqah_teacher->currentTotal }} dari {{ $halaqah_teacher->total() }} data</p>
+                    {{ $halaqah_teacher->onEachSide(1)->links() }}
                 </div>
             </div>
         </div>

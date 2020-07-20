@@ -20,18 +20,24 @@ class RefHalaqahController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $users = Roles::findOrFail(3)->users()->get();
-        // $users = User::all();
 
+        $q = $request->query('q') ?: '';
         $halaqah_teacher = DB::table('halaqahs')
+                                ->where('halaqahs.name', 'like', '%'.$q.'%')
                                 ->join('users', 'users.id', '=', 'halaqahs.id_teacher')
                                 ->select('halaqahs.id', 'users.name as teacherName', 'halaqahs.name as halaqahName', 'description')
-                                ->get();
+                                ->paginate(20);
+
+        $halaqah_teacher->currentTotal = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + $halaqah_teacher->count();
+        $halaqah_teacher->startNo = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + 1;
+        $halaqah_teacher->no = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + 1;
+                        
         $halaqahs = RefHalaqah::all();
 
-        return view('ref.halaqah.index', compact('users', 'halaqahs', 'halaqah_teacher'));
+        return view('ref.halaqah.index', compact('q', 'users', 'halaqahs', 'halaqah_teacher'));
     }
 
     /**

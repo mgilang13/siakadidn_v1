@@ -22,16 +22,24 @@ class RefTeacherController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
         $subjects = RefSubject::all();
         $users = Roles::findOrFail(3)->users()->get();
-        // $users = User::all();
+        $q = $request->query('q') ?: '';
         $teacher_subjects = DB::table('teachers')
                                 ->join('users', 'teachers.id_teacher', '=', 'users.id')
+                                ->where('users.name', 'like', '%'.$q.'%')
                                 ->join('subjects', 'teachers.id_subject', '=', 'subjects.id')
                                 ->select('users.id as teacherID','users.name as userName', 'subjects.name as subjectName', 'subject')
-                                ->get();
+                                ->paginate(20);
+        
+        $teacher_subjects->currentTotal = ($teacher_subjects->currentPage() - 1) * $teacher_subjects->perPage() + $teacher_subjects->count();
+        $teacher_subjects->startNo = ($teacher_subjects->currentPage() - 1) * $teacher_subjects->perPage() + 1;
+        $teacher_subjects->no = ($teacher_subjects->currentPage() - 1) * $teacher_subjects->perPage() + 1;
+
+
         foreach($teacher_subjects as $ts) {
             if($ts->subject == "it") {
                 $ts->subject = "Komputer dan Informatika";
@@ -42,7 +50,7 @@ class RefTeacherController extends Controller
             }
         }
 
-        return view('ref.teacher.index', compact('users', 'subjects', 'teacher_subjects'));
+        return view('ref.teacher.index', compact('q', 'users', 'subjects', 'teacher_subjects'));
     }
 
     /**

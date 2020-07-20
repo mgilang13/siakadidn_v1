@@ -7,7 +7,11 @@
                 <h5>Halaqah {{ $halaqah->name }}</h5>
                 <h6>Pengampu : {{ $halaqah->user->name }}</h6>
                 <div class="header-btn">
+                @if( Auth::user()->roles->first()->pivot->roles_id == 3)
+                    <a href="{{ route('tahfidz.index') }}" class="btn btn-outline-primary"><i width="14" class="mr-2" data-feather="arrow-left"></i>Kembali</a>
+                @else
                     <a href="{{ route('tahfidz.list-halaqah') }}" class="btn btn-outline-primary"><i width="14" class="mr-2" data-feather="arrow-left"></i>Kembali</a>
+                @endif
                 </div>
             </div>
             <div class="card-body">

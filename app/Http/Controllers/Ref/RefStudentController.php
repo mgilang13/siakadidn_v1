@@ -20,16 +20,23 @@ class RefStudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $users = Roles::findOrFail(4)->users()->orderBy('name', 'asc')->get();
-        // $users = User::all();
+        
+        $q = $request->query('q') ?: '';
+        
         $halaqahs = RefHalaqah::all();
         $user_students = DB::table('users')
+                        ->where('users.name', 'like', '%'.$q.'%')
                         ->join('students', 'students.id_student', '=', 'users.id')
-                        ->get();
+                        ->paginate(20);
         
-        return view('ref.student.index', compact('users', 'user_students', 'halaqahs'));
+        $user_students->currentTotal = ($user_students->currentPage() - 1) * $user_students->perPage() + $user_students->count();
+        $user_students->startNo = ($user_students->currentPage() - 1) * $user_students->perPage() + 1;
+        $user_students->no = ($user_students->currentPage() - 1) * $user_students->perPage() + 1;
+        
+        return view('ref.student.index', compact('q', 'users', 'user_students', 'halaqahs'));
     }
 
     /**
@@ -118,8 +125,8 @@ class RefStudentController extends Controller
             
             $validateStudent = $request->validate([
                 'id_student' => '',
-                'nisn' => 'required|unique:students,nisn,NULL,id,deleted_at,NULL',
-                'nis' => 'required|unique:students,nis,NULL,id,deleted_at,NULL',
+                'nisn' => '',
+                'nis' => '',
                 'id_halaqah' => '',
                 'entry_date' => '',
                 'hafalan_pra_idn' => '',

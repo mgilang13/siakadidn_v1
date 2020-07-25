@@ -24,7 +24,7 @@
                         <div class="row bg-primary rounded p-1">
                             <div class="form-group col-md-5">
                                 <label for="tanggal_setor" class="col-for-label text-light">Tanggal Setor</label>
-                                <input type="date" class="form-control" name="tanggal_setor" max="{{ $tanggal_sekarang }}" value="{{ $tanggal_sekarang }}">
+                                <input type="date" class="form-control" max="{{ $tanggal_sekarang }}" name="tanggal_setor" value="{{ $tanggal_sekarang }}">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="absen" class="col-for-label text-light font-weight">Absensi</label>
@@ -42,11 +42,18 @@
                             <div>
                                 <div><label for="type" class="col-for-label">Tipe Hafalan :</label></div>
                                 <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons" id="type">
+                                    
                                     <label class="btn btn-success active px-md-4 py-md-2">
-                                        <input type="radio" name="type" value="sabaq" id="sabaq" autocomplete="off" checked> Sabaq
+                                        <input type="radio" name="type" value="ziyadah" id="ziyadah" autocomplete="off" checked> Ziyadah
                                     </label>
+                                    <!--<label class="btn btn-success px-md-4 py-md-2">-->
+                                    <!--    <input type="radio" name="type" value="sabqy" id="sabqy" autocomplete="off"> Sabqy-->
+                                    <!--</label>-->
                                     <label class="btn btn-success px-md-4 py-md-2">
-                                        <input type="radio" name="type" value="manzil" id="manzil" autocomplete="off"> Manzil
+                                        <input type="radio" name="type" value="murajaah" id="murajaah" autocomplete="off"> Muraja'ah
+                                    </label>
+                                    <label class="btn btn-secondary px-md-4 py-md-2">
+                                        <input type="radio" name="type" value="tahsin" id="tahsin" autocomplete="off"> Tahsin
                                     </label>
                                 </div>
                             </div>
@@ -54,13 +61,10 @@
                                 <div><label for="assessment" class="col-for-label">Penilaian :</label></div>
                                 <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons" id="assessment">
                                     <label class="btn btn-info px-md-4 py-md-2 active">
-                                        <input type="radio" name="assessment" value="a" id="a" autocomplete="off" checked> A
+                                        <input type="radio" name="assessment" value="l" id="a" autocomplete="off" checked> L
                                     </label>
                                     <label class="btn btn-info px-md-4 py-md-2">
-                                        <input type="radio" name="assessment" value="b" id="b" autocomplete="off"> B
-                                    </label>
-                                    <label class="btn btn-info px-md-4 py-md-2">
-                                        <input type="radio" name="assessment" value="c" id="c" autocomplete="off"> C
+                                        <input type="radio" name="assessment" value="kl" id="b" autocomplete="off"> KL
                                     </label>
                                 </div>
                             </div>

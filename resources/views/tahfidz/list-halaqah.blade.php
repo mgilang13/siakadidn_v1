@@ -6,12 +6,12 @@
             <div class="card-header">
                 <h5>Daftar Kelompok Tahfidz</h5>
                 <div class="header-btn">
-                    <a href="{{ route('tahfidz.index') }}" class="btn btn-outline-primary"><i width="14" class="mr-2" data-feather="arrow-left"></i>Kembali</a>
+                    <a href="{{ route('tahfidz.index') }}" class="btn btn-outline-primary btn-sm"><i width="14" class="mr-2" data-feather="arrow-left"></i>Kembali</a>
                 </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-sm">
                         <thead>
                             <tr>
                                 <th>No</th>

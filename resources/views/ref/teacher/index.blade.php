@@ -11,12 +11,13 @@
             </div>
             <div class="card-body">
             @include('layouts.notification')
-            @include('layouts.form-search', ['name' => 'Guru'])
+            @include('layouts.form-search', ['route' => 'ref.teacher.index', 'name' => 'Guru'])
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>No.</th>
+                                <th>Username</th>
                                 <th>Nama Guru</th>
                                 <th>Materi Pelajaran</th>
                                 <th>Bidang</th>
@@ -27,7 +28,8 @@
                         @php $no = 1; @endphp
                         @forelse ($teacher_subjects as $ts)
                             <tr>
-                                <td>{{ $teacher_subjects->no++ }} }}</td>
+                                <td>{{ $teacher_subjects->no++ }}</td>
+                                <td>{{ $ts->uname }}</td>
                                 <td>{{ $ts->userName }}</td>
                                 <td>{{ $ts->subjectName}}</td>
                                 <td>{{ $ts->subject}}</td>

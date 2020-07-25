@@ -11,7 +11,7 @@
             </div>
             <div class="card-body">
             @include('layouts.notification')
-            @include('layouts.form-search', ['name' => 'Halaqah'])
+            @include('layouts.form-search', ['name' => 'Halaqah', 'route' => 'ref.halaqah.index'])
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -20,6 +20,8 @@
                                 <th>Nama Halaqah</th>
                                 <th>Pengampu</th>
                                 <th>Deskripsi</th>
+                                <th>Kelas</th>
+                                <th>Level</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -31,6 +33,12 @@
                                 <td>{{ $halaqah->halaqahName }}</td>
                                 <td>{{ $halaqah->teacherName }}</td>
                                 <td>{{ $halaqah->description}}</td>
+                                <td>{{ $halaqah->namaKelas}}</td>
+                                @if($halaqah->namaLevel == "Sekolah Menengah Pertama")
+                                <td>SMP</td>
+                                @else
+                                <td>SMK</td>
+                                @endif
                                 <td>
                                     <div class="btn-action d-flex justify-content-around">
                                         <a href="{{ route('ref.halaqah.show', $halaqah->id) }}" title="Tambah Anggota">

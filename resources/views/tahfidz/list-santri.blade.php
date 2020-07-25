@@ -6,16 +6,18 @@
             <div class="card-header">
                 <h5>Daftar Santri</h5>
                 <div class="header-btn">
-                    <a href="{{ route('tahfidz.index') }}" class="btn btn-outline-primary"><i width="14" class="mr-2" data-feather="arrow-left"></i>Kembali</a>
+                    <a href="{{ route('tahfidz.index') }}" class="btn btn-outline-primary btn-sm"><i width="14" class="mr-2" data-feather="arrow-left"></i>Kembali</a>
                 </div>
             </div>
             <div class="card-body">
+                @include('layouts.form-search', ['name' => 'Siswa', 'route' => 'tahfidz.list-santri'])
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-sm">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>NIS</th>
+                                <th>Username</th>
                                 <th>Nama Santri</th>
                                 <th>Nama Halaqah</th>
                                 <th>Action</th>
@@ -27,6 +29,7 @@
                            <tr>
                                 <td>{{ $no++ }}</td>
                                 <td>{{ $ush->nis }}</td>
+                                <td>{{ $ush->username }}</td>
                                 <td>{{ $ush->santriName }}</td>
                                 <td>{{ $ush->halaqahName }}</td>
                                 <td>
@@ -41,6 +44,10 @@
                            @endforelse
                         </tbody>
                     </table>
+                </div>
+                <div class="table-footer">
+                    <p>Menampilkan {{ $user_students->startNo }} - {{ $user_students->currentTotal }} dari {{ $user_students->total() }} data</p>
+                    {{ $user_students->onEachSide(1)->links() }}
                 </div>
             </div>
         </div>

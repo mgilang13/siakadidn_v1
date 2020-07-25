@@ -3,16 +3,17 @@
 @section('content')
 <div class="content">
     <div class="card">
-        <div class="card-header bg-white">
-            <h5>Daftar Murid</h5>
-            <a href="{{ route('ref.student.create') }}" class="btn btn-primary-outline">
+        <div class="card-header bg-white d-flex flex-wrap justify-content-center justify-content-md-between">
+            <h4 class="font-weight-bold">Daftar Murid</h4>
+            <a href="{{ route('ref.student.create') }}" class="btn btn-primary-outline btn-sm">
                 <i width="14" class="mr-2" data-feather="plus"></i>Tambah Data Murid
             </a>
         </div>
         <div class="card-body">
         @include('layouts.notification')
+        @include('layouts.form-search', ['name' => 'Siswa', 'route' => 'ref.student.index'])
             <div class="table-responsive">
-                <table class="table">
+                <table class="table table-sm">
                     <thead>
                         <tr>
                             <th>No.</th>
@@ -28,7 +29,7 @@
                     @php $no = 1; @endphp
                         @forelse ($user_students as $us)
                             <tr>
-                                <td>{{ $no++ }}</td>
+                                <td>{{ $user_students->no++ }}</td>
                                 <td>{{ $us->nis }}</td>
                                 <td>{{ $us->name }}</td>
                                 <td>{{ substr($us->entry_date, 0, 4) }}</td>
@@ -59,6 +60,10 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+            <div class="table-footer">
+                <p>Menampilkan {{ $user_students->startNo }} - {{ $user_students->currentTotal }} dari {{ $user_students->total() }} data</p>
+                {{ $user_students->onEachSide(1)->links() }}
             </div>
         </div>
     </div>

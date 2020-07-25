@@ -20,7 +20,7 @@
     
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/mdb.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/main.css?v=11')}}">
 </head>
 <body>
     <div class="d-flex" id="wrapper">
@@ -29,27 +29,30 @@
             {!! $APPS_MENU !!}
         </div>
         <div id="page-content-wrapper">
-            <nav class="navbar shadow-sm p-0 justify-content-space-around justify-content-lg-end">
-            
-            <a id="sidebarCollapse" class="d-block d-lg-none p-3">
-                <i data-feather="menu" style="color:#349ce4"></i>
-</a>
-                <div class="col-5 d-flex align-items-center justify-content-end">
-                    <b class="mr-3">{{ Auth::user()->name }}</b>
-                    
-                    <img class="mr-3 img-responsive img-rounded img-fluid" src="{{ Auth::user()->image_small ? asset('storage/'.env('UPLOAD_USER').'/'.Auth::user()->id.'/'.Auth::user()->image_small) : asset('images/ic_profile.svg') }}" alt="profil">
-                    <div class="dropdown">
-                        <a type="button" id="dropdown" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true" aria-haspopup="true"></a>
-                        <div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdown">
-                            <a class="dropdown-item" href="{{ route('profile') }}">
-                                {{ __('Ubah Profil') }}
-                            </a>
-                            <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
+                <nav class="navbar fixed-top shadow p-0 justify-content-space-around justify-content-lg-end">
+                
+                <a id="sidebarCollapse" class="d-block d-lg-none p-3">
+                    <i data-feather="menu" style="color:#349ce4"></i>
+    </a>
+                    <div class="col d-flex align-items-center justify-content-end">
+                        <b class="mr-3">{{ Auth::user()->name }}</b>
+                        
+                        <img class="mr-3 img-responsive img-rounded img-fluid" src="{{ Auth::user()->image_small ? asset('storage/'.env('UPLOAD_USER').'/'.Auth::user()->id.'/'.Auth::user()->image_small) : asset('images/ic_profile.svg') }}" alt="profil">
+                        <div class="dropdown">
+                            <a type="button" id="dropdown" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true" aria-haspopup="true"></a>
+                            <div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdown">
+                                <a class="dropdown-item" href="{{ route('profile') }}">
+                                    {{ __('Ubah Profil') }}
+                                </a>
+                                <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
+                            </div>
                         </div>
                     </div>
+                </nav>
+            
+                <div id="overlay" style="float:none; line-height:1.5; font-size:inherit">
+                    @yield('content')
                 </div>
-            </nav>
-            @yield('content')  
         </div>
     </div>
     
@@ -73,6 +76,7 @@
 				$('.sidebar').toggleClass('hide-300');
                 $('.navbar').toggleClass('hide-0');
                 $('.content').toggleClass('hide-0');
+                $('#overlay').toggleClass('close');
 			});
            
 		});  

@@ -10,6 +10,8 @@ use App\Model\Soorah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Auth;
+
 class TahfidzController extends Controller
 {
     /**
@@ -19,7 +21,11 @@ class TahfidzController extends Controller
      */
     public function index()
     {
-        return view('tahfidz.index');
+        $id = Auth::user()->id;
+
+        $halaqah = $halaqah = RefHalaqah::where('id_teacher', $id)->get()->first();
+        
+        return view('tahfidz.index', compact('halaqah'));
     }
 
     public function listHalaqah()
@@ -31,16 +37,23 @@ class TahfidzController extends Controller
         return view('tahfidz.list-halaqah', compact('halaqahs'));
     }
 
-    public function listSantri()
+    public function listSantri(Request $request)
     {
+        $q = $request->query('q') ?: '';
+        
         $user_students = DB::table('users')
+                        ->where('users.name', 'like', '%'.$q.'%')
                         ->join('students', 'students.id_student', '=', 'users.id')
                         ->join('halaqahs', 'halaqahs.id', '=', 'students.id_halaqah')
                         ->select('*', 'users.name as santriName', 'halaqahs.name as halaqahName')
-                        ->get();
+                        ->paginate(20);
+        
+        $user_students->currentTotal = ($user_students->currentPage() - 1) * $user_students->perPage() + $user_students->count();
+        $user_students->startNo = ($user_students->currentPage() - 1) * $user_students->perPage() + 1;
+        $user_students->no = ($user_students->currentPage() - 1) * $user_students->perPage() + 1;
         
 
-        return view('tahfidz.list-santri', compact('user_students'));
+        return view('tahfidz.list-santri', compact('q', 'user_students'));
     }
 
     /**
@@ -104,28 +117,38 @@ class TahfidzController extends Controller
         $tahfidzs->no = ($tahfidzs->currentPage() - 1) * $tahfidzs->perPage() + 1;
 
         $soorahs = Soorah::all();
-        $tahfidz_total_sabaq = DB::select('call tahfidz_total_sabaq(?)', array($id));
-
-        $tahfidz_total_manzil = DB::select('call tahfidz_total_manzil(?)', array($id));
         
-        $tahfidz_report_sabaq = DB::select('call tahfidz_report_sabaq(?)', array($id));
-        $tgl_bln_sabaq = array();
-        $total_line_sabaq = array();
-        foreach($tahfidz_report_sabaq as $tc){
-            array_push($tgl_bln_sabaq, $tc->tgl_bln);
-            array_push($total_line_sabaq, $tc->total_line);
+        $tahfidz_total_ziyadah = DB::select('call tahfidz_total_ziyadah(?)', array($id));
+        $tahfidz_total_sabqy = DB::select('call tahfidz_total_sabqy(?)', array($id));
+        $tahfidz_total_murajaah = DB::select('call tahfidz_total_murajaah(?)', array($id));
+        
+        $tahfidz_report_ziyadah = DB::select('call tahfidz_report_ziyadah(?)', array($id));
+        $tgl_bln_ziyadah = array();
+        $total_line_ziyadah = array();
+        foreach($tahfidz_report_ziyadah as $tc){
+            array_push($tgl_bln_ziyadah, $tc->tgl_bln);
+            array_push($total_line_ziyadah, $tc->total_line);
+        }
+        
+        $tahfidz_report_sabqy = DB::select('call tahfidz_report_sabqy(?)', array($id));
+        $tgl_bln_sabqy = array();
+        $total_line_sabqy = array();
+        foreach($tahfidz_report_sabqy as $tc){
+            array_push($tgl_bln_sabqy, $tc->tgl_bln);
+            array_push($total_line_sabqy, $tc->total_line);
+        }
+        
+        
+
+        $tahfidz_report_murajaah = DB::select('call tahfidz_report_murajaah(?)', array($id));
+        $tgl_bln_murajaah = array();
+        $total_line_murajaah = array();
+        foreach($tahfidz_report_murajaah as $tc){
+            array_push($tgl_bln_murajaah, $tc->tgl_bln);
+            array_push($total_line_murajaah, $tc->total_line);
         }
 
-        $tahfidz_report_manzil = DB::select('call tahfidz_report_manzil(?)', array($id));
-        
-        $tgl_bln_manzil = array();
-        $total_line_manzil = array();
-        foreach($tahfidz_report_manzil as $tc){
-            array_push($tgl_bln_manzil, $tc->tgl_bln);
-            array_push($total_line_manzil, $tc->total_line);
-        }
-
-        $tahfidz_absensi = DB::select('call tahfidz_absensi(?)', array($id));
+        $tahfidz_absensi = DB::select('call tahfidz_absensi_bu(?)', array($id));
         $tahfidz_absensi = $tahfidz_absensi[0];
         
 
@@ -141,7 +164,7 @@ class TahfidzController extends Controller
             }
         }
         
-        return view('tahfidz.show', compact('student', 'tahfidzs', 'tahfidz_total_sabaq', 'tahfidz_total_manzil', 'tgl_bln_sabaq', 'total_line_sabaq', 'tgl_bln_manzil', 'total_line_manzil', 'tahfidz_absensi'));
+        return view('tahfidz.show', compact('student', 'tahfidzs', 'tahfidz_total_ziyadah','tahfidz_total_sabqy', 'tahfidz_total_murajaah', 'tgl_bln_ziyadah', 'total_line_ziyadah','tgl_bln_sabqy', 'total_line_sabqy', 'tgl_bln_murajaah', 'total_line_murajaah', 'tahfidz_absensi'));
     }
 
     /**
@@ -263,22 +286,22 @@ class TahfidzController extends Controller
             array_push($total_line_manzil, $tc->total_line);
         }
 
-        $tahfidz_absensi = DB::select('call tahfidz_absensi(?)', array($id));
+        $tahfidz_absensi = DB::select('call tahfidz_absensi_bu(?)', array($id));
+        
         $tahfidz_absensi = $tahfidz_absensi[0];
 
         return view('tahfidz.report.parent', compact('tahfidz_total_sabaq', 'tahfidz_total_manzil', 'tgl_bln_sabaq', 'total_line_sabaq', 'tgl_bln_manzil', 'total_line_manzil', 'tahfidz_absensi'));
     }
-
+    
     public function halaqah($id)
     {
-        // dd($id);
-        // $halaqah = DB::table('halaqahs')->where('id_teacher', $id)->first();
         $halaqah = RefHalaqah::where('id_teacher', $id)->get()->first();
-        // dd($halaqah);
+        
         $listed_members = DB::table('students')
                                 ->join('users', 'users.id', '=', 'students.id_student')
                                 ->where('students.id_halaqah', $halaqah->id)
                                 ->get();
+
         return view('tahfidz.show-member', compact('listed_members', 'halaqah'));
     }
 }

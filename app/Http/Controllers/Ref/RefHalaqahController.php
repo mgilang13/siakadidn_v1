@@ -27,14 +27,18 @@ class RefHalaqahController extends Controller
         $q = $request->query('q') ?: '';
         $halaqah_teacher = DB::table('halaqahs')
                                 ->where('halaqahs.name', 'like', '%'.$q.'%')
+                                ->orWhere('levels.abbr', 'like', '%'.$q.'%')
+                                ->orWhere('classrooms.name', 'like', '%'.$q.'%')
                                 ->join('users', 'users.id', '=', 'halaqahs.id_teacher')
-                                ->select('halaqahs.id', 'users.name as teacherName', 'halaqahs.name as halaqahName', 'description')
+                                ->join('classrooms', 'halaqahs.id_class', '=', 'classrooms.id')
+                                ->join('levels', 'halaqahs.id_level', '=', 'levels.id')
+                                ->select('halaqahs.id', 'users.name as teacherName', 'halaqahs.name as halaqahName', 'description', 'classrooms.name as namaKelas', 'levels.name as namaLevel')
                                 ->paginate(20);
 
         $halaqah_teacher->currentTotal = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + $halaqah_teacher->count();
         $halaqah_teacher->startNo = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + 1;
         $halaqah_teacher->no = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + 1;
-                        
+        
         $halaqahs = RefHalaqah::all();
 
         return view('ref.halaqah.index', compact('q', 'users', 'halaqahs', 'halaqah_teacher'));
@@ -135,11 +139,21 @@ class RefHalaqahController extends Controller
         return redirect()->route('ref.halaqah.index')->with('success', 'Hapus Data Halaqah Sukses');
     }
 
-    public function addMember(RefHalaqah $halaqah)
+    public function addMember(RefHalaqah $halaqah, Request $request)
     {
-        $students = RefStudent::where('id_halaqah',null)->get();
+        $q = $request->query('q') ?: '';
         
-        return view('ref.halaqah.add-member', compact('halaqah', 'students'));
+        $students = RefStudent::all();
+        $students = DB::table('users')
+                            ->join('students', 'students.id_student', '=', 'users.id')
+                            ->where('students.id_halaqah', null)
+                            ->where('users.name', 'like', '%'.$q.'%')->paginate(20);
+        
+        $students->currentTotal = ($students->currentPage() - 1) * $students->perPage() + $students->count();
+        $students->startNo = ($students->currentPage() - 1) * $students->perPage() + 1;
+        $students->no = ($students->currentPage() - 1) * $students->perPage() + 1;
+        
+        return view('ref.halaqah.add-member', compact('q', 'halaqah', 'students'));
     }
 
     public function addMemberProcess($id, Request $request)

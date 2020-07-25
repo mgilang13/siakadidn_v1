@@ -146,7 +146,7 @@ class UsersController extends Controller
         $request->validate([
             'username' => 'required|string|max:255|unique:users,username,' .$user->id. ',id,deleted_at,NULL',
             'email' => 'required|string|max:255|email:rfc,dns|unique:users,email,' .$user->id. ',id,deleted_at,NULL',
-            // 'phone' => 'required|string|max:20|unique:users,phone,' .$user->id. ',id,deleted_at,NULL',
+            'phone' => 'required|string|max:20|unique:users,phone,' .$user->id. ',id,deleted_at,NULL',
             'name' => 'required|string|max:255',
             'password' => '',
             'role' => 'exists:roles,id',

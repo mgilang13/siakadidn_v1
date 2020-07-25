@@ -1,4 +1,4 @@
-<form action="{{ route($route) }}" method="get">
+<form action="{{ route($route, $id) }}" method="get">
     <div class="form-group row justify-content-center mt-3">
         <label class="col-md-2 d-flex justify-content-md-end justify-content-center col-form-label" for="q">Cari {{ $name }}</label>
         <div class="col-md-3">

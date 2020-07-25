@@ -38,7 +38,7 @@ class ProfileController extends Controller
             'password' => '',
         ]);
         DB::transaction(function () use ($request, $user) {
-            $params = $request->only(['username', 'email', 'name']);
+            $params = $request->only(['username', 'email', 'name', 'phone']);
             // jika password diganti
             if ($request->input('password')) $params['password'] = bcrypt($request->input('password'));
             $user->update($params);

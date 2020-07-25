@@ -1,17 +1,19 @@
 @extends('layouts.app')
 @section('content')
     <div class="content">
-    <h1>Tahfidz</h1>
+    <h1 class="h1-responsive text-center text-md-left">Tahfidz</h1>
         <div class="card">
-            <div class="card-header">
-                <h5>Halaqah {{ $halaqah->name }}</h5>
-                <h6>Pengampu : {{ $halaqah->user->name }}</h6>
+            <div class="card-header d-flex flex-wrap justify-content-center justify-content-lg-between">
+                <div>
+                <h5 class="text-center text-md-left">Nama Halaqah : {{ $halaqah->name }}</h5>
+                <h6 class="text-center text-md-left">Pengampu : {{ $halaqah->user->name }}</h6>
+                </div>
                 <div class="header-btn">
-                @if( Auth::user()->roles->first()->pivot->roles_id == 3)
-                    <a href="{{ route('tahfidz.index') }}" class="btn btn-outline-primary"><i width="14" class="mr-2" data-feather="arrow-left"></i>Kembali</a>
-                @else
-                    <a href="{{ route('tahfidz.list-halaqah') }}" class="btn btn-outline-primary"><i width="14" class="mr-2" data-feather="arrow-left"></i>Kembali</a>
-                @endif
+                    @if( Auth::user()->roles->first()->pivot->roles_id == 3)
+                        <a href="{{ route('tahfidz.index') }}" class="btn btn-outline-primary btn-sm"><i width="14" class="mr-2" data-feather="arrow-left"></i>Kembali</a>
+                    @else
+                        <a href="{{ route('tahfidz.list-halaqah') }}" class="btn btn-outline-primary btn-sm"><i width="14" class="mr-2" data-feather="arrow-left"></i>Kembali</a>
+                    @endif
                 </div>
             </div>
             <div class="card-body">

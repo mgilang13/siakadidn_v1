@@ -42,24 +42,24 @@
                                 <div><label for="type" class="col-for-label">Tipe Hafalan :</label></div>
                                 <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons" id="type">
                                     <label class="btn btn-success active px-md-4 py-md-2">
-                                        <input type="radio" name="type" value="sabaq" id="sabaq" autocomplete="off" {{ (old('type') ?? $tahfidz->type) == 'sabaq' ? 'checked' : ''}}> Sabaq
+                                        <input type="radio" name="type" value="ziyadah" id="ziyadah" autocomplete="off" {{ (old('type') ?? $tahfidz->type) == 'ziyadah' ? 'checked' : ''}}> Ziyadah
                                     </label>
                                     <label class="btn btn-success px-md-4 py-md-2">
-                                        <input type="radio" name="type" value="manzil" id="manzil" autocomplete="off" {{ (old('type') ?? $tahfidz->type) == 'manzil' ? 'checked' : ''}}> Manzil
+                                        <input type="radio" name="type" value="murajaah" id="murajaah" autocomplete="off" {{ (old('type') ?? $tahfidz->type) == 'murajaah' ? 'checked' : ''}}> Muraja'ah
+                                    </label>
+                                    <label class="btn btn-secondary px-md-4 py-md-2">
+                                        <input type="radio" name="type" value="murajaah" id="murajaah" autocomplete="off" {{ (old('type') ?? $tahfidz->type) == 'tahsin' ? 'checked' : ''}}> Tahsin
                                     </label>
                                 </div>
                             </div>
                             <div>
                                 <div><label for="assessment" class="col-for-label">Penilaian :</label></div>
                                 <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons" id="assessment">
-                                    <label class="btn btn-info px-md-4 py-md-2 active">
-                                        <input type="radio" name="assessment" value="a" id="a" autocomplete="off" {{ (old('assessment') ?? $tahfidz->assessment) == 'a' ? 'checked' : ''}}> A
+                                    <label class="btn btn-info px-md-3 py-md-2 active">
+                                        <input type="radio" name="assessment" value="l" id="l" autocomplete="off" {{ (old('assessment') ?? $tahfidz->assessment) == 'l' ? 'checked' : ''}}> L
                                     </label>
-                                    <label class="btn btn-info px-md-4 py-md-2">
-                                        <input type="radio" name="assessment" value="b" id="b" autocomplete="off" {{ (old('assessment') ?? $tahfidz->assessment) == 'b' ? 'checked' : ''}}> B
-                                    </label>
-                                    <label class="btn btn-info px-md-4 py-md-2">
-                                        <input type="radio" name="assessment" value="c" id="c" autocomplete="off" {{ (old('assessment') ?? $tahfidz->assessment) == 'c' ? 'checked' : ''}}> C
+                                    <label class="btn btn-info px-md-3 py-md-2">
+                                        <input type="radio" name="assessment" value="kl" id="kl" autocomplete="off" {{ (old('assessment') ?? $tahfidz->assessment) == 'kl' ? 'checked' : ''}}> KL
                                     </label>
                                 </div>
                             </div>

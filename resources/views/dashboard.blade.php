@@ -12,8 +12,11 @@
         </div>
         
         <div class="card-body">
-            You are logged in 
-            
+            You are logged in
+             
+            <!-- Roles  -->
+            {{ Auth::user()->roles->first()->pivot->roles_id }}
+            {{ Auth::user()->id }}
         </div>
     </div>
 </div>

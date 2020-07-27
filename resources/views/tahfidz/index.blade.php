@@ -6,19 +6,19 @@
                 @if(Auth::user()->id == 1 or Auth::user()->roles->first()->pivot->roles_id == 2)
                 <div class="row d-flex flex-wrap">
                     <div class="col-md-6">
-                        <a href="{{ route('tahfidz.list-halaqah') }}" class="btn btn-secondary btn-lg w-100">
+                        <a href="{{ route('tahfidz.list-halaqah') }}" class="btn btn-deep-purple btn-lg w-100">
                             <i class="text-white mr-2 mb-1" data-feather="list" width="20"></i> Daftar Halaqah Santri IDN
                         </a>
                     </div>    
                     <div class="col-md-6">
-                        <a href="{{ route('tahfidz.list-santri') }}" class="btn btn-primary btn-lg w-100">
+                        <a href="{{ route('tahfidz.list-santri') }}" class="btn btn-indigo btn-lg w-100">
                             <i class="text-white mr-2 mb-1" data-feather="list" width="20"></i>Daftar Semua Santri IDN
                         </a>
                     </div>
                 @elseif( Auth::user()->roles->first()->pivot->roles_id == 3)
                     @if($halaqah != null)
                     <div class="col-md-6">
-                            <a href="{{ route('tahfidz.halaqah', Auth::user()->id) }}" class="btn btn-primary btn-lg w-100">
+                            <a href="{{ route('tahfidz.halaqah', Auth::user()->id) }}" class="btn btn-indigo btn-lg w-100">
                                 <i class="text-white mr-2 mb-1" data-feather="list" width="20"></i>Halaqah Tahfidz
                             </a>
                     </div>

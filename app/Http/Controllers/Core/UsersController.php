@@ -27,7 +27,7 @@ class UsersController extends Controller
         $q = $request->query('q') ?: '';
         $rs_user = User::where('name', 'like', '%'.$q.'%')
                         ->orWhere('email', 'like', '%'.$q.'%')
-                        // ->orWhere('phone', 'like', '%'.$q.'%')
+                        ->orWhere('phone', 'like', '%'.$q.'%')
                         ->orderBy('name', 'asc')
                         ->paginate(20);
         $rs_user->currentTotal = ($rs_user->currentPage() - 1) * $rs_user->perPage() + $rs_user->count();
@@ -57,8 +57,8 @@ class UsersController extends Controller
         // validasi
         $request->validate([
             'username' => 'required|string|max:255|unique:users,username,NULL,id,deleted_at,NULL',
-            'email' => 'required|string|max:255|email:rfc,dns|unique:users,email,NULL,id,deleted_at,NULL',
-            'phone' => 'required|string|max:20|unique:users,phone,NULL,id,deleted_at,NULL',
+            'email' => 'string|max:255|email:rfc,dns|unique:users,email,NULL,id,deleted_at,NULL',
+            'phone' => 'string|max:20|unique:users,phone,NULL,id,deleted_at,NULL',
             'name' => 'required|string|max:255',
             'password' => 'required|string',
             'gender' => 'required|in:l,p',
@@ -145,8 +145,8 @@ class UsersController extends Controller
         // validasi
         $request->validate([
             'username' => 'required|string|max:255|unique:users,username,' .$user->id. ',id,deleted_at,NULL',
-            'email' => 'required|string|max:255|email:rfc,dns|unique:users,email,' .$user->id. ',id,deleted_at,NULL',
-            'phone' => 'required|string|max:20|unique:users,phone,' .$user->id. ',id,deleted_at,NULL',
+            'email' => 'string|max:255|email:rfc,dns|unique:users,email,' .$user->id. ',id,deleted_at,NULL',
+            'phone' => 'string|max:20|unique:users,phone,' .$user->id. ',id,deleted_at,NULL',
             'name' => 'required|string|max:255',
             'password' => '',
             'role' => 'exists:roles,id',

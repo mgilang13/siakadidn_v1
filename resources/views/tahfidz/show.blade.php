@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     <div class="mt-auto mx-auto">
-                        <a href="{{ route('tahfidz.add-notes', $student->id_student) }}" class="btn btn-success btn-sm">
+                        <a href="{{ route('tahfidz.add-notes', $student->id_student) }}" class="btn btn-dark-green btn-sm">
                             <i class="text-light" data-feather="plus" width="14"></i> Tambah Catatan
                         </a>
                     </div>
@@ -169,9 +169,6 @@
         var tgl_bln_ziyadah = {!! json_encode($tgl_bln_ziyadah) !!}
         var total_line_ziyadah = {!! json_encode($total_line_ziyadah) !!}
         
-        var tgl_bln_sabqy = {!! json_encode($tgl_bln_sabqy) !!}
-        var total_line_sabqy = {!! json_encode($total_line_sabqy) !!}
-        
         var tgl_bln_murajaah = {!! json_encode($tgl_bln_murajaah) !!}
         var total_line_murajaah = {!! json_encode($total_line_murajaah) !!}
 
@@ -189,11 +186,6 @@
                     borderColor: 'rgba(255, 99, 132, 1.0)',
                     data: total_line_ziyadah,
                 },{
-                    label: 'Hafalan Sabqy',
-                    backgroundColor: 'rgba(39, 174, 96, 0.5)',
-                    borderColor: 'rgba(39, 174, 96, 1.0)',
-                    data: total_line_sabqy,
-                }, {
                     label: 'Hafalan Murajaah',
                     backgroundColor:'rgba(142, 68, 173,0.5)',
                     borderColor:'rgba(142, 68, 173,1.0)',

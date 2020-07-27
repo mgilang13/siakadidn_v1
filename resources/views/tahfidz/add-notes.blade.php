@@ -9,8 +9,8 @@
     @csrf
         <div class="content-header d-flex justify-content-end">
             <div class="header-btn">
-                <a href="{{ route('tahfidz.show', $student->id_student) }}" class="btn btn-primary-outline"><i width="14" class="mr-2" data-feather="arrow-left"></i>Kembali</a>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <a href="{{ route('tahfidz.show', $student->id_student) }}" class="btn btn-outline-secondary btn-sm"><i width="14" class="mr-2" data-feather="arrow-left"></i>Kembali</a>
+                <button type="submit" class="btn btn-deep-purple btn-sm">Simpan</button>
             </div>
         </div>
         <div class="row">
@@ -43,16 +43,13 @@
                                 <div><label for="type" class="col-for-label">Tipe Hafalan :</label></div>
                                 <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons" id="type">
                                     
-                                    <label class="btn btn-success active px-md-4 py-md-2">
+                                    <label class="btn btn-dark-green active px-md-4 py-md-2">
                                         <input type="radio" name="type" value="ziyadah" id="ziyadah" autocomplete="off" checked> Ziyadah
                                     </label>
-                                    <!--<label class="btn btn-success px-md-4 py-md-2">-->
-                                    <!--    <input type="radio" name="type" value="sabqy" id="sabqy" autocomplete="off"> Sabqy-->
-                                    <!--</label>-->
-                                    <label class="btn btn-success px-md-4 py-md-2">
+                                    <label class="btn btn-dark-green px-md-4 py-md-2">
                                         <input type="radio" name="type" value="murajaah" id="murajaah" autocomplete="off"> Muraja'ah
                                     </label>
-                                    <label class="btn btn-secondary px-md-4 py-md-2">
+                                    <label class="btn btn-indigo px-md-4 py-md-2">
                                         <input type="radio" name="type" value="tahsin" id="tahsin" autocomplete="off"> Tahsin
                                     </label>
                                 </div>
@@ -60,10 +57,10 @@
                             <div>
                                 <div><label for="assessment" class="col-for-label">Penilaian :</label></div>
                                 <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons" id="assessment">
-                                    <label class="btn btn-info px-md-4 py-md-2 active">
+                                    <label class="btn btn-cyan px-md-4 py-md-2 active">
                                         <input type="radio" name="assessment" value="l" id="a" autocomplete="off" checked> L
                                     </label>
-                                    <label class="btn btn-info px-md-4 py-md-2">
+                                    <label class="btn btn-cyan px-md-4 py-md-2">
                                         <input type="radio" name="assessment" value="kl" id="b" autocomplete="off"> KL
                                     </label>
                                 </div>

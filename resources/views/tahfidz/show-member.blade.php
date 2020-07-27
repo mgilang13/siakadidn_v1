@@ -33,7 +33,7 @@
                                 <td>{{ $no++ }}</td>
                                 <td>{{ $listed_member->name }}</td>
                                 <td>
-                                    <a href="{{ route('tahfidz.show', $listed_member->id) }}" class="btn btn-primary btn-sm">Lembar Mutaba'ah</a>
+                                    <a href="{{ route('tahfidz.show', $listed_member->id) }}" class="btn btn-mdb-color btn-sm">Lembar Mutaba'ah</a>
                                 </td>
                             </tr>
                         @empty

@@ -9,6 +9,9 @@
 
     <title>{{ config('app.name', 'Sistem Akademik IDN') }}</title>
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" ></script>
     
@@ -19,8 +22,9 @@
     <!-- Styles -->
     
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/mdb.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/main.css?v=11')}}">
+    <link rel="stylesheet" href="{{ asset('css/mdb.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatables.min.css') }}">
 </head>
 <body>
     <div class="d-flex" id="wrapper">
@@ -87,7 +91,8 @@
         feather.replace()
     </script>
     @yield('js')
-    
     <script src="{{ asset('js/mdb.min.js') }}"></script>
+    <script src="{{ asset('js/datatables.min.js') }}"></script>
+    
 </body>
 </html>

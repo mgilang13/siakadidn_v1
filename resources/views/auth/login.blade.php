@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-sm col-md-8 col-lg-4 mt-5">
+        <div class="col-sm col-md-8 col-lg-5 mt-5">
             <img class="mx-auto d-block" src="{{ asset('images/main_logo.svg') }}" alt="">
             <p class="main-title mb-sm-3">SiAKAD SMP SMK IDN</p>
             <p class="sub-title">Sistem Informasi Akademik Siswa SMP SMK IDN Boarding School</p>

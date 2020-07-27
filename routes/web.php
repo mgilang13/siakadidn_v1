@@ -32,13 +32,18 @@ Route::middleware(['auth', 'core'])->group(function () {
     // Tahfidz Menu 
     Route::name('tahfidz.')->prefix('/tahfidz')->group(function () {
         Route::get('halaqah/{id}', 'TahfidzController@halaqah')->name('halaqah');
-        Route::get('report.parent/{id}', 'TahfidzController@reportParent')->name('report.parent');
+        // Route::get('report.parent/{id}', 'TahfidzController@reportParent')->name('report.parent');
         Route::get('list-halaqah', 'TahfidzController@listHalaqah')->name('list-halaqah');
         Route::get('list-santri', 'TahfidzController@listSantri')->name('list-santri');
         Route::get('add-notes/{id}', 'TahfidzController@addNotes')->name('add-notes');
         Route::get('show-member/{halaqah}', 'TahfidzController@showMember')->name('show-member');
         Route::get('report-murid/{id}', 'TahfidzController@reportMurid')->name('report-murid');
         Route::get('show-json/{id}', 'TahfidzController@showJson')->name('show-json');
+        
+        Route::name('report.')->prefix('/report')->group(function() {
+            Route::get('parent/{id}', 'TahfidzController@reportParent')->name('parent');
+            Route::get('smp', 'TahfidzController@reportKepalaTahfidzSMP')->name('smp');
+        });
     });
     Route::resource('tahfidz', 'TahfidzController');
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Ref;
 
-use App\Model\Classroom;
+use App\Model\Ref\RefLevel;
 use Illuminate\Http\Request;
 
-class ClassroomController extends Controller
+class RefLevelController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class ClassroomController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Model\Classroom  $classroom
+     * @param  \App\Model\Level  $level
      * @return \Illuminate\Http\Response
      */
-    public function show(Classroom $classroom)
+    public function show(Level $level)
     {
         //
     }
@@ -52,10 +52,10 @@ class ClassroomController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Model\Classroom  $classroom
+     * @param  \App\Model\Level  $level
      * @return \Illuminate\Http\Response
      */
-    public function edit(Classroom $classroom)
+    public function edit(Level $level)
     {
         //
     }
@@ -64,10 +64,10 @@ class ClassroomController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Classroom  $classroom
+     * @param  \App\Model\Level  $level
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Classroom $classroom)
+    public function update(Request $request, Level $level)
     {
         //
     }
@@ -75,10 +75,10 @@ class ClassroomController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Model\Classroom  $classroom
+     * @param  \App\Model\Level  $level
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Classroom $classroom)
+    public function destroy(Level $level)
     {
         //
     }

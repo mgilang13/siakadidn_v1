@@ -7,6 +7,9 @@ use App\Model\Ref\RefHalaqah;
 use App\Model\Ref\RefStudent;
 use App\Model\Ref\RefHalaqahRefStudents;
 
+use App\Model\Ref\RefClassroom;
+use App\Model\Ref\RefLevel;
+
 use App\Model\Core\Roles;
 use App\Model\User;
 
@@ -35,13 +38,16 @@ class RefHalaqahController extends Controller
                                 ->select('halaqahs.id', 'users.name as teacherName', 'halaqahs.name as halaqahName', 'description', 'classrooms.name as namaKelas', 'levels.name as namaLevel')
                                 ->paginate(20);
 
+        $classrooms = RefClassroom::all();
+        $levels = RefLevel::all();
+
         $halaqah_teacher->currentTotal = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + $halaqah_teacher->count();
         $halaqah_teacher->startNo = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + 1;
         $halaqah_teacher->no = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + 1;
         
         $halaqahs = RefHalaqah::all();
 
-        return view('ref.halaqah.index', compact('q', 'users', 'halaqahs', 'halaqah_teacher'));
+        return view('ref.halaqah.index', compact('q', 'users', 'halaqahs', 'halaqah_teacher', 'levels', 'classrooms'));
     }
 
     /**
@@ -65,9 +71,11 @@ class RefHalaqahController extends Controller
         $request->validate([
             'name' => 'required',
             'id_teacher' => '',
+            'id_class' => '',
+            'id_level' => '',
             'description' => ''
         ]);
-        RefHalaqah::create($request->only(['name', 'id_teacher', 'description']));
+        RefHalaqah::create($request->only(['name', 'id_teacher', 'id_class', 'id_level', 'description']));
         $request->session()->flash('success', 'Tambah Halaqah Sukses');
     }
 

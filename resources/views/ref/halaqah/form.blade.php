@@ -28,11 +28,34 @@
                         </select>
                         <div class="invalid-feedback" id="id_teacher-message"></div>
                     </div>
+
+                    <div class="form-group">
+                        <label for="id_level" class="col-form-label">Jenjang Pendidikan</label>
+                        <select name="id_level" id="id_level" class="form-control">
+                            @forelse ($levels as $level)
+                                <option value="{{ $level->id }}">{{ $level->name }}</option>
+                            @empty
+                                <option value="">Belum ada data</option>
+                            @endforelse
+                        </select>
+                        <div class="invalid-feedback" id="id_class-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_class" class="col-form-label">Kelas</label>
+                        <select name="id_class" id="id_class" class="form-control">
+                            @forelse ($classrooms as $classroom)
+                                <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
+                            @empty
+                                <option value="">Belum ada data</option>
+                            @endforelse
+                        </select>
+                        <div class="invalid-feedback" id="id_class-message"></div>
+                    </div>
                     
                     <div class="form-group">
                         <label for="description" class="col-form-label">Deskripsi Halaqah</label>
                         <textarea name="description" id="description" rows="5" class="form-control"></textarea>
-                        <div class="invalid-feedback" id="description-message"></div>
                     </div>
                 </div>
                 <div class="modal-footer">

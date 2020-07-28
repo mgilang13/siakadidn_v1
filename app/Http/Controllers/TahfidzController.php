@@ -257,13 +257,15 @@ class TahfidzController extends Controller
 
 
     // Laporan-laporan
+    
+    // Laporan SMP
     public function reportKepalaTahfidzSMP(Request $request)
     {
         $present_date = date('Y-m-d');
         $past_date = $request->query('past_date');
 
         if($past_date == null){
-            $past_date = date('Y-m-d',strtotime("-1 month"));
+            $past_date = date('Y-m-d',strtotime("-1 week"));
         } else {
             $past_date = $request->query('past_date');
         }
@@ -272,6 +274,39 @@ class TahfidzController extends Controller
 
         return view('tahfidz.report.smp', compact('past_date','present_date', 'dataPerKelas', 'dataPerHalaqah'));
     }
+
+     // Laporan SMK
+     public function reportKepalaTahfidzSMK(Request $request)
+     {
+         $present_date = date('Y-m-d');
+         $past_date = $request->query('past_date');
+ 
+         if($past_date == null){
+             $past_date = date('Y-m-d',strtotime("-1 week"));
+         } else {
+             $past_date = $request->query('past_date');
+         }
+         $dataPerKelas = DB::select('call tahfidz_reportclass(?, ?, ?)', array(4, $past_date, $present_date));
+         $dataPerHalaqah = DB::select('call tahfidz_reportmuhafidzhead(?, ?, ?)', array(4, $past_date, $present_date));
+ 
+         return view('tahfidz.report.smk', compact('past_date','present_date', 'dataPerKelas', 'dataPerHalaqah'));
+     }
+
+     public function reportFoundation(Request $request)
+     {
+        $present_date = date('Y-m-d');
+        $past_date = $request->query('past_date');
+
+        if($past_date == null){
+            $past_date = date('Y-m-d',strtotime("-1 week"));
+        } else {
+            $past_date = $request->query('past_date');
+        }
+        $dataFoundation = DB::select('call tahfidz_reportfoundation(?, ?)', array($past_date, $present_date));
+
+        return view('tahfidz.report.foundation', compact('past_date','present_date', 'dataFoundation'));
+     }
+
     public function reportMurid($id)
     {
         $student = RefStudent::findOrFail($id);

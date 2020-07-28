@@ -1,10 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-
-    <div class="content">
-        <h1 class="text-center text-md-left h1-responsive" name="top">Laporan Tahfidz SMP</h1>
-        <div class="card mt-5 pt-2 ml-3 ml-md-0">
+    <div class="content" id="section-to-print">
+        <h1 class="text-center text-md-left h1-responsive" name="top" id="section-title">Laporan Tahfidz SMP</h1>
+        <div class="alert alert-info" role="alert">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <h4 class="alert-heading text-dark">Keterangan</h4>
+            <ul>
+                <li class="text-dark">Data pencapaian untuk jenis hafalan <b>Ziyadah</b></li>
+                <li class="text-dark">Target perhari adalah <b>3 baris</b></li>
+                <li class="text-dark"><b>Senin & Ahad</b> tidak ada target ziyadah</li>
+            </ul>
+            <h4 id="counter" class="h5-responsive text-right text-dark" ></h4>
+        </div>
+        <div class="card mt-3 pt-2 ml-3 ml-md-0" id="documentPrintable">
         @include('layouts.form-periode', ['route' => 'tahfidz.report.smp', 'name' => 'past_date'])
             <div class="row mt-2">
                 <div class="w-100 d-flex justify-content-around flex-wrap">
@@ -63,6 +72,7 @@
                     </tbody>
                 </table>
             </div>
+            <button class="mx-auto mt-3 mb-3 btn btn-mdb-color btn-sm" onClick="window.print()"><i width="17" class="mr-2" data-feather="printer"></i> Print</button>
         </div>
     </div>
     <script>
@@ -70,6 +80,23 @@
             $('#dtHalaqah').DataTable({
                 "paging":true,
             });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            var count1 = 200;
+            var myTimer = setInterval(function() {
+                document.getElementById("counter").innerHTML = count1;
+                count1--;
+                if (count1 == -1) {
+                    $('.alert').hide();
+                    clearInterval(myTimer);
+                } else if (count1 % 10 == 0) {
+                    $('#counter').addClass('font-weight-bold');
+                } else if (count1 % 10 != 0) {
+                    $('#counter').removeClass('font-weight-bold');
+                }
+            }, 100);
         });
     </script>
     <script>

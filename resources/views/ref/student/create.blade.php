@@ -11,8 +11,8 @@
                 <button type="submit" class="btn btn-primary">Simpan</button>
             </div>
         </div>
-        <div class="row">
-            <div class="col-4">
+        <div class="d-flex flex-wrap">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">
                         <h5>Avatar</h5>
@@ -82,7 +82,7 @@
 
                 </div>
             </div>
-            <div class="col-8">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
                         <h5>Data Siswa 1</h5>
@@ -133,7 +133,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-4">
+                        <div class="col-md-4">
                             <select id="gender" name="gender" id="" class="form-control @error('gender') is-invalid @enderror">
                                 <option value="">-- Pilih Jenis Kelamin --</option>
                                 <option value="l" {{ old('gender') == "l" ? 'selected' : '' }}>Laki-laki</option>
@@ -169,7 +169,7 @@
                             <div class="form-group col-6 row">
                                 <div class="col input-with-icon d-flex">
                                     <i width="18" data-feather="layers" class="align-self-center ml-3"></i>
-                                    <input class="form-control @error('hafalan_pra_idn') is-invalid @enderror" id="hafalan_pra_idn" min="0" max="30" type="number" name="hafalan_pra_idn" placeholder="Hafalan Sebelum Masuk IDN" value="{{ old('hafalan_pra_idn') }}">
+                                    <input class="form-control @error('hafalan_pra_idn') is-invalid @enderror" id="hafalan_pra_idn" min="0" max="30" type="number" step="0.01" name="hafalan_pra_idn" placeholder="Hafalan Sebelum Masuk IDN" value="{{ old('hafalan_pra_idn') }}">
                                     @error('hafalan_pra_idn')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -178,7 +178,7 @@
                             <div class="form-group col-6 row">
                                 <div class="col input-with-icon d-flex">
                                     <i width="18" data-feather="layers" class="align-self-center ml-3"></i>
-                                    <input class="form-control @error('target_hafalan') @enderror" id="target_hafalan" min="0" max="30" type="number" name="target_hafalan" placeholder="Target Hafalan" value="{{ old('target_hafalan') }}">
+                                    <input class="form-control @error('target_hafalan') @enderror" id="target_hafalan" min="0" max="30" step="0.01" type="number" name="target_hafalan" placeholder="Target Hafalan" value="{{ old('target_hafalan') }}">
                                     @error('target_hafalan')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

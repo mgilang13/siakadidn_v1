@@ -281,6 +281,7 @@ class RefTeacherController extends Controller
         
         DB::transaction(function() use ($teacher) {
             $teacher->user->delete();
+            $teacher->delete();
             Storage::disk('public')->deleteDirectory('users/'.$teacher->user->id);
         });
         return redirect()->route('ref.teacher.index')->with('success', 'Hapus Data Guru berhasil!');

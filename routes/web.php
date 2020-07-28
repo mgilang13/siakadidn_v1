@@ -43,6 +43,8 @@ Route::middleware(['auth', 'core'])->group(function () {
         Route::name('report.')->prefix('/report')->group(function() {
             Route::get('parent/{id}', 'TahfidzController@reportParent')->name('parent');
             Route::get('smp', 'TahfidzController@reportKepalaTahfidzSMP')->name('smp');
+            Route::get('smk', 'TahfidzController@reportKepalaTahfidzSMK')->name('smk');
+            Route::get('foundation', 'TahfidzController@reportFoundation')->name('foundation');
         });
     });
     Route::resource('tahfidz', 'TahfidzController');

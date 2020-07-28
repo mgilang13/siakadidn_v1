@@ -17,7 +17,8 @@
             <div class="card-body">
                 <div class="table-responsive">
                 @include('layouts.notification')
-                    <table class="table">
+                @include('layouts.form-search-with-id', ['name' => 'Siswa', 'route' => 'ref.halaqah.show.add', 'id' => $halaqah->id])
+                    <table class="table table-sm">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -32,7 +33,7 @@
                             <tr>
                                 <td>{{ $no++ }}</td>
                                 <td>{{ $student->nis }}</td>
-                                <td>{{ $student->user->name }}</td>
+                                <td>{{ $student->name }}</td>
                                 <td>
                                     <form action="{{ route('ref.halaqah.show.add.process', $student->id_student) }}" method="POST">
                                         @method('PATCH')
@@ -49,6 +50,10 @@
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+                <div class="table-footer">
+                    <p>Menampilkan {{ $students->startNo }} - {{ $students->currentTotal }} dari {{ $students->total() }} data</p>
+                    {{ $students->onEachSide(1)->links() }}
                 </div>
             </div>
         </div>

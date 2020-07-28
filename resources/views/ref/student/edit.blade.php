@@ -5,8 +5,8 @@
     <form action="{{ route('ref.student.update', $student->id_student) }}" method="post" enctype="multipart/form-data">
         @csrf
         @method('PATCH')
-        <div class="content-header">
-            <h2>Tambah Siswa</h2>
+        <div class="content-header d-flex flex-wrap">
+            <h2>Edit Siswa</h2>
             <div class="header-btn">
                 <a href="{{ route('ref.student.index') }}" class="btn btn-primary-outline">
                     <i width="14" class="mr-2" data-feather="arrow-left"></i>Kembali
@@ -14,8 +14,8 @@
                 <button type="submit" class="btn btn-primary">Simpan</button>
             </div>
         </div>
-        <div class="row">
-            <div class="col-4">
+        <div class="d-flex flex-wrap">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">
                         <h5>Avatar</h5>
@@ -85,7 +85,7 @@
 
                 </div>
             </div>
-            <div class="col-8">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
                         <h5>Data Siswa 1</h5>
@@ -137,7 +137,7 @@
                     </div>
                     <p class="mt-n3 font-italic"><small>Kosongkan apabila ingin menggunakan password lama</small></p>
                     <div class="form-group row">
-                        <div class="col-4">
+                        <div class="col-md-4">
                             <select id="gender" name="gender" id="" class="form-control @error('gender') is-invalid @enderror">
                                 <option value="">-- Pilih Jenis Kelamin --</option>
                                 <option value="l" {{ (old('gender') ?? $student->user->gender) == "l" ? 'selected' : '' }}>Laki-laki</option>
@@ -160,26 +160,26 @@
                             <select name="id_halaqah" id="id_halaqah" class="form-control @error('id_halaqah') is-invalid @enderror">
                                     <option value="">Kosongkan bila belum ada kelompok</option>
                                 @forelse ($halaqahs as $halaqah)
-                                    <option value="{{ $halaqah->id }}" {{ (old('id_halaqah') ?? $halaqah->id) == $student->id_halaqah }}>{{ $halaqah->name }}</option>
+                                    <option value="{{ $halaqah->id }}" {{ (old('id_halaqah') ?? $halaqah->id) == $student->id_halaqah ? 'selected' : '' }}>{{ $halaqah->name }}</option>
                                 @empty
                                     <option value="">Data Kosong</option>
                                 @endforelse
                             </select>
                         </div>
                         <div class="row">
-                            <div class="form-group col-6 row">
+                            <div class="form-group col-md-6 row">
                                 <div class="col input-with-icon d-flex">
                                     <i width="18" data-feather="layers" class="align-self-center ml-3"></i>
-                                    <input class="form-control @error('hafalan_pra_idn') is-invalid @enderror" id="hafalan_pra_idn" min="0" max="30" type="number" name="hafalan_pra_idn" placeholder="Hafalan Sebelum Masuk IDN" value="{{ old('hafalan_pra_idn') ?? $student->hafalan_pra_idn }}">
+                                    <input class="form-control @error('hafalan_pra_idn') is-invalid @enderror" id="hafalan_pra_idn" min="0" max="30" type="number" step="0.01" name="hafalan_pra_idn" placeholder="Hafalan Sebelum Masuk IDN" value="{{ old('hafalan_pra_idn') ?? $student->hafalan_pra_idn }}">
                                     @error('hafalan_pra_idn')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-group col-6 row">
+                            <div class="form-group col-md-6 row">
                                 <div class="col input-with-icon d-flex">
                                     <i width="18" data-feather="layers" class="align-self-center ml-3"></i>
-                                    <input class="form-control @error('target_hafalan') @enderror" id="target_hafalan" min="0" max="30" type="number" name="target_hafalan" placeholder="Target Hafalan" value="{{ old('target_hafalan') ?? $student->target_hafalan }}">
+                                    <input class="form-control @error('target_hafalan') @enderror" id="target_hafalan" min="0" max="30" type="number" step="0.01" name="target_hafalan" placeholder="Target Hafalan" value="{{ old('target_hafalan') ?? $student->target_hafalan }}">
                                     @error('target_hafalan')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -187,7 +187,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-6 row">
+                            <div class="form-group col-md-6 row">
                                 <div class="col input-with-icon d-flex">
                                     <i width="18" data-feather="align-justify" class="align-self-center ml-3"></i>
                                     <input class="form-control @error('father_name') @enderror" id="father_name" type="text" name="father_name" placeholder="Nama Ayah" value="{{ old('father_name') ?? $student->father_name }}">
@@ -196,7 +196,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-group col-6 row">
+                            <div class="form-group col-md-6 row">
                                 <div class="col input-with-icon d-flex">
                                     <i width="18" data-feather="align-justify" class="align-self-center ml-3"></i>
                                     <input class="form-control" id="father_job" type="text" name="father_job" placeholder="Pekerjaan Ayah" value="{{ old('father_job') ?? $student->father_job }}">
@@ -204,13 +204,13 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-6 row">
+                            <div class="form-group col-md-6 row">
                                 <div class="col input-with-icon d-flex">
                                     <i width="18" data-feather="align-justify" class="align-self-center ml-3"></i>
                                     <input class="form-control" id="mother_name" type="text" name="mother_name" placeholder="Nama Ibu" value="{{ old('mother_name') ?? $student->mother_name }}">
                                 </div>
                             </div>
-                            <div class="form-group col-6 row">
+                            <div class="form-group col-md-6 row">
                                 <div class="col input-with-icon d-flex">
                                     <i width="18" data-feather="align-justify" class="align-self-center ml-3"></i>
                                     <input class="form-control" id="mother_job" type="text" name="mother_job" placeholder="Pekerjaan Ibu" value="{{ old('mother_job') ?? $student->mother_job }}">

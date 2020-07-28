@@ -13,16 +13,16 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" ></script>
+    <script src="{{ mix('/js/app.js') }}" ></script>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
 
     <!-- Styles -->
-    
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/main.css?v=11')}}">
+    <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ mix('/css/main-mix.css')}}">
+    <link href="{{ asset('/css/main-print.css') }}" rel="stylesheet" media="print">
     <link rel="stylesheet" href="{{ asset('css/mdb.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/datatables.min.css') }}">
 </head>

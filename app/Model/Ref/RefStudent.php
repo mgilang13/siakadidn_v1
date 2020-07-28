@@ -3,11 +3,9 @@
 namespace App\Model\Ref;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RefStudent extends Model
 {
-    use SoftDeletes;
     
     protected $primaryKey = "id_student";
     

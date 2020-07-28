@@ -160,7 +160,6 @@ class RefHalaqahController extends Controller
         $students->currentTotal = ($students->currentPage() - 1) * $students->perPage() + $students->count();
         $students->startNo = ($students->currentPage() - 1) * $students->perPage() + 1;
         $students->no = ($students->currentPage() - 1) * $students->perPage() + 1;
-        
         return view('ref.halaqah.add-member', compact('q', 'halaqah', 'students'));
     }
 

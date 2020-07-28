@@ -19,7 +19,7 @@
                         <div class="card purple-gradient text-white text-center card-shadow-info px-0">
                             <div class="card-body">
                                 <h6 class="font-weight-normal">Target Hafalan Baru</h6>
-                                <h6 class="mb-0 font-weight-bold">{{ $student->target_hafalan == null ? '0' : $student->hafalan_pra_idn }} Juz</h6>
+                                <h6 class="mb-0 font-weight-bold">{{ $student->target_hafalan == null ? '0' : $student->target_hafalan }} Juz</h6>
                             </div>
                         </div>
                     </div>

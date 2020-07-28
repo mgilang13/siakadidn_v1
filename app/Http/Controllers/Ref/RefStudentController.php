@@ -292,11 +292,12 @@ class RefStudentController extends Controller
      */
     public function destroy($id)
     {
-        $student = RefStudent::findOrFail($id);
-        
-        DB::transaction(function() use ($student) {
-            $student->user->delete();
-            Storage::disk('public')->deleteDirectory('users/'.$student->user->id);
+        $user = User::findOrFail($id);
+
+        DB::transaction(function() use ($id, $user) {
+            $user->delete();
+            RefStudent::where('id_student', $id)->delete();
+            Storage::disk('public')->deleteDirectory('users/'.$id);
         });
         return redirect()->route('ref.student.index')->with('success', 'Hapus Data Murid berhasil!');
     }

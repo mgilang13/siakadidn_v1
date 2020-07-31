@@ -57,8 +57,8 @@ class UsersController extends Controller
         // validasi
         $request->validate([
             'username' => 'required|string|max:255|unique:users,username,NULL,id,deleted_at,NULL',
-            'email' => 'string|max:255|email:rfc,dns|unique:users,email,NULL,id,deleted_at,NULL',
-            'phone' => 'string|max:20|unique:users,phone,NULL,id,deleted_at,NULL',
+            'email' => '',
+            'phone' => '',
             'name' => 'required|string|max:255',
             'password' => 'required|string',
             'gender' => 'required|in:l,p',

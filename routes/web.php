@@ -96,7 +96,7 @@ Route::middleware(['auth', 'core'])->group(function () {
 
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
     Route::get('/profile', 'ProfileController@index')->name('profile');
-    Route::put('/profile', 'ProfileController@updateProcess')->name('profile.update.process');
+    Route::patch('/profile', 'ProfileController@updateProcess')->name('profile.update.process');
     Route::get('/template', 'TemplateController@index')->name('template');
     
     Route::name('core.')->prefix('/core')->namespace('Core')->group(function () {

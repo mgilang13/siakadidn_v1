@@ -130,11 +130,7 @@ class RefStudentController extends Controller
                 'id_halaqah' => '',
                 'entry_date' => '',
                 'hafalan_pra_idn' => '',
-                'target_hafalan' => '',
-                'father_name' => '',
-                'father_job' => '',
-                'mother_name' => '',
-                'mother_job' => ''
+                'target_hafalan' => ''
             ]);
             $id = $user->id;
             RefStudent::create([
@@ -144,11 +140,7 @@ class RefStudentController extends Controller
                 'id_halaqah' => request('id_halaqah'),
                 'entry_date' => request('entry_date'),
                 'hafalan_pra_idn' => request('hafalan_pra_idn'),
-                'target_hafalan' => request('target_hafalan'),
-                'father_name' => request('father_name'),
-                'father_job' => request('father_job'),
-                'mother_name' => request('mother_name'),
-                'mother_job' => request('mother_job'),
+                'target_hafalan' => request('target_hafalan')
             ]);
             
             $params = [ 'roles_id' => $request->input('role'), 'users_id' => $user->id ];
@@ -255,7 +247,7 @@ class RefStudentController extends Controller
 
                 // Small Image
                 $image_sm = "image_sm_".$student->user->id."_".date('YmdHis').$image_ext;
-                $resize_image->resize(512, null, function($constraint) {
+                $resize_image->resize(128, null, function($constraint) {
                     $constraint->aspectRatio();
                 });
                 $resize_image->save(storage_path('app/public/'.env('UPLOAD_USER').$student->user->id."/".$image_sm));
@@ -274,10 +266,6 @@ class RefStudentController extends Controller
                 'entry_date' => '',
                 'hafalan_pra_idn' => '',
                 'target_hafalan' => '',
-                'father_name' => '',
-                'father_job' => '',
-                'mother_name' => '',
-                'mother_job' => ''
             ]);
             $student->update($validateStudent);
         });

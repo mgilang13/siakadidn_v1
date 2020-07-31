@@ -21,7 +21,6 @@
                             <th>Nama</th>
                             <th>Tahun Masuk</th>
                             <th>Tempat Lahir</th>
-                            <th>Nama Ayah</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -34,7 +33,6 @@
                                 <td>{{ $us->name }}</td>
                                 <td>{{ substr($us->entry_date, 0, 4) }}</td>
                                 <td>{{ $us->birth_place }}</td>
-                                <td>{{ $us->father_name }}</td>
                                 <td>
                                     <div class="btn-action d-flex justify-content-around">
                                         <a href="{{ route('ref.student.edit', $us->id) }}">

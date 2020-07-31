@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Model\User;
 
 class DashboardController extends Controller
 {
@@ -13,15 +14,41 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-        // // check role id of user
-        // $role_id = Auth::user()->roles->first()->pivot->roles_id;
+        $id = Auth::user()->id;
+        $user = User::findOrFail($id);
+
+        // Dashboard Muhafidz
+        $present_date = date('Y-m-d');
+        $past_date = $request->query('past_date');
         
-        // if($role_id == 3) {
-        //     $tahfidz_muhafidzs = DB::select('CALL tahfidz_muhafidz(?)', array($role_id));
-        //     dd($tahfidz_muhafidzs);
-        // }
-        return view('dashboard');
+        if($past_date == null){
+            $past_date = date('Y-m-d',strtotime("-1 week"));
+        } else {
+            $past_date = $request->query('past_date');
+        }
+        $reportMuhafidz = DB::select('call tahfidz_reportmuhafidz(?, ?, ?)', array($id, $past_date, $present_date));
+        $reportMuhafidzSantri = DB::select('call tahfidz_reportmuhafidzsantri(?, ?, ?)', array($id, $past_date, $present_date));
+        
+        // Dashboard Murid
+        // Untuk membuat grafik
+        $tahfidz_report_ziyadah = DB::select('call tahfidz_report(?, ?)', array($id, 'ziyadah'));
+        $tgl_bln_ziyadah = array();
+        $total_line_ziyadah = array();
+        foreach($tahfidz_report_ziyadah as $tc){
+            array_push($tgl_bln_ziyadah, $tc->tgl_bln);
+            array_push($total_line_ziyadah, $tc->total_line);
+        }
+
+        $tahfidz_report_murajaah = DB::select('call tahfidz_report(?, ?)', array($id, 'murajaah'));
+        $tgl_bln_murajaah = array();
+        $total_line_murajaah = array();
+        foreach($tahfidz_report_murajaah as $tc){
+            array_push($tgl_bln_murajaah, $tc->tgl_bln);
+            array_push($total_line_murajaah, $tc->total_line);
+        }
+        return view('dashboard', compact('past_date','present_date', 'reportMuhafidz', 'reportMuhafidzSantri','user', 'tahfidz_report_murajaah', 'tahfidz_report_ziyadah', 'tgl_bln_ziyadah', 'total_line_ziyadah', 'tgl_bln_murajaah', 'total_line_murajaah',));
+        // return view('dashboard', compact('past_date','present_date', 'reportMuhafidz', 'reportMuhafidzSantri'));        
     }
 }

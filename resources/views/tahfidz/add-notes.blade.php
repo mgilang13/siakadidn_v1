@@ -38,30 +38,33 @@
                         </div>
                         
 
-                        <div class="form-group mt-2 mt-md-5 d-flex justify-content-between">
+                        <div class="form-group mt-4 mt-md-3">
                             <div>
-                                <div><label for="type" class="col-for-label">Tipe Hafalan :</label></div>
-                                <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons" id="type">
+                                <div><label for="type" class="col-for-label">Tipe Setoran :</label></div>
+                                <div class="btn-group btn-group-toggle btn-group-sm flex-wrap d-flex" data-toggle="buttons" id="type">
                                     
-                                    <label class="btn btn-dark-green active px-md-4 py-md-2">
+                                    <label class="btn btn-dark-green active px-md-3 py-md-2">
                                         <input type="radio" name="type" value="ziyadah" id="ziyadah" autocomplete="off" checked> Ziyadah
                                     </label>
-                                    <label class="btn btn-dark-green px-md-4 py-md-2">
+                                    <label class="btn btn-dark-green px-md-3 py-md-2">
                                         <input type="radio" name="type" value="murajaah" id="murajaah" autocomplete="off"> Muraja'ah
                                     </label>
-                                    <label class="btn btn-indigo px-md-4 py-md-2">
+                                    <label class="btn btn-indigo px-md-3 py-md-2">
                                         <input type="radio" name="type" value="tahsin" id="tahsin" autocomplete="off"> Tahsin
+                                    </label>
+                                    <label class="btn btn-deep-orange px-md-3 py-md-2">
+                                        <input type="radio" name="type" value="ulang" id="ulang" autocomplete="off"> ULANG
                                     </label>
                                 </div>
                             </div>
-                            <div>
-                                <div><label for="assessment" class="col-for-label">Penilaian :</label></div>
+                            <div class="mt-4">
+                                <div><label for="assessment">Penilaian :</label></div>
                                 <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons" id="assessment">
                                     <label class="btn btn-cyan px-md-4 py-md-2 active">
-                                        <input type="radio" name="assessment" value="l" id="a" autocomplete="off" checked> L
+                                        <input type="radio" name="assessment" value="l" id="a" autocomplete="off" checked> Lancar
                                     </label>
                                     <label class="btn btn-cyan px-md-4 py-md-2">
-                                        <input type="radio" name="assessment" value="kl" id="b" autocomplete="off"> KL
+                                        <input type="radio" name="assessment" value="kl" id="b" autocomplete="off"> Kurang Lancar
                                     </label>
                                 </div>
                             </div>

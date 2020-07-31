@@ -41,7 +41,7 @@
                     <div class="col d-flex align-items-center justify-content-end">
                         <b class="mr-3">{{ Auth::user()->name }}</b>
                         
-                        <img class="mr-3 img-responsive img-rounded img-fluid" src="{{ Auth::user()->image_small ? asset('storage/'.env('UPLOAD_USER').'/'.Auth::user()->id.'/'.Auth::user()->image_small) : asset('images/ic_profile.svg') }}" alt="profil">
+                        <img class="mr-3 img-responsive img-rounded img-fluid img-profile" src="{{ Auth::user()->image_small ? asset('storage/'.Auth::user()->image_small) : asset('images/ic_profile.svg') }}" alt="profil">
                         <div class="dropdown">
                             <a type="button" id="dropdown" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true" aria-haspopup="true"></a>
                             <div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdown">

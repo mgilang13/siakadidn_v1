@@ -23,7 +23,7 @@ class TahfidzController extends Controller
     {
         $id = Auth::user()->id;
 
-        $halaqah = $halaqah = RefHalaqah::where('id_teacher', $id)->get()->first();
+        $halaqah = RefHalaqah::where('id_teacher', $id)->get()->first();
         
         return view('tahfidz.index', compact('halaqah'));
     }
@@ -121,6 +121,7 @@ class TahfidzController extends Controller
         $tahfidz_total_ziyadah = DB::select('call tahfidz_total(?, ?)', array($id, 'ziyadah'));
         $tahfidz_total_murajaah = DB::select('call tahfidz_total(?, ?)', array($id, 'murajaah'));
         
+        // Untuk membuat grafik
         $tahfidz_report_ziyadah = DB::select('call tahfidz_report(?, ?)', array($id, 'ziyadah'));
         $tgl_bln_ziyadah = array();
         $total_line_ziyadah = array();

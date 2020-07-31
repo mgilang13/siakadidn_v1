@@ -1,23 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-
-<div class="content">
-    <div class="content-header">
-        <h2>Dashboard</h2>
-    </div>
-    <div class="card h-100">
-        <div class="card-header">
-            <h5>Dashboard</h5>
+    @if(Auth::user()->roles->first()->pivot->roles_id == 3)
+        @include('dashboard.muhafidz')
+    @elseif(Auth::user()->roles->first()->pivot->roles_id == 4)
+        @include('dashboard.murid')
+    @else
+        <div class="content">
+            <h1 class="h1-responsive">Dashboard</h1>
+            <div class="card">
+                You're welcome
+            </div>
         </div>
-        
-        <div class="card-body">
-            You are logged in
-             
-            <!-- Roles  -->
-            {{ Auth::user()->roles->first()->pivot->roles_id }}
-            {{ Auth::user()->id }}
-        </div>
-    </div>
-</div>
+    @endif
 @endsection

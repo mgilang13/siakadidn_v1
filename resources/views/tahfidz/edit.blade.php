@@ -37,29 +37,32 @@
                         </div>
                         
 
-                        <div class="form-group mt-2 mt-md-5 d-flex justify-content-between">
+                        <div class="form-group mt-3 mt-md-5">
                             <div>
                                 <div><label for="type" class="col-for-label">Tipe Hafalan :</label></div>
-                                <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons" id="type">
-                                    <label class="btn btn-dark-green active px-md-4 py-md-2">
+                                <div class="btn-group btn-group-toggle btn-group-sm flex-wrap d-flex" data-toggle="buttons" id="type">
+                                    <label class="btn btn-dark-green active px-md-3 py-md-2">
                                         <input type="radio" name="type" value="ziyadah" id="ziyadah" autocomplete="off" {{ (old('type') ?? $tahfidz->type) == 'ziyadah' ? 'checked' : ''}}> Ziyadah
                                     </label>
-                                    <label class="btn btn-dark-green px-md-4 py-md-2">
+                                    <label class="btn btn-dark-green px-md-3 py-md-2">
                                         <input type="radio" name="type" value="murajaah" id="murajaah" autocomplete="off" {{ (old('type') ?? $tahfidz->type) == 'murajaah' ? 'checked' : ''}}> Muraja'ah
                                     </label>
-                                    <label class="btn btn-indigo px-md-4 py-md-2">
-                                        <input type="radio" name="type" value="murajaah" id="murajaah" autocomplete="off" {{ (old('type') ?? $tahfidz->type) == 'tahsin' ? 'checked' : ''}}> Tahsin
+                                    <label class="btn btn-indigo px-md-3 py-md-2">
+                                        <input type="radio" name="type" value="tahsin" id="tahsin" autocomplete="off" {{ (old('type') ?? $tahfidz->type) == 'tahsin' ? 'checked' : ''}}> Tahsin
+                                    </label>
+                                    <label class="btn btn-deep-orange px-md-3 py-md-2">
+                                        <input type="radio" name="type" value="ulang" id="ulang" autocomplete="off" {{ (old('type') ?? $tahfidz->type) == 'ulang' ? 'checked' : ''}}> Ulang
                                     </label>
                                 </div>
                             </div>
-                            <div>
+                            <div class="mt-4">
                                 <div><label for="assessment" class="col-for-label">Penilaian :</label></div>
                                 <div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons" id="assessment">
                                     <label class="btn btn-cyan px-md-3 py-md-2 active">
-                                        <input type="radio" name="assessment" value="l" id="l" autocomplete="off" {{ (old('assessment') ?? $tahfidz->assessment) == 'l' ? 'checked' : ''}}> L
+                                        <input type="radio" name="assessment" value="l" id="l" autocomplete="off" {{ (old('assessment') ?? $tahfidz->assessment) == 'l' ? 'checked' : ''}}> Lancar
                                     </label>
                                     <label class="btn btn-cyan px-md-3 py-md-2">
-                                        <input type="radio" name="assessment" value="kl" id="kl" autocomplete="off" {{ (old('assessment') ?? $tahfidz->assessment) == 'kl' ? 'checked' : ''}}> KL
+                                        <input type="radio" name="assessment" value="kl" id="kl" autocomplete="off" {{ (old('assessment') ?? $tahfidz->assessment) == 'kl' ? 'checked' : ''}}> Kurang Lancar
                                     </label>
                                 </div>
                             </div>

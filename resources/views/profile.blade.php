@@ -4,7 +4,7 @@
 <div class="content">
     <form action="{{ route('profile.update.process') }}" method="post" enctype="multipart/form-data">
         @csrf
-        @method('put')
+        @method('PATCH')
         <div class="content-header">
             <h2>Ubah Profile</h2>
             <div class="header-btn">
@@ -17,15 +17,21 @@
                     <div class="card-header">
                         <h5>Avatar</h5>
                     </div>
-                    <div class="input-with-icon">
-                        <i width="18" data-feather="image" class="mr-15"></i>
-                        <input type="file" name="image" id="image" accept="image/*" class="form-control @error('image') is-invalid @enderror">
-                        @error('image')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                    <div class="form-group">
+                        <div class="col d-flex input-with-icon">
+                            <i width="18" data-feather="image" class="align-self-center ml-3"></i>
+                            <input type="file" name="image" id="image" accept="image/*" class="form-control @error('image') is-invalid @enderror">
+                            @error('image')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
-                    @if (Auth::user()->image)
-                        <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="profile" class="img-fluid" width="100%">
+                    @if (Auth::user()->image_medium)
+                        <img src="{{ asset('storage/' . Auth::user()->image_medium) }}" alt="profile" class="img-fluid" width="100%">
+                    @else
+                        <div class="d-flex justify-content-center mt-2 mb-2">
+                            <h4 class="text-primary h4-responsive font-weight-bold">No Image</h4>
+                        </div>
                     @endif
                 </div>
             </div>

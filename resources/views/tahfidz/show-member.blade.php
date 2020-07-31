@@ -22,6 +22,7 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
+                                <th>ID</th>
                                 <th>Nama Siswa</th>
                                 <th>Action</th>
                             </tr>
@@ -31,6 +32,7 @@
                         @forelse ($listed_members as $listed_member)
                             <tr>
                                 <td>{{ $no++ }}</td>
+                                <td>{{ $listed_member->id}}</td>
                                 <td>{{ $listed_member->name }}</td>
                                 <td>
                                     <a href="{{ route('tahfidz.show', $listed_member->id) }}" class="btn btn-mdb-color btn-sm">Lembar Mutaba'ah</a>

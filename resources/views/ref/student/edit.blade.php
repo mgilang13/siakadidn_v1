@@ -186,37 +186,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="form-group col-md-6 row">
-                                <div class="col input-with-icon d-flex">
-                                    <i width="18" data-feather="align-justify" class="align-self-center ml-3"></i>
-                                    <input class="form-control @error('father_name') @enderror" id="father_name" type="text" name="father_name" placeholder="Nama Ayah" value="{{ old('father_name') ?? $student->father_name }}">
-                                    @error('father_name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6 row">
-                                <div class="col input-with-icon d-flex">
-                                    <i width="18" data-feather="align-justify" class="align-self-center ml-3"></i>
-                                    <input class="form-control" id="father_job" type="text" name="father_job" placeholder="Pekerjaan Ayah" value="{{ old('father_job') ?? $student->father_job }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6 row">
-                                <div class="col input-with-icon d-flex">
-                                    <i width="18" data-feather="align-justify" class="align-self-center ml-3"></i>
-                                    <input class="form-control" id="mother_name" type="text" name="mother_name" placeholder="Nama Ibu" value="{{ old('mother_name') ?? $student->mother_name }}">
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6 row">
-                                <div class="col input-with-icon d-flex">
-                                    <i width="18" data-feather="align-justify" class="align-self-center ml-3"></i>
-                                    <input class="form-control" id="mother_job" type="text" name="mother_job" placeholder="Pekerjaan Ibu" value="{{ old('mother_job') ?? $student->mother_job }}">
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

@@ -308,3 +308,11 @@ body {
     background-color: #fff;
     border-radius: 50px;
 }
+
+.img-profile {
+    width: 55px;
+    object-fit: cover;
+    height: 55px !important;
+    border-radius: 110px;
+    padding: 3px;
+}

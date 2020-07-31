@@ -5,6 +5,8 @@
         @include('dashboard.muhafidz')
     @elseif(Auth::user()->roles->first()->pivot->roles_id == 4)
         @include('dashboard.murid')
+    @elseif(Auth::user()->id == 1)
+        @include('dashboard.admin')
     @else
         <div class="content">
             <h1 class="h1-responsive">Dashboard</h1>

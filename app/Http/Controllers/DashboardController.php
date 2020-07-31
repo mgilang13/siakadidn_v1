@@ -48,7 +48,11 @@ class DashboardController extends Controller
             array_push($tgl_bln_murajaah, $tc->tgl_bln);
             array_push($total_line_murajaah, $tc->total_line);
         }
-        return view('dashboard', compact('past_date','present_date', 'reportMuhafidz', 'reportMuhafidzSantri','user', 'tahfidz_report_murajaah', 'tahfidz_report_ziyadah', 'tgl_bln_ziyadah', 'total_line_ziyadah', 'tgl_bln_murajaah', 'total_line_murajaah',));
-        // return view('dashboard', compact('past_date','present_date', 'reportMuhafidz', 'reportMuhafidzSantri'));        
+
+        // Dashboard Admin
+        $dataFoundation = DB::select('call tahfidz_reportfoundation(?, ?)', array($past_date, $present_date));
+        
+        
+        return view('dashboard', compact('past_date','present_date', 'reportMuhafidz', 'reportMuhafidzSantri','user', 'tahfidz_report_murajaah', 'tahfidz_report_ziyadah', 'tgl_bln_ziyadah', 'total_line_ziyadah', 'tgl_bln_murajaah', 'total_line_murajaah', 'dataFoundation'));  
     }
 }

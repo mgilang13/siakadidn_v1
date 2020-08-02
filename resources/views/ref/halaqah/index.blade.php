@@ -21,7 +21,7 @@
                                 <th>Pengampu</th>
                                 <th>Deskripsi</th>
                                 <th>Kelas</th>
-                                <th>Level</th>
+                                <th>Institusi</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -32,13 +32,9 @@
                                 <td>{{ $halaqah_teacher->no++ }}</td>
                                 <td>{{ $halaqah->halaqahName }}</td>
                                 <td>{{ $halaqah->teacherName }}</td>
-                                <td>{{ $halaqah->description}}</td>
-                                <td>{{ $halaqah->namaKelas}}</td>
-                                @if($halaqah->namaLevel == "Sekolah Menengah Pertama")
-                                <td>SMP</td>
-                                @else
-                                <td>SMK</td>
-                                @endif
+                                <td>{{ $halaqah->description }}</td>
+                                <td>{{ $halaqah->namaKelas }}</td>
+                                <td><span class="text-uppercase">{{ $halaqah->abbrevation }}</span> {{ $halaqah->namaLevelDetail }}</td>
                                 <td>
                                     <div class="btn-action d-flex justify-content-around">
                                         <a href="{{ route('ref.halaqah.show', $halaqah->id) }}" title="Tambah Anggota">
@@ -144,6 +140,13 @@
                     });
             }
         })
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('.js-example-responsive').select2({
+            width: 'style'
+        });
     });
 </script>
 @endsection

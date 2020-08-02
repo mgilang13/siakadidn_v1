@@ -21,7 +21,8 @@
 
     <!-- Styles -->
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ mix('/css/main-mix.css')}}">
+    <link rel="stylesheet" href="{{ mix('/css/main-mix.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
     <link href="{{ asset('/css/main-print.css') }}" rel="stylesheet" media="print">
     <link rel="stylesheet" href="{{ asset('css/mdb.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/datatables.min.css') }}">
@@ -37,8 +38,12 @@
                 
                 <a id="sidebarCollapse" class="d-block d-lg-none p-3">
                     <i data-feather="menu" style="color:#349ce4"></i>
-    </a>
+    </a>            
                     <div class="col d-flex align-items-center justify-content-end">
+                        <a href="#" class="mr-3">
+                            <i width="18" data-feather="bell"></i>
+                        </a>
+
                         <b class="mr-3">{{ Auth::user()->name }}</b>
                         
                         <img class="mr-3 img-responsive img-rounded img-fluid img-profile" src="{{ Auth::user()->image_small ? asset('storage/'.Auth::user()->image_small) : asset('images/ic_profile.svg') }}" alt="profil">
@@ -65,7 +70,7 @@
     <script src="{{ asset('theme/js/popper.min.js') }}"></script>
     <script src="{{ asset('theme/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('theme/js/axios.min.js') }}"></script>
-
+    <script src="{{ asset('js/select2.min.js') }}"></script>
     <script>
 	    $(document).ready(function(){
             sidebarCollapseStatus = $('#sidebarCollapse').css('display');

@@ -9,6 +9,7 @@ use App\Model\Ref\RefHalaqahRefStudents;
 
 use App\Model\Ref\RefClassroom;
 use App\Model\Ref\RefLevel;
+use App\Model\Ref\RefLevelDetail;
 
 use App\Model\Core\Roles;
 use App\Model\User;
@@ -35,19 +36,22 @@ class RefHalaqahController extends Controller
                                 ->join('users', 'users.id', '=', 'halaqahs.id_teacher')
                                 ->join('classrooms', 'halaqahs.id_class', '=', 'classrooms.id')
                                 ->join('levels', 'halaqahs.id_level', '=', 'levels.id')
-                                ->select('halaqahs.id', 'users.name as teacherName', 'halaqahs.name as halaqahName', 'description', 'classrooms.name as namaKelas', 'levels.name as namaLevel')
+                                ->join('level_details', 'halaqahs.id_level_detail', '=', 'level_details.id')
+                                ->select('halaqahs.id', 'users.name as teacherName', 'halaqahs.name as halaqahName', 'description', 
+                                            'classrooms.name as namaKelas', 'levels.name as namaLevel','levels.abbr as abbrevation', 
+                                            'level_details.name as namaLevelDetail')
                                 ->paginate(20);
-
-        $classrooms = RefClassroom::all();
-        $levels = RefLevel::all();
 
         $halaqah_teacher->currentTotal = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + $halaqah_teacher->count();
         $halaqah_teacher->startNo = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + 1;
         $halaqah_teacher->no = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + 1;
         
+        $classrooms = RefClassroom::all();
+        $levels = RefLevel::all();
+        $level_details = RefLevelDetail::all();
         $halaqahs = RefHalaqah::all();
 
-        return view('ref.halaqah.index', compact('q', 'users', 'halaqahs', 'halaqah_teacher', 'levels', 'classrooms'));
+        return view('ref.halaqah.index', compact('q', 'users', 'halaqahs', 'halaqah_teacher', 'levels', 'classrooms','level_details'));
     }
 
     /**
@@ -73,8 +77,10 @@ class RefHalaqahController extends Controller
             'id_teacher' => '',
             'id_class' => '',
             'id_level' => '',
+            'id_level_detail' => '',
             'description' => ''
         ]);
+
         RefHalaqah::create($request->only(['name', 'id_teacher', 'id_class', 'id_level', 'description']));
         $request->session()->flash('success', 'Tambah Halaqah Sukses');
     }
@@ -113,7 +119,12 @@ class RefHalaqahController extends Controller
                             ->join('users as u', 'u.id', '=', 't.id_teacher')
                             ->select('u.id', 'u.name')
                             ->get();
-        return view('ref.halaqah.edit', compact('halaqah', 'teachers'));
+        
+        $classrooms = RefClassroom::all();
+        $levels = RefLevel::all();
+        $level_details = RefLevelDetail::all();
+        
+        return view('ref.halaqah.edit', compact('halaqah', 'teachers', 'levels', 'classrooms', 'level_details'));
     }
 
     /**
@@ -128,6 +139,9 @@ class RefHalaqahController extends Controller
         $validateData = $request->validate([
             'name' => 'required',
             'id_teacher' => '',
+            'id_class' => '',
+            'id_level' => '',
+            'id_level_detail' => '',
             'description' => ''
         ]);
         $halaqah->update($validateData);

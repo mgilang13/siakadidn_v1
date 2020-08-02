@@ -19,7 +19,7 @@
 
                     <div class="form-group">
                         <label for="id_teacher" class="col-form-label">Pengampu</label>
-                        <select name="id_teacher" id="id_teacher" class="form-control">
+                        <select name="id_teacher" id="id_teacher" class="js-example-responsive form-control" style="width:100%">
                             @forelse ($users as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }}</option>
                             @empty
@@ -30,7 +30,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="id_level" class="col-form-label">Jenjang Pendidikan</label>
+                        <label for="id_level" class="col-form-label">Institusi</label>
                         <select name="id_level" id="id_level" class="form-control">
                             @forelse ($levels as $level)
                                 <option value="{{ $level->id }}">{{ $level->name }}</option>
@@ -38,7 +38,19 @@
                                 <option value="">Belum ada data</option>
                             @endforelse
                         </select>
-                        <div class="invalid-feedback" id="id_class-message"></div>
+                        <div class="invalid-feedback" id="id_level-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_level_detail" class="col-form-label">Detail Institusi</label>
+                        <select name="id_level_detail" id="id_level_detail" class="form-control">
+                            @forelse ($level_details as $level_detail)
+                                <option value="{{ $level_detail->id }}">{{ $level_detail->name }}</option>
+                            @empty
+                                <option value="">Belum ada data</option>
+                            @endforelse
+                        </select>
+                        <div class="invalid-feedback" id="id_level_detail-message"></div>
                     </div>
 
                     <div class="form-group">

@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,5 +29,15 @@ class AppServiceProvider extends ServiceProvider
         config(['app.locale' => 'id']);
         \Carbon\Carbon::setLocale('id');
         date_default_timezone_set('Asia/Jakarta');
+        
+        view()->composer('*', function ($view) {
+            if(Auth::check()) {
+                $id = Auth::user()->id;
+                $notifMuhafidz = DB::select('call tahfidz_notifmuhafidz(?)', array($id));
+
+                $view->with('notifMuhafidz', $notifMuhafidz);
+            }
+        });
+        
     }
 }

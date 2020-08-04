@@ -28,9 +28,12 @@ class DashboardController extends Controller
         } else {
             $past_date = $request->query('past_date');
         }
+
+        $yesterday = date('Y-m-d', strtotime('yesterday'));
+
         $reportMuhafidz = DB::select('call tahfidz_reportmuhafidz(?, ?, ?)', array($id, $past_date, $present_date));
         $reportMuhafidzSantri = DB::select('call tahfidz_reportmuhafidzsantri(?, ?, ?)', array($id, $past_date, $present_date));
-        
+
         // Dashboard Murid
         // Untuk membuat grafik
         $tahfidz_report_ziyadah = DB::select('call tahfidz_report(?, ?)', array($id, 'ziyadah'));
@@ -53,6 +56,8 @@ class DashboardController extends Controller
         $dataFoundation = DB::select('call tahfidz_reportfoundation(?, ?)', array($past_date, $present_date));
         
         
-        return view('dashboard', compact('past_date','present_date', 'reportMuhafidz', 'reportMuhafidzSantri','user', 'tahfidz_report_murajaah', 'tahfidz_report_ziyadah', 'tgl_bln_ziyadah', 'total_line_ziyadah', 'tgl_bln_murajaah', 'total_line_murajaah', 'dataFoundation'));  
+        return view('dashboard', compact('past_date','present_date', 'reportMuhafidz', 'reportMuhafidzSantri','user', 
+        'tahfidz_report_murajaah', 'tahfidz_report_ziyadah', 'tgl_bln_ziyadah', 'total_line_ziyadah', 'tgl_bln_murajaah', 
+        'total_line_murajaah', 'dataFoundation'));
     }
 }

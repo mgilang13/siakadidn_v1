@@ -38,12 +38,44 @@
                 
                 <a id="sidebarCollapse" class="d-block d-lg-none p-3">
                     <i data-feather="menu" style="color:#349ce4"></i>
-    </a>            
+                </a>
                     <div class="col d-flex align-items-center justify-content-end">
-                        <a href="#" class="mr-3">
-                            <i width="18" data-feather="bell"></i>
-                        </a>
-
+                        <div class="dropdown">
+                            <a type="button" id="drop-notification" class="mr-5" data-toggle="dropdown" class="dropdown-toggle">
+                                <i width="18" data-feather="bell" color="indigo darken-4" style="position:relative"></i>
+                                @if(Auth::user()->roles->first()->pivot->roles_id == 3)
+                                    @if($notifMuhafidz != null)
+                                    <span style="height:6px; width:6px; border-radius: 3px; position:absolute" class="red mr-2"></span>
+                                    @endif
+                                @endif
+                            </a>
+                            <div class="dropdown-menu mt-3 amber lighten-1" aria-labelledby="drop-notification">
+                                <div class="dropdown-item bg-white">
+                                @if(Auth::user()->roles->first()->pivot->roles_id == 3)
+                                    <div class="toast amber lighten-3" data-autohide="false">
+                                        <div class="toast-header">
+                                        <strong class="mr-auto">Notifikasi Muhafidz </strong>
+                                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                                        </div>
+                                        <div class="toast-body d-flex flex-wrap">
+                                        @if($notifMuhafidz != null)
+                                        <h6 class="h6-responsive">Belum input data tahfidz pada: </h6>
+                                            <ul>
+                                                @foreach($notifMuhafidz as $nm)
+                                                    <li><small class="font-weight-bold">{{ $nm->tanggal_setor }}</small></li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                        <h6 class="h6-responsive">Data tahfidz terisi semua</h6>
+                                        @endif
+                                        </div>
+                                    </div>
+                                @else
+                                    <span class="align-middle">Tidak ada notifikasi</span>
+                                @endif
+                                </div>
+                            </div>
+                        </div>
                         <b class="mr-3">{{ Auth::user()->name }}</b>
                         
                         <img class="mr-3 img-responsive img-rounded img-fluid img-profile" src="{{ Auth::user()->image_small ? asset('storage/'.Auth::user()->image_small) : asset('images/ic_profile.svg') }}" alt="profil">
@@ -88,7 +120,8 @@
                 $('#overlay').toggleClass('close');
 			});
            
-		});  
+		});
+        $('.toast').toast('show');  
 	</script>
     <script>
         //axios

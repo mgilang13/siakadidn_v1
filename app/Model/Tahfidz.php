@@ -14,8 +14,10 @@ class Tahfidz extends Model
         return \Carbon\Carbon::parse($this->attributes['created_at'])
         ->format('yy-m-d');
     }
+    
     public function getTanggalSetorAttribute()
     {
-        return \Carbon\Carbon::parse($this->tanggal_setor)->format('d, M Y');
+        return \Carbon\Carbon::parse($this->attributes['tanggal_setor'])
+        ->format('d, M Y');
     }
 }

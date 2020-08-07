@@ -89,6 +89,7 @@ class TahfidzController extends Controller
             'page' => '',
             'absen' => '' 
         ]);
+        
         $tahfidz_note = Tahfidz::create($validateData);
         if(empty($request->input('page'))) {
             $tahfidz_note->page = 0;
@@ -96,7 +97,7 @@ class TahfidzController extends Controller
         }
         $student = RefStudent::findOrFail($tahfidz_note->id_student);
         $tahfidzs = Tahfidz::where('id_student', $tahfidz_note->student)->get();
-
+        
         return redirect()->route('tahfidz.show', $student->id_student)->with('success', 'Tambah Catatan sukses');
     }
 
@@ -196,11 +197,14 @@ class TahfidzController extends Controller
             'page' => '',
             'absen' => '' 
         ]);
-        $tahfidz->update($validateData);
-        if(empty($request->input('page'))) {
-            $tahfidz->page = 0;
-            $tahfidz->save();
-        }
+
+        DB::transaction(function () use ($request, $validateData) {
+            $tahfidz->update($validateData);
+            if(empty($request->input('page'))) {
+                $tahfidz->page = 0;
+                $tahfidz->save();
+            }
+        });
 
         return redirect()->route('tahfidz.show', $tahfidz->id_student)->with('success', 'Ubah Catatan sukses');
     }
@@ -218,9 +222,13 @@ class TahfidzController extends Controller
     }
 
     public function destroy(Tahfidz $tahfidz)
-    {   $id_student = $tahfidz->id_student;
+    {   
+        $id_student = $tahfidz->id_student;
+        
+        DB::transaction(function () use ($tahfidz) {
+            $tahfidz->delete();
+        });
 
-        $tahfidz->delete();
         return redirect()->route('tahfidz.show', $id_student)->with('success', 'Hapus Catatan Sukses');
     }
 

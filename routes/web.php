@@ -29,6 +29,12 @@ Route::get('/logout', function () {
 
 Route::middleware(['auth', 'core'])->group(function () {
 
+    // Journal Menu
+    Route::name('journal.')->prefix('/journal')->group(function () {
+
+    });
+    Route::resource('journal', 'JournalController');
+    
     // Tahfidz Menu 
     Route::name('tahfidz.')->prefix('/tahfidz')->group(function () {
         Route::get('halaqah/{id}', 'TahfidzController@halaqah')->name('halaqah');

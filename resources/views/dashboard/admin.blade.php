@@ -1,7 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
-    <div class="content">
+<div class="content">
     <h1 class="h1-responsive mb-2">Dashboard Admin</h1>
         <div class="card shadow">
             <div class="card-header bg-white"><h2><i data-feather="book-open" class="mr-1"></i> Tahfidz</h2></div>
@@ -108,4 +105,3 @@
             }
         });
     </script>
-@endsection

@@ -7,6 +7,8 @@
         @include('dashboard.murid')
     @elseif(Auth::user()->id == 1)
         @include('dashboard.admin')
+    @elseif(Auth::user()->roles->first()->pivot->roles_id == 8)
+        @include('dashboard.foundationhead')
     @else
         <div class="content">
             <h1 class="h1-responsive">Dashboard</h1>

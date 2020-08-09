@@ -37,15 +37,16 @@ class RefHalaqahController extends Controller
                                 ->join('classrooms', 'halaqahs.id_class', '=', 'classrooms.id')
                                 ->join('levels', 'halaqahs.id_level', '=', 'levels.id')
                                 ->join('level_details', 'halaqahs.id_level_detail', '=', 'level_details.id')
-                                ->select('halaqahs.id', 'users.name as teacherName', 'halaqahs.name as halaqahName', 'description', 
+                                ->select('halaqahs.id', 'users.name as teacherName', 'halaqahs.name as halaqahName', 'halaqahs.description as description', 
                                             'classrooms.name as namaKelas', 'levels.name as namaLevel','levels.abbr as abbrevation', 
                                             'level_details.name as namaLevelDetail')
                                 ->paginate(20);
 
+        
         $halaqah_teacher->currentTotal = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + $halaqah_teacher->count();
         $halaqah_teacher->startNo = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + 1;
         $halaqah_teacher->no = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + 1;
-        
+
         $classrooms = RefClassroom::all();
         $levels = RefLevel::all();
         $level_details = RefLevelDetail::all();

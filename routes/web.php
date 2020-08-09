@@ -76,6 +76,12 @@ Route::middleware(['auth', 'core'])->group(function () {
         });
         Route::resource('schoolyear', 'RefSchoolYearController');
         
+        // Matter Menu
+        Route::name('matter.')->prefix('/matter')->group(function() {
+            Route::get('show-json/{id}', 'RefMatterController@showJson')->name('show-json');
+        });
+        Route::resource('matter', 'RefMatterController');
+        
         // Subject Menu
         Route::name('subject.')->prefix('/subject')->group(function() {
             Route::get('show-json/{id}', 'RefSubjectController@showJson')->name('show-json');
@@ -84,9 +90,9 @@ Route::middleware(['auth', 'core'])->group(function () {
 
         // Halaqah Menu
         Route::name('halaqah.')->prefix('/halaqah')->group(function() {
+            Route::get('show-json/{id}', 'RefHalaqahController@showJson')->name('show-json');
             Route::get('show/add/{halaqah}', 'RefHalaqahController@addMember')->name('show.add');
             Route::patch('show/add/process/{id}', 'RefHalaqahController@addMemberProcess')->name('show.add.process');
-            Route::get('show-json/{id}', 'RefHalaqahController@showJson')->name('show-json');
         });
         Route::resource('halaqah', 'RefHalaqahController');
 
@@ -97,8 +103,8 @@ Route::middleware(['auth', 'core'])->group(function () {
         Route::resource('student', 'RefStudentController');
 
         // Classroom
-        Route::name('classroom.')->prefix('/halaqah')->group(function() {
-            Route::get('show-json/{id}', 'RefHalaqahController@showJson')->name('show-json');
+        Route::name('classroom.')->prefix('/classroom')->group(function() {
+            Route::get('show-json/{id}', 'RefClassroomController@showJson')->name('show-json');
         });
         Route::resource('classroom', 'RefClassroomController');
     });

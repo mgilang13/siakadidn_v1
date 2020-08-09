@@ -17,6 +17,15 @@
                         <div class="invalid-feedback" id="name-message"></div>
                     </div>
                     <div class="form-group">
+                        <label for="id_subject" class="col-form-label">Mata Pelajaran</label>
+                        <select name="id_subject" id="id_subject" class="form-control">
+                            @foreach($subjects as $subject)
+                                <option value="{{ $subject->id }}" {{ old('id_subject') == $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
+                            @endforeach
+                        </select>
+                        <div class="invalid-feedback" id="subject-message"></div>
+                    </div>
+                    <div class="form-group">
                         <label for="description" class="col-form-label">Deskripsi</label>
                         <textarea name="description" id="description" rows="5" class="form-control"></textarea>
                         <div class="invalid-feedback" id="description-message"></div>

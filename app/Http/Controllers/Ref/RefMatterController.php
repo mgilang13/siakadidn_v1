@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Ref;
 
 use App\Http\Controllers\Controller;
+use App\Model\Ref\RefMatter;
 use App\Model\Ref\RefSubject;
+
+
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 
-class RefSubjectController extends Controller
+class RefMatterController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +20,14 @@ class RefSubjectController extends Controller
      */
     public function index()
     {
+        $matters = DB::table('matters')
+                                ->join('subjects', 'matters.id_subject', '=', 'subjects.id')
+                                ->select('matters.*', 'subjects.id as subjectID', 'subjects.name as subjectName', 'subjects.description as subjectDesc')
+                                ->get();
+
         $subjects = RefSubject::all();
 
-        return view('ref.subject.index', compact('subjects'));
+        return view('ref.matter.index', compact('matters', 'subjects'));
     }
 
     /**
@@ -39,12 +48,13 @@ class RefSubjectController extends Controller
      */
     public function store(Request $request)
     {
-         // validasi     
-         $request->validate([
+        // validasi     
+        $request->validate([
             'name' => 'required|string|max:255',
+            'id_subject' => '',
             'description' => '',
         ]);
-        RefSubject::create($request->only(['name', 'description']));
+        RefMatter::create($request->only(['name', 'id_subject', 'description']));
         
         $request->session()->flash('success', 'Tambah Materi Sukses');
     }
@@ -52,10 +62,10 @@ class RefSubjectController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Model\matter  $matter
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(matter $matter)
     {
         //
     }
@@ -63,48 +73,50 @@ class RefSubjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Model\matter  $matter
      * @return \Illuminate\Http\Response
      */
-    public function edit(RefSubject $subject)
+    public function edit(RefMatter $matter)
     {
-        return view('ref.subject.edit', compact('subject'));
+        $subjects = RefSubject::all();
+        return view('ref.matter.edit', compact('matter', 'subjects'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Model\matter  $matter
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RefSubject $subject)
+    public function update(Request $request, RefMatter $matter)
     {
         // validasi
         $validateData = $request->validate([
             'name' => 'required|string|max:255',
+            'id_subject' => '',
             'description' => '',
         ]);
-        $subject->update($validateData);
+        $matter->update($validateData);
 
-        return redirect()->route('ref.subject.index')->with('success', 'Ubah Mata Pelajaran berhasil!');
+        return redirect()->route('ref.matter.index')->with('success', 'Ubah Materi Pelajaran berhasil!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Model\matter  $matter
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RefSubject $subject)
+    public function destroy(RefMatter $matter)
     {
-        $subject->delete();
-        return redirect()->route('ref.subject.index')->with('success', 'Hapus Mata Pelajaran berhasil!');
+        $matter->delete();
+        return redirect()->route('ref.matter.index')->with('success', 'Hapus Materi Pelajaran berhasil!');
     }
 
     public function showJson($id)
     {
-        $subject = RefSubject::findOrFail($id);
-        return $subject->toJson();
+        $matter = RefMatter::findOrFail($id);
+        return $matter->toJson();
     }
 }

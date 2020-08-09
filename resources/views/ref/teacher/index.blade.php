@@ -19,8 +19,7 @@
                                 <th>No.</th>
                                 <th>Username</th>
                                 <th>Nama Guru</th>
-                                <th>Materi Pelajaran</th>
-                                <th>Bidang</th>
+                                <th>BIdang / Mata Pelajaran</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -32,7 +31,6 @@
                                 <td>{{ $ts->uname }}</td>
                                 <td>{{ $ts->userName }}</td>
                                 <td>{{ $ts->subjectName}}</td>
-                                <td>{{ $ts->subject}}</td>
                                 <td>
                                     <div class="btn-action d-flex justify-content-around">
                                         <a href="{{ route('ref.teacher.edit', $ts->teacherID) }}">

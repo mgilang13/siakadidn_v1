@@ -107,6 +107,17 @@ Route::middleware(['auth', 'core'])->group(function () {
             Route::get('show-json/{id}', 'RefClassroomController@showJson')->name('show-json');
         });
         Route::resource('classroom', 'RefClassroomController');
+        
+        // Level
+        Route::name('level.')->prefix('/level')->group(function() {
+            Route::post('detail', 'RefLevelController@levelDetailStore')->name('detail.store');
+            Route::get('detail/{level_detail}/edit', 'RefLevelController@levelDetailEdit')->name('detail.edit');
+            Route::patch('detail/{level_detail}', 'RefLevelController@levelDetailUpdate')->name('detail.update');
+            Route::delete('detail/{level_detail}/destroy', 'RefLevelController@levelDetailDestroy')->name('detail.destroy');
+            Route::get('show-json/{id}', 'RefLevelController@showJson')->name('show-json');
+            Route::get('detail/show-json/{id}', 'RefLevelController@detailShowJson')->name('detail.show-json');
+        });
+        Route::resource('level', 'RefLevelController');
     });
 
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');

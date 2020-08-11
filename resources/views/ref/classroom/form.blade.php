@@ -22,7 +22,7 @@
                         <select name="id_teacher" id="id_teacher" class="js-example-responsive form-control" style="width:100%">
                                 <option value="">Daftar Wali Kelas</option>
                             @forelse ($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                <option value="{{ $user->id }}">{{ $user->title_ahead }} {{ $user->name }}{{ $user->back_title ? ', '.$user->back_title : '' }}</option>
                             @empty
                                 <option value="">Belum ada data</option>
                             @endforelse

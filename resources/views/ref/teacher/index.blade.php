@@ -11,9 +11,8 @@
             </div>
             <div class="card-body">
             @include('layouts.notification')
-            @include('layouts.form-search', ['route' => 'ref.teacher.index', 'name' => 'Guru'])
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-sm table-hover" id="dtguru">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -27,22 +26,27 @@
                         @php $no = 1; @endphp
                         @forelse ($teacher_subjects as $ts)
                             <tr>
-                                <td>{{ $teacher_subjects->no++ }}</td>
-                                <td>{{ $ts->uname }}</td>
-                                <td>{{ $ts->userName }}</td>
-                                <td>{{ $ts->subjectName}}</td>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $ts->username }}</td>
+                                <td>{{$ts->title_ahead}} {{ $ts->name }}{{$ts->back_title ? ', '.$ts->back_title : '' }}</td>
+                                <td>{{ $ts->subjects ? $ts->subjects : '-' }}</td>
                                 <td>
                                     <div class="btn-action d-flex justify-content-around">
-                                        <a href="{{ route('ref.teacher.edit', $ts->teacherID) }}">
+                                        <a href="{{ route('ref.teacher.edit', $ts->id_teacher) }}">
                                             <i width="14" color="#04396c" data-feather="edit"></i>
                                         </a>
-                                        <a title="Delete" id="deleteData" data-toggle="modal" data-target="#deleteModal" data-id="{{ $ts->teacherID }}" href="#" class="text-danger" data-action="{{ route('ref.teacher.destroy', $ts->teacherID) }}">
+                                        <a title="Delete" id="deleteData" data-toggle="modal" data-target="#deleteModal" data-id="{{ $ts->id_teacher }}" href="#" class="text-danger" data-action="{{ route('ref.teacher.destroy', $ts->id_teacher) }}">
                                             <i width="14" color="red" data-feather="trash"></i>
                                         </a>
                                     </div>
                                 </td>
                             </tr>
-                        @include('layouts.form-delete', [
+                        @empty
+                            <tr><td colspan="5" class="text-center">Data Kosong</td></tr>
+                        @endforelse
+                        </tbody>
+                    </table>
+                    @include('layouts.form-delete', [
                             'method' => 'POST',
                             'methodx' => 'DELETE',
                             'bgDanger' => '',
@@ -51,18 +55,16 @@
                             'title_modal' => 'Delete Data',
                             'showdata' => "ref.teacher.show-json",
                             'title_menu' => 'teacher'])
-
-                        @empty
-                            <tr><td colspan="5" class="text-center">Data Kosong</td></tr>
-                        @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                <div class="table-footer">
-                    <p>Menampilkan {{ $teacher_subjects->startNo }} - {{ $teacher_subjects->currentTotal }} dari {{ $teacher_subjects->total() }} data</p>
-                    {{ $teacher_subjects->onEachSide(1)->links() }}
                 </div>
             </div>
         </div>
     </div>
+<script>
+    $(document).ready(function (e) {
+        
+        $('#dtguru').DataTable({
+            "paging":true,
+        });
+    });
+</script>
 @endsection

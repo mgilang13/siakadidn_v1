@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ref;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Model\Ref\RefTeacher;
+use App\Model\Ref\RefTeacherRefSubject;
 use App\Model\Ref\RefSubject;
 use App\Model\User;
 use App\Model\Core\Roles;
@@ -24,23 +25,9 @@ class RefTeacherController extends Controller
      */
     public function index(Request $request)
     {
-        $subjects = RefSubject::all();
-        $users = Roles::findOrFail(3)->users()->get();
-        $q = $request->query('q') ?: '';
-        
-        $teacher_subjects = DB::table('teachers')
-                                ->join('users', 'teachers.id_teacher', '=', 'users.id')
-                                ->where('users.name', 'like', '%'.$q.'%')
-                                ->join('subjects', 'teachers.id_subject', '=', 'subjects.id')
-                                ->select('users.id as teacherID','users.username as uname', 'users.name as userName', 'subjects.name as subjectName')
-                                ->orderBy('userName', 'asc')
-                                ->paginate(20);
-        
-        $teacher_subjects->currentTotal = ($teacher_subjects->currentPage() - 1) * $teacher_subjects->perPage() + $teacher_subjects->count();
-        $teacher_subjects->startNo = ($teacher_subjects->currentPage() - 1) * $teacher_subjects->perPage() + 1;
-        $teacher_subjects->no = ($teacher_subjects->currentPage() - 1) * $teacher_subjects->perPage() + 1;
+        $teacher_subjects = DB::select('select * from teachersView');
 
-        return view('ref.teacher.index', compact('q', 'users', 'subjects', 'teacher_subjects'));
+        return view('ref.teacher.index', compact('teacher_subjects'));
     }
 
     /**
@@ -70,13 +57,14 @@ class RefTeacherController extends Controller
             'name' => 'required|string|max:255',
             'password' => 'required|string',
             'gender' => 'required|in:l,p',
-            'id_subject' => 'required',
+            'id_subject' => '',
             'role' => '',
             'image' => '',
             'birth_place' => '',
             'birth_date' => '',
             'address' => ''
         ]);
+
         DB::transaction(function () use ($request) {
             $params = $request->only(['username', 'email', 'phone', 'name', 'gender', 'birth_place', 'birth_date', 'address']);
             $params['password'] = bcrypt($request->input('password'));
@@ -124,17 +112,29 @@ class RefTeacherController extends Controller
 
                 $user->image_small = $upload_path . "/" . $image_sm;
                 $user->save();
-            }
-
-            $validateStudent = $request->validate([
-                'id_subject' => 'required'
-            ]);
+            }    
 
             $id = $user->id;
+
+            $title_ahead = $request->input('title_ahead');
+            $back_title = $request->input('back_title');
+
             RefTeacher::create([
                 'id_teacher' => $id,
-                'id_subject' => request('id_subject')
+                'title_ahead' => $title_ahead,
+                'back_title' => $back_title
             ]);
+
+            // Input subject ke table teacher_subjects karena 1 guru bisa lebih dari 1 subject
+            $subjects = $request->input('id_subject');
+            if($subjects != null) {
+                foreach($subjects as $subject) {
+                    RefTeacherRefSubject::create([
+                        'id_teacher' => $id,
+                        'id_subject' => (int)$subject
+                    ]);
+                }
+            }
 
             $params = [ 'roles_id' => $request->input('role'), 'users_id' => $user->id ];
             RolesUsers::create($params);
@@ -165,7 +165,9 @@ class RefTeacherController extends Controller
         
         $teacher = RefTeacher::findOrFail($id);
         $subjects = RefSubject::all();
-        return view('ref.teacher.edit', compact('teacher', 'subjects'));
+        $teacher_subject = DB::table('teacher_subjects')->where('id_teacher', $id)->get();
+
+        return view('ref.teacher.edit', compact('teacher', 'subjects', 'teacher_subject'));
     }
 
     /**
@@ -184,12 +186,14 @@ class RefTeacherController extends Controller
             'name' => 'required|string|max:255',
             'password' => '',
             'gender' => 'required|in:l,p',
-            'id_subject' => 'required',
+            'id_subject' => '',
             'role' => '',
             'image' => '',
             'birth_place' => '',
             'birth_date' => '',
-            'address' => ''
+            'address' => '',
+            'title_ahead' => '',
+            'back_title' => ''
         ]);
 
         DB::transaction(function () use ($teacher, $request) {
@@ -198,7 +202,7 @@ class RefTeacherController extends Controller
             $teacher->user->update($params);
 
             // update materi pelajaran
-            $params = $request->only(['id_subject']);
+            $params = $request->only(['title_ahead', 'back_title']);
             $teacher->update($params);
 
             // Jika update gambar
@@ -255,6 +259,18 @@ class RefTeacherController extends Controller
 
                 Storage::disk('public')->delete($old_image_small_name);
             }
+
+            // Input subject ke table teacher_subjects karena 1 guru bisa lebih dari 1 subject
+            $subjects = $request->input('id_subject');
+            if($subjects != null) {
+                RefTeacherRefSubject::where('id_teacher', $teacher->id_teacher)->delete();
+                foreach($subjects as $subject) {
+                    RefTeacherRefSubject::create([
+                        'id_teacher' => $teacher->id_teacher,
+                        'id_subject' => (int)$subject
+                    ]);
+                }
+            }
         });
         return redirect()->route('ref.teacher.index')->with('success', 'Ubah Data Guru Sukses');
     }
@@ -270,6 +286,7 @@ class RefTeacherController extends Controller
         $teacher = RefTeacher::findOrFail($id);
         
         DB::transaction(function() use ($teacher) {
+            RefTeacherRefSubject::where('id_teacher', $teacher->id_teacher)->delete();
             $teacher->user->delete();
             $teacher->delete();
             Storage::disk('public')->deleteDirectory('users/'.$teacher->user->id);

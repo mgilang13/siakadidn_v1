@@ -38,11 +38,20 @@
                     <div class="card-header">
                         <h5>Data Guru 2</h5>
                     </div>
+                    
+                    <div class="form-group row d-flex flex-wrap justify-content-md-between">
+                        <input name="title_ahead" id="title_ahead" class="form-control col-md-5" placeholder="Gelar Depan" value="{{ old('title_ahead') ?? $teacher->title_ahead }}">
+                        <input name="back_title" id="back_title" class="form-control col-md-6" placeholder="Gelar Belakang" value="{{ old('back_title') ?? $teacher->back_title }}">
+                    </div>
+
                     <div class="form-group row">
-                        <select name="id_subject" id="subject" class="form-control @error('id_subject') is-invalid @enderror">
-                            <option value="">-- Pilih Mapel --</option>
+                        <select multiple data-live-search="true" name="id_subject[]" id="subject" class="selectpicker form-control @error('id_subject') is-invalid @enderror">
                         @forelse($subjects as $subject)
-                            <option value="{{ $subject->id }}" {{ (old('id_subject') ?? $teacher->id_subject) == $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
+                            <option value="{{ $subject->id }}" 
+                            @foreach($teacher_subject as $ts)
+                                {{ (old('id_subject') ?? $ts->id_subject) == $subject->id ? 'selected' : '' }}
+                            @endforeach
+                            >{{ $subject->name }}</option>
                         @empty
                             <option >No Data</option>
                         @endforelse  
@@ -151,6 +160,10 @@
 @endsection
 
 @section('js')
+
+<script>
+    $('#subject').selectpicker();
+</script>
 
 <script>
    $(document).ready(function(){

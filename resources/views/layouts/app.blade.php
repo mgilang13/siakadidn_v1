@@ -26,6 +26,8 @@
     <link href="{{ asset('/css/main-print.css') }}" rel="stylesheet" media="print">
     <link rel="stylesheet" href="{{ asset('css/mdb.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/datatables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-select.css') }}" />
+    <script src="{{ asset('js/bootstrap-select.js') }}"></script>
 </head>
 <body>
     <div class="d-flex" id="wrapper">

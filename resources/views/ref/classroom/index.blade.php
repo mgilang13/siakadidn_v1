@@ -29,7 +29,7 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $classroom->className }}</td>
-                            <td>{{ $classroom->teacherName }}</td>
+                            <td>{{ $classroom->title_ahead }} {{ $classroom->teacherName }}{{$classroom->back_title ? ', '.$classroom->back_title : '' }}</td>
                             <td><span class="text-uppercase">{{ $classroom->abbrevation }}</span> {{ $classroom->namaLevelDetail }}</td>
                             <td>{{ $classroom->description }}</td>
                             <td>
@@ -43,7 +43,14 @@
                                 </div>
                             </td>
                         </tr>
-                    @include('layouts.form-delete', [
+                    @empty
+                        <tr>
+                            <td colspan="4" class="text-center">Data Kosong!</td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                </table>
+                @include('layouts.form-delete', [
                         'method' => 'POST',
                         'methodx' => 'DELETE',
                         'bgDanger' => '',
@@ -52,13 +59,6 @@
                         'title_modal' => 'Delete Data',
                         'showdata' => "ref.classroom.show-json",
                         'title_menu' => 'Class'])
-                    @empty
-                        <tr>
-                            <td colspan="4" class="text-center">Data Kosong!</td>
-                        </tr>
-                    @endforelse
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>
@@ -69,7 +69,8 @@
 
 @section('js')
 <script>
-    $(document).ready(function () {
+    $(document).ready(function (e) {
+        
         $('#dtkelas').DataTable({
             "paging":true,
         });

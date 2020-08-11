@@ -33,9 +33,15 @@
                     <div class="card-header">
                         <h5>Data Guru 2</h5>
                     </div>
-                    <div class="form-group row">
-                        <select name="id_subject" id="subject" class="form-control @error('id_subject') is-invalid @enderror">
-                            <option value="">-- Pilih Mapel --</option>
+                    
+                    <div class="form-group row d-flex flex-wrap justify-content-md-between">
+                        <input name="title_ahead" id="title_ahead" class="form-control col-md-5" placeholder="Gelar Depan">
+                        <input name="back_title" id="back_title" class="form-control col-md-6" placeholder="Gelar Belakang">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Pilih Mata Pelajaran</label>
+                        <select multiple data-live-search="true" name="id_subject[]" id="subject" class="selectpicker form-control @error('id_subject') is-invalid @enderror">
                         @forelse($subjects as $subject)
                             <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                         @empty
@@ -146,6 +152,9 @@
 
 @section('js')
 
+<script>
+    $('#subject').selectpicker();
+</script>
 <script>
     $('#avatar_image').change(function() {
         previewAvatar(this);

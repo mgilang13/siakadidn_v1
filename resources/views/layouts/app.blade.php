@@ -98,7 +98,34 @@
                 </div>
         </div>
     </div>
-    
+
+    <script>
+        let dropdown = $('.sidebar').children();
+        let dropdownChild = $('.sidebar-child').children();
+        let i;
+
+        for(i = 0; i < dropdownChild.length; i++) {
+            if(dropdownChild[i].classList.contains('active')) {
+               dropdownChildContent = dropdownChild[i].parentElement;
+               if(dropdownChildContent.style.display === "block") {
+                   dropdownChildContent.style.display = "none";
+               } else {
+                   dropdownChildContent.style.display = "block";
+               }
+            }
+        }
+        for (i = 0; i < dropdown.length; i++) {
+            dropdown[i].addEventListener("click", function() {
+                var dropdownContent = this.nextElementSibling;
+                
+                if (dropdownContent.style.display === "block") {
+                    dropdownContent.style.display = "none";
+                } else {
+                    dropdownContent.style.display = "block";
+                }
+            });
+        }
+    </script>
     <script src="{{ asset('theme/js/feather.min.js') }}"></script>
 
     <script src="{{ asset('theme/js/popper.min.js') }}"></script>

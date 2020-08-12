@@ -150,6 +150,10 @@ body {
     margin-bottom: 0;
 }
 
+.sidebar-child {
+    display: none;
+}
+
 .sidebar-child a {
     padding-left: 45px !important;
 }

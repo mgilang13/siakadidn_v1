@@ -16,20 +16,7 @@
                         <input type="text" name="name" class="form-control" id="name">
                         <div class="invalid-feedback" id="name-message"></div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="id_teacher" class="col-form-label">Wali Kelas</label>
-                        <select name="id_teacher" id="id_teacher" class="js-example-responsive form-control" style="width:100%">
-                                <option value="">Daftar Wali Kelas</option>
-                            @forelse ($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->title_ahead }} {{ $user->name }}{{ $user->back_title ? ', '.$user->back_title : '' }}</option>
-                            @empty
-                                <option value="">Belum ada data</option>
-                            @endforelse
-                        </select>
-                        <div class="invalid-feedback" id="id_teacher-message"></div>
-                    </div>
-
+                    
                     <div class="form-group">
                         <label for="id_level" class="col-form-label">Institusi</label>
                         <select name="id_level" id="id_level" class="form-control">

@@ -23,17 +23,6 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-6">
-                            <label for="id_teacher" class="col-for-label font-weight-bold">Pengampu</label>
-                            <select name="id_teacher" id="id_teacher" class="form-control">
-                                <option value="">Pilih Wali Kelas</option>
-                                @forelse($teachers as $teacher)
-                                <option value="{{ $teacher->id }}" {{ (old('id_teacher') ?? $classroom->id_teacher) == $teacher->id ? 'selected' : '' }}>{{ $teacher->title_ahead }} {{ $teacher->name }}{{$teacher->back_title ? ', '.$teacher->back_title : '' }}</option>
-                                @empty
-                                <option value="">Tidak ada data</option>
-                                @endforelse
-                            </select>
-                        </div>
                         
                         <div class="form-group col-md-4">
                             <label for="id_level" class="col-for-label font-weight-bold">Institusi</label>

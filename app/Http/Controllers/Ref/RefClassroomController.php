@@ -23,26 +23,17 @@ class RefClassroomController extends Controller
      */
     public function index()
     {
-        $users = DB::table('users')
-                        ->join('teachers', 'users.id', '=', 'teachers.id_teacher')
-                        ->join('roles_users', 'users.id', '=', 'roles_users.users_id')
-                        ->where('roles_users.roles_id', 3)
-                        ->get();                        
-
         $levels = RefLevel::all();
         $level_details = RefLevelDetail::all();
 
         $classrooms = DB::table('classrooms')
-                                ->leftJoin('users', 'users.id', '=', 'classrooms.id_teacher')
-                                ->leftJoin('teachers', 'teachers.id_teacher', '=', 'classrooms.id_teacher')
                                 ->leftJoin('levels', 'classrooms.id_level', '=', 'levels.id')
                                 ->leftJoin('level_details', 'classrooms.id_level_detail', '=', 'level_details.id')
-                                ->select('classrooms.id', 'teachers.*', 'users.name as teacherName', 'classrooms.name as className', 'description', 
+                                ->select('classrooms.id', 'classrooms.name as className', 'description', 
                                             'levels.name as namaLevel','levels.abbr as abbrevation', 
                                             'level_details.name as namaLevelDetail')->get();
 
-        // $classrooms = DB::table('classrooms')->where('id', '!=', 40)->get();
-        return view('ref.classroom.index', compact('classrooms', 'users', 'levels', 'level_details'));
+        return view('ref.classroom.index', compact('classrooms', 'levels', 'level_details'));
     }
 
     public function showJson($id)
@@ -71,7 +62,6 @@ class RefClassroomController extends Controller
     {
         $validateData = $request->validate([
             'name' => 'required',
-            'id_teacher' => '',
             'id_level' => '',
             'id_level_detail' => '',
             'description' => ''
@@ -100,16 +90,10 @@ class RefClassroomController extends Controller
      */
     public function edit(RefClassroom $classroom)
     {
-        $teachers = DB::table('users')
-                            ->join('teachers', 'users.id', '=', 'teachers.id_teacher')
-                            ->join('roles_users', 'users.id', '=', 'roles_users.users_id')
-                            ->where('roles_users.roles_id', 3)
-                            ->get();
-
         $levels = RefLevel::all();
         $level_details = RefLevelDetail::all();
 
-        return view('ref.classroom.edit', compact('classroom', 'teachers', 'levels', 'level_details'));
+        return view('ref.classroom.edit', compact('classroom', 'levels', 'level_details'));
     }
 
     /**
@@ -123,33 +107,23 @@ class RefClassroomController extends Controller
     {
         $validateData = $request->validate([
             'name' => 'required',
-            'id_teacher' => '',
             'id_level' => '',
             'id_level_detail' => '',
             'description' => ''
         ]);
 
-       $users = DB::table('users')
-                        ->join('teachers', 'users.id', '=', 'teachers.id_teacher')
-                        ->join('roles_users', 'users.id', '=', 'roles_users.users_id')
-                        ->where('roles_users.roles_id', 3)
-                        ->get();
-
         $levels = RefLevel::all();
         $level_details = RefLevelDetail::all();
 
         $classrooms = DB::table('classrooms')
-                                ->leftJoin('users', 'users.id', '=', 'classrooms.id_teacher')
-                                ->leftJoin('teachers', 'teachers.id_teacher', '=', 'classrooms.id_teacher')
                                 ->leftJoin('levels', 'classrooms.id_level', '=', 'levels.id')
                                 ->leftJoin('level_details', 'classrooms.id_level_detail', '=', 'level_details.id')
-                                ->select('classrooms.id', 'teachers.*', 'users.name as teacherName', 'classrooms.name as className', 'description', 
+                                ->select('classrooms.id', 'classrooms.name as className', 'description', 
                                             'levels.name as namaLevel','levels.abbr as abbrevation', 
                                             'level_details.name as namaLevelDetail')->get();
 
         $classroom->update($validateData);
-        return redirect()->route('ref.classroom.index', compact('classrooms', 'users', 'levels', 'level_details'))->with('success', 'Ubah Data Guru Sukses');
-        // return view('ref.classroom.index', compact('classrooms', 'users', 'levels', 'level_details'));
+        return redirect()->route('ref.classroom.index', compact('classrooms', 'levels', 'level_details'))->with('success', 'Ubah Data Guru Sukses');
     }
 
     /**

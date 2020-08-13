@@ -17,7 +17,6 @@
                         <tr>
                             <th>No.</th>
                             <th>Nama Kelas</th>
-                            <th>Wali Kelas</th>
                             <th>Institusi</th>
                             <th>Deskripsi</th>
                             <th>Action</th>
@@ -29,7 +28,6 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $classroom->className }}</td>
-                            <td>{{ $classroom->title_ahead }} {{ $classroom->teacherName }}{{$classroom->back_title ? ', '.$classroom->back_title : '' }}</td>
                             <td><span class="text-uppercase">{{ $classroom->abbrevation }}</span> {{ $classroom->namaLevelDetail }}</td>
                             <td>{{ $classroom->description }}</td>
                             <td>

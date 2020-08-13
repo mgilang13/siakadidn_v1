@@ -44,7 +44,7 @@ class Core
             $html .= '<a class="' .$active. '" href="' .$link. '">' .$icon. ' ' .$parent->title. '</a>';
             // cek child
             if ($child = self::formatMenu($all_menu, $parent->id)) {
-                $html .= '<div class="sidebar-child">' .$child. '</div>';
+                $html .= '<div class="sidebar-child animated flipInX faster">' .$child. '</div>';
             }
         }
         // return 

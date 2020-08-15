@@ -42,6 +42,7 @@ class RefHalaqahController extends Controller
                                             'level_details.name as namaLevelDetail')
                                 ->paginate(20);
 
+
         
         $halaqah_teacher->currentTotal = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + $halaqah_teacher->count();
         $halaqah_teacher->startNo = ($halaqah_teacher->currentPage() - 1) * $halaqah_teacher->perPage() + 1;
@@ -82,7 +83,7 @@ class RefHalaqahController extends Controller
             'description' => ''
         ]);
 
-        RefHalaqah::create($request->only(['name', 'id_teacher', 'id_class', 'id_level', 'description']));
+        RefHalaqah::create($request->only(['name', 'id_teacher', 'id_class', 'id_level', 'id_level_detail', 'description']));
         $request->session()->flash('success', 'Tambah Halaqah Sukses');
     }
 

@@ -77,9 +77,16 @@ class RefSchoolYearController extends Controller
      * @param  \App\Model\Ref\SchoolYear  $schoolYear
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SchoolYear $schoolYear)
+    public function update(Request $request, RefSchoolYear $schoolyear)
     {
-        
+        $validateData = $request->validate([
+            'name' => 'required',
+            'semester' => 'required',
+            'status' => 'required'
+        ]);
+
+        $schoolyear->update($validateData);
+        return redirect()->route('ref.schoolyear.index')->with('success', 'Ubah Tahun Ajaran Sukses');
     }
 
     /**

@@ -11,7 +11,7 @@
             </button>
         </div>
         <div class="modal-body">
-            Are you sure to delete the <span id="meta-to-delete"></span> {{$title_menu}}?
+            Are you sure to delete this <span id="meta-to-delete"></span> {{$title_menu}}?
         </div>
         <div class="modal-footer">
 

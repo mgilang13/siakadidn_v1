@@ -55,6 +55,17 @@ Route::middleware(['auth', 'core'])->group(function () {
     });
     Route::resource('tahfidz', 'TahfidzController');
 
+    // Management Menu
+    Route::name('manage.')->prefix('/manage')->namespace('Manage')->group(function() {
+        // Class Menu
+        Route::name('class.')->prefix('/class')->group(function() {
+            Route::get('show-json/{id}', 'MgtClassController@showJson')->name('show-json');
+            Route::get('add-student/{idMC}', 'MgtClassController@addStudent')->name('add-student');
+            Route::post('add-student/add', 'MgtClassController@addStudentStore')->name('add-student.process');
+        });
+        Route::resource('class', 'MgtClassController');
+    });
+
     // Ref Menu 
     Route::name('ref.')->prefix('/ref')->namespace('Ref')->group(function() {
         

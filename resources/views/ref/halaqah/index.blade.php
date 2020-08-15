@@ -142,11 +142,4 @@
         })
     });
 </script>
-<script>
-    $(document).ready(function() {
-        $('.js-example-responsive').select2({
-            width: 'style'
-        });
-    });
-</script>
 @endsection

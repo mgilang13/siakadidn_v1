@@ -19,7 +19,7 @@
 
                     <div class="form-group">
                         <label for="id_teacher" class="col-form-label">Pengampu</label>
-                        <select name="id_teacher" id="id_teacher" class="js-example-responsive form-control" style="width:100%">
+                        <select name="id_teacher" id="id_teacher" class="form-control" style="width:100%">
                             @forelse ($users as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }}</option>
                             @empty

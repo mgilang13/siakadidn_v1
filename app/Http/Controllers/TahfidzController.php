@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Model\Tahfidz;
 use App\Model\Ref\RefHalaqah;
 use App\Model\Ref\RefStudent;
+use App\Model\Ref\RefParents;
 use App\Model\Soorah;
 
 use Illuminate\Http\Request;
@@ -110,9 +111,14 @@ class TahfidzController extends Controller
     public function show($id)
     {
         $student = RefStudent::findOrFail($id);
-
         $tahfidzs = DB::table('tahfidzs')->where('id_student', $id)->paginate(20);
         
+        $teacher = DB::table('students as s')
+                        ->join('halaqahs as h', 'h.id', '=', 's.id_halaqah')
+                        ->join('users as u', 'u.id', '=', 'h.id_teacher')
+                        ->where('s.id_student', $id)
+                        ->get();
+
         $tahfidzs->currentTotal = ($tahfidzs->currentPage() - 1) * $tahfidzs->perPage() + $tahfidzs->count();
         $tahfidzs->startNo = ($tahfidzs->currentPage() - 1) * $tahfidzs->perPage() + 1;
         $tahfidzs->no = ($tahfidzs->currentPage() - 1) * $tahfidzs->perPage() + 1;
@@ -154,7 +160,7 @@ class TahfidzController extends Controller
             }
         }
         
-        return view('tahfidz.show', compact('student', 'tahfidzs', 'tahfidz_total_ziyadah', 'tahfidz_total_murajaah', 'tgl_bln_ziyadah', 'total_line_ziyadah', 'tgl_bln_murajaah', 'total_line_murajaah', 'tahfidz_absensi'));
+        return view('tahfidz.show', compact('student', 'tahfidzs', 'tahfidz_total_ziyadah', 'tahfidz_total_murajaah', 'tgl_bln_ziyadah', 'total_line_ziyadah', 'tgl_bln_murajaah', 'total_line_murajaah', 'tahfidz_absensi', 'teacher'));
     }
 
     /**
@@ -270,7 +276,14 @@ class TahfidzController extends Controller
     // Laporan SMP
     public function reportKepalaTahfidzSMP(Request $request)
     {
-        $present_date = date('Y-m-d');
+        $present_date = $request->query('present_date');
+
+        if($present_date == null) {
+            $present_date = date('Y-m-d');
+        } else {
+            $present_date = $request->query('present_date');
+        }
+
         $past_date = $request->query('past_date');
 
         if($past_date == null){
@@ -287,7 +300,14 @@ class TahfidzController extends Controller
      // Laporan SMK
      public function reportKepalaTahfidzSMK(Request $request)
      {
-         $present_date = date('Y-m-d');
+        $present_date = $request->query('present_date');
+        
+        if($present_date == null) {
+            $present_date = date('Y-m-d');
+        } else {
+            $present_date = $request->query('present_date');
+        }
+
          $past_date = $request->query('past_date');
  
          if($past_date == null){
@@ -297,7 +317,7 @@ class TahfidzController extends Controller
          }
          $dataPerKelas = DB::select('call tahfidz_reportclass(?, ?, ?)', array(4, $past_date, $present_date));
          $dataPerHalaqah = DB::select('call tahfidz_reportmuhafidzhead(?, ?, ?)', array(4, $past_date, $present_date));
- 
+       
          return view('tahfidz.report.smk', compact('past_date','present_date', 'dataPerKelas', 'dataPerHalaqah'));
      }
 
@@ -325,33 +345,18 @@ class TahfidzController extends Controller
 
     public function reportParent($id)
     {
+        $id_student = RefParents::where('id_parents', $id)->value('id_student');
+        return $this->show($id_student);
         
-        $tahfidz_total_sabaq = DB::select('call tahfidz_total_sabaq(?)', array($id));
+    }
 
-        $tahfidz_total_manzil = DB::select('call tahfidz_total_manzil(?)', array($id));
-        
-        $tahfidz_report_sabaq = DB::select('call tahfidz_report_sabaq(?)', array($id));
-        $tgl_bln_sabaq = array();
-        $total_line_sabaq = array();
-        foreach($tahfidz_report_sabaq as $tc){
-            array_push($tgl_bln_sabaq, $tc->tgl_bln);
-            array_push($total_line_sabaq, $tc->total_line);
-        }
+    public function tahfidzCheck(RefHalaqah $halaqah) {
+        // id halaqah
+        $tahfidz_check = DB::select('call tahfidz_check(?)', array($halaqah->id));
 
-        $tahfidz_report_manzil = DB::select('call tahfidz_report_manzil(?)', array($id));
-        
-        $tgl_bln_manzil = array();
-        $total_line_manzil = array();
-        foreach($tahfidz_report_manzil as $tc){
-            array_push($tgl_bln_manzil, $tc->tgl_bln);
-            array_push($total_line_manzil, $tc->total_line);
-        }
-
-        $tahfidz_absensi = DB::select('call tahfidz_absensi_bu(?)', array($id));
-        
-        $tahfidz_absensi = $tahfidz_absensi[0];
-
-        return view('tahfidz.report.parent', compact('tahfidz_total_sabaq', 'tahfidz_total_manzil', 'tgl_bln_sabaq', 'total_line_sabaq', 'tgl_bln_manzil', 'total_line_manzil', 'tahfidz_absensi'));
+        return response()->json([
+            'tahfidz_check' => $tahfidz_check
+        ]);
     }
 
 }

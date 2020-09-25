@@ -12,7 +12,7 @@
             <div class="card-body">
                 @include('layouts.notification')
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-sm table-striped" id="dtortu">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -57,4 +57,12 @@
             </div>
         </div>
 </div>
+<script>
+$(document).ready(function (e) {
+        
+        $('#dtortu').DataTable({
+            "paging":true,
+        });
+    });
+</script>
 @endsection

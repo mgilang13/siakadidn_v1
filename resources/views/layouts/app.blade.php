@@ -132,6 +132,7 @@
     <script src="{{ asset('theme/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('theme/js/axios.min.js') }}"></script>
     <script src="{{ asset('js/select2.min.js') }}"></script>
+    
     <script>
 	    $(document).ready(function(){
             sidebarCollapseStatus = $('#sidebarCollapse').css('display');

@@ -36,17 +36,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="id_schoolyear" class="col-form-label">Tahun Ajaran</label>
-                        <select readonly name="id_schoolyear" id="id_schoolyear" class="form-control">
-                            <option value="{{ $activeSchoolYear->id }}">{{ $activeSchoolYear->name }}</option>
+                        <label for="id_schoolyear" class="col-form-label">Tahun Pelajaran</label>
+                        <select name="id_schoolyear" id="id_schoolyear" class="form-control">
+                            @forelse ($schoolyears as $schoolyear)
+                                <option value="{{ $schoolyear->id }}">{{ $schoolyear->name }} {{ $schoolyear->status == 1 ? '(Aktif)' : '' }}</option>
+                            @empty
+                                <option value="">Belum ada data</option>
+                            @endforelse
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="id_schoolyear_semester" class="col-form-label">Semester</label>
-                        <select readonly name="id_schoolyear_semester" id="id_schoolyear_semester" class="form-control">
-                                <option value="{{ $activeSchoolYear->semester }}">{{ $activeSchoolYear->semester == 1 ? 'Ganjil' : 'Genap'}}</option>
-                        </select>
+                        <div class="invalid-feedback" id="id_teacher-message"></div>
                     </div>
                 </div>
                 <div class="modal-footer">

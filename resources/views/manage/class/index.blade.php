@@ -4,7 +4,7 @@
     <div class="content">
         <div class="card">
             <div class="card-header bg-white">
-                <h1 class="ml-1 h1-responsive">Manajemen Ruang Kelas</h1>
+                <h1 class="ml-1 h1-responsive">Manajemen Kelas</h1>
             </div>
             
             @include('layouts.notification')
@@ -16,23 +16,29 @@
                                 <i width="14" class="mr-2" data-feather="plus"></i>Atur
                             </a>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <form action="" method="POST">
-                            <div class="d-flex justify-content-between">
-                                <div class="mr-2">
-                                <select name="schoolyear" class="form-control">
-                                    <option value="">Tahun Ajaran</option>
-                                    @foreach($schoolyears as $schoolyear)
-                                    <option value="{{ $schoolyear->id }}">{{ $schoolyear->name }} -- Semester {{ $schoolyear->semester }}</option>
-                                    @endforeach
-                                </select>
+                        <div>
+                            <form method="GET" action="{{ route('manage.class.index') }}">
+                                <div class="form-group">
+                                    <select name="id_level" id="" class="form-control-sm form-control">
+                                        <option value="">-- Jenjang Pendidikan --</option>
+                                        @forelse($levels as $level)
+                                        <option value="{{ $level->id }}" {{ (old('id_level') ?? $level->id) == $qLevel ? 'selected' : '' }}>{{ $level->name }}</option>
+                                        @empty
+                                        <option value="">Belum ada data</option>
+                                        @endforelse
+                                    </select>
                                 </div>
-                                <div class="d-flex align-items-center">
-                                <button type="submit" class="shadow-sm bg-white border-0 px-2" style="border-radius:50%; ">
-                                    <i data-feather="search" width="17"></i>
-                                </button>
+                                <div class="form-group">
+                                    <select name="id_level_detail" id="" class="form-control-sm form-control">
+                                        <option value="">-- Detail Jenjang --</option>
+                                        @forelse($level_details as $level_detail)
+                                        <option value="{{ $level_detail->id }}" {{ (old('id_level_detail') ?? $level_detail->id) == $qLevelDt ? 'selected' : '' }}>{{ $level_detail->name }}</option>
+                                        @empty
+                                        <option value="">Belum ada data</option>
+                                        @endforelse
+                                    </select>
                                 </div>
-                                </div>
+                                <button type="submit" class="btn btn-sm btn-indigo">Search</button>
                             </form>
                         </div>
                     </div>
@@ -43,6 +49,7 @@
                                     <th class="text-white">No.</th>
                                     <th class="text-white">Nama Kelas</th>
                                     <th class="text-white">Wali Kelas</th>
+                                    <th class="text-white">Tahun Ajar</th>
                                     <th class="text-white">Action</th>
                                 </tr>
                             </thead>
@@ -53,15 +60,16 @@
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $managedClass->className }}</td>
                                     <td>{{ $managedClass->title_ahead }} {{ $managedClass->teacherName }} {{ $managedClass->back_title ? ', '.$managedClass->back_title : '' }}</td>
+                                    <td>{{ $managedClass->schyearName }}</td>
                                     <td>
                                         <div class="btn-action d-flex justify-content-around">
-                                            <a href="{{ route('manage.class.edit', $managedClass->id) }}">
+                                            <a href="{{ route('manage.class.edit', $managedClass->idMC) }}">
                                                 <i width="14" color="#04396c" data-feather="edit"></i>
                                             </a>
-                                            <a title="Delete" id="deleteData" data-toggle="modal" data-target="#deleteModal" data-id="{{ $managedClass->id }}" href="#" class="text-danger" data-action="{{ route('manage.class.destroy', $managedClass->id) }}">
+                                            <a title="Delete" id="deleteData" data-toggle="modal" data-target="#deleteModal" data-id="{{ $managedClass->idMC }}" href="#" class="text-danger" data-action="{{ route('manage.class.destroy', $managedClass->idMC) }}">
                                                 <i width="14" color="red" data-feather="trash"></i>
                                             </a>
-                                            <a title="Lihat Kelas" href="{{ route('manage.class.show', $managedClass->id) }}">
+                                            <a title="Lihat Kelas" href="{{ route('manage.class.show', $managedClass->idMC) }}">
                                                 <i width="14" color="#04396c" data-feather="chevron-right"></i>
                                             </a>
                                         </div>

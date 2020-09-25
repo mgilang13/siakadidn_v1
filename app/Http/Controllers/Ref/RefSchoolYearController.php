@@ -40,7 +40,8 @@ class RefSchoolYearController extends Controller
     {
         $validateData = $request->validate([
             'name' => 'required',
-            'semester' => 'required',
+            'start_date' => '',
+            'end_date' => '',
             'status' => 'required'
         ]);
 
@@ -81,7 +82,8 @@ class RefSchoolYearController extends Controller
     {
         $validateData = $request->validate([
             'name' => 'required',
-            'semester' => 'required',
+            'start_date' => '',
+            'end_date' => '',
             'status' => 'required'
         ]);
 

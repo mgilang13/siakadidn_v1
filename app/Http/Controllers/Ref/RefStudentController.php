@@ -60,8 +60,8 @@ class RefStudentController extends Controller
     {
         $request->validate([
             'username' => 'required|string|max:255|unique:users,username,NULL,id,deleted_at,NULL',
-            'email' => 'required|string|max:255|email:rfc,dns|unique:users,email,NULL,id,deleted_at,NULL',
-            'phone' => 'required|string|max:20|unique:users,phone,NULL,id,deleted_at,NULL',
+            'email' => '',
+            'phone' => '',
             'name' => 'required|string|max:255',
             'password' => 'required|string',
             'gender' => 'required|in:l,p',
@@ -185,8 +185,8 @@ class RefStudentController extends Controller
     {
         $request->validate([
             'username' => 'required|string|max:255|unique:users,username,'.$student->user->id,'NULL,id,deleted_at,NULL',
-            'email' => 'required|string|max:255|email:rfc,dns|unique:users,email,'.$student->user->id,'NULL,id,deleted_at,NULL',
-            'phone' => 'required|string|max:20|unique:users,phone,'.$student->user->id,'NULL,id,deleted_at,NULL',
+            'email' => '',
+            'phone' => '',
             'name' => 'required|string|max:255',
             'password' => '',
             'gender' => 'required|in:l,p',

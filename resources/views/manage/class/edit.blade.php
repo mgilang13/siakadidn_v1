@@ -8,7 +8,7 @@
             <div class="content-header">
                 <h2 class="h2-responsive">Ubah Data Manajemen Kelas</h2>
                 <div class="header-btn">
-                    <a href="{{ route('manage.class.index') }}" class="btn btn-primary-outline">
+                    <a href="{{ route('manage.class.index') }}" class="btn btn-primary-outline bg-white">
                         <i width="14" class="mr-2" data-feather="arrow-left"></i>Kembali
                     </a>
                     <button type="submit" href="#" class="btn btn-primary">Update</button>

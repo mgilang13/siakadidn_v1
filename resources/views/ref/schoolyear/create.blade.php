@@ -14,35 +14,38 @@
         <div class="card-body">
             <div class="card">
                 <div class="card-body row">
-                    <div class="col-md-4">
-                        <div class="form-group row">
-                            <div class="col input-with-icon d-flex">
-                                <i width="18" data-feather="calendar" class="align-self-center ml-3"></i>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="d-flex flex-column">
+                                <label for="name">Tahun Ajar</label>
                                 <input class="form-control @error('name') is-invalid @enderror" id="name" type="text" name="name" placeholder="Tahun Ajaran" value="{{ old('name') }}" autofocus>
-                                
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group row">
-                            <div class="col input-with-icon d-flex">
-                                <select name="semester" id="semester" class="form-control @error('semester') is-invalid @enderror">
-                                    <option value="">-- Pilih Semester --</option>
-                                    <option value="1">Semester Ganjil</option>
-                                    <option value="2">Semester Genap</option>
-                                </select>
-                                @error('semester')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="d-flex flex-column">
+                                <label for="start_date">Tanggal Mulai</label>
+                                <input id="start_date" type="date" class="form-control" name="start_date" value="{{ old('start_date') }}">
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group row">
-                            <div class="col input-with-icon d-flex">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="d-flex flex-column">
+                                <label for="end_date">Tanggal Berakhir</label>
+                                <input id="end_date" type="date" class="form-control" name="end_date" value="{{ old('end_date') }}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="d-flex flex-column">
+                            <label for="status">Status</label>
                                 <select name="status" id="status" class="form-control @error('status') is-invalid @enderror">
                                     <option value="">-- Pilih Status --</option>
                                     <option value="0">Tidak AKtif</option>

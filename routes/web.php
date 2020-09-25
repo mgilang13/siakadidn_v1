@@ -31,12 +31,27 @@ Route::middleware(['auth', 'core'])->group(function () {
 
     // Journal Menu
     Route::name('journal.')->prefix('/journal')->group(function () {
-
+        
+        Route::get('report/absensi-class', 'JournalController@reportAbsensiClass')->name('report.absensi-class');
+        Route::get('report/feedback-class', 'JournalController@reportFeedbackClass')->name('report.feedback-class');
+        
+        Route::post('report/feedback-treat/{student}', 'JournalController@feedbackTreat')->name('report.feedback-treat');
+        
+        Route::get('report/absensi-student/{student}', 'JournalController@reportAbsensiStudent')->name('report.absensi-student');
+        Route::get('report/feedback-student/{student}', 'JournalController@reportFeedbackStudent')->name('report.feedback-student');
+        
+        Route::get('sub/list/{id}', 'JournalController@listSubMatter')->name('list-submatter');
+        Route::get('list/{id}', 'JournalController@listMatter')->name('list-matter');
+        Route::get('teacher-schedule/{id}', 'JournalController@teacherSchedule')->name('teacher-schedule');
+        Route::post('feedback/store', 'JournalController@feedbackStore')->name('feedback.store');
+        Route::post('detail/response', 'JournalController@journalDetailResponse')->name('detail.response');
+        Route::get('show-json/{id}', 'JournalController@showJson')->name('show-json');
     });
     Route::resource('journal', 'JournalController');
     
     // Tahfidz Menu 
     Route::name('tahfidz.')->prefix('/tahfidz')->group(function () {
+        Route::get('check/{halaqah}', 'TahfidzController@tahfidzCheck')->name('check');
         Route::get('halaqah/{id}', 'TahfidzController@halaqah')->name('halaqah');
         // Route::get('report.parent/{id}', 'TahfidzController@reportParent')->name('report.parent');
         Route::get('list-halaqah', 'TahfidzController@listHalaqah')->name('list-halaqah');
@@ -64,6 +79,26 @@ Route::middleware(['auth', 'core'])->group(function () {
             Route::post('add-student/add', 'MgtClassController@addStudentStore')->name('add-student.process');
         });
         Route::resource('class', 'MgtClassController');
+
+        // Teacher Menu
+        Route::name('teacher.')->prefix('/manage')->group(function() {
+            Route::get('show-json/{id}', 'MgtTeacherController@showJson')->name('show-json');
+            Route::get('add-class/{id}', 'MgtTeacherController@addClass')->name('add-class');
+            Route::post('add-class/add', 'MgtTeacherController@addClassStore')->name('add-class.process');
+            Route::get('add-matter/{id}', 'MgtTeacherController@addMatter')->name('add-matter');
+            Route::post('add-matter/add', 'MgtTeacherController@addMatterStore')->name('add-matter.process');
+        });
+        Route::resource('teacher', 'MgtTeacherController');
+
+        // Schedule
+        Route::name('schedule.')->prefix('/schedule')->group(function() {
+            Route::post('level/response', 'MgtScheduleController@levelResponse')->name('level.response');
+            Route::post('grade/response', 'MgtScheduleController@gradeResponse')->name('grade.response');
+            Route::post('class/response', 'MgtScheduleController@classResponse')->name('class.response');
+            Route::post('subject/byteacher', 'MgtScheduleController@subjectByTeacher')->name('subject.byteacher');
+            Route::get('show-json/{id}', 'MgtScheduleController@showJson')->name('show-json');
+        });
+        Route::resource('schedule', 'MgtScheduleController');
     });
 
     // Ref Menu 
@@ -86,10 +121,17 @@ Route::middleware(['auth', 'core'])->group(function () {
             Route::get('show-json/{id}', 'RefSchoolYearController@showJson')->name('show-json');
         });
         Route::resource('schoolyear', 'RefSchoolYearController');
+
+        //Tahun ajaran
+        Route::name('semester.')->prefix('/semester')->group(function() {
+            Route::get('show-json/{id}', 'RefSemesterController@showJson')->name('show-json');
+        });
+        Route::resource('semester', 'RefSemesterController');
         
         // Matter Menu
         Route::name('matter.')->prefix('/matter')->group(function() {
             Route::get('show-json/{id}', 'RefMatterController@showJson')->name('show-json');
+            Route::post('sub/store/', 'RefMatterController@matterSubStore')->name('sub.store');
         });
         Route::resource('matter', 'RefMatterController');
         
@@ -129,6 +171,18 @@ Route::middleware(['auth', 'core'])->group(function () {
             Route::get('detail/show-json/{id}', 'RefLevelController@detailShowJson')->name('detail.show-json');
         });
         Route::resource('level', 'RefLevelController');
+
+        // Study Time
+        Route::name('studytime.')->prefix('/studytime')->group(function() {
+            Route::get('show-json/{id}', 'RefStudyTimeController@showJson')->name('show-json');
+        });
+        Route::resource('studytime', 'RefStudyTimeController');
+
+        // Days
+        Route::name('day.')->prefix('/day')->group(function() {
+            Route::get('show-json/{id}', 'RefDayController@showJson')->name('show-json');
+        });
+        Route::resource('day', 'RefDayController');
     });
 
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard');

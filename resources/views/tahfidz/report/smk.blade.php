@@ -53,6 +53,7 @@
                             <th class="text-white align-middle">Tercapai</th>
                             <th class="text-white align-middle">Melampaui</th>
                             <th class="text-white align-middle">Persentase</th>
+                            <th class="text-white align-middle">Cek Tahfidz</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,6 +68,9 @@
                             <td>{{ $halaqahList->tercapai }}</td>
                             <td>{{ $halaqahList->melampaui }}</td>
                             <td><b>{{ round($halaqahList->persentase, 2) }}%</b></td>
+                            <td>
+                                <button data-url="{{ route('tahfidz.check', $halaqahList->id) }}" class="btn btn-sm btn-purple rounded-pill font-weight-bold" id="tahfidz_check">Cek</button>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -208,5 +212,17 @@
                 }
             }
         });
+    </script>
+    <script>
+        $('#tahfidz_check').on('click', function() {
+            let url = $('#tahfidz_check').data('url');
+
+            axios.get(url).then(result => {
+                let data = result.data.tahfidz_check;
+
+                var grouped = _.mapValues(_.groupBy(data, 'name'),clist => clist.map(data => _.omit(data, 'name')));
+                console.log(Object.values(grouped));
+            })
+        })
     </script>
 @endsection

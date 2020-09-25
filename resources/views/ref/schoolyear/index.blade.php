@@ -17,7 +17,8 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Tahun Ajaran</th>
-                                <th>Semester</th>
+                                <th>Tanggal Mulai</th>
+                                <th>Tanggal Selesai</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -28,7 +29,8 @@
                             <tr>
                                 <td>{{ $no++ }}</td>
                                 <td>{{ $schoolyear->name }}</td>
-                                <td>{{ $schoolyear->semester == 1 ? 'Ganjil' : 'Genap' }}</td>
+                                <td>{{ $schoolyear->start_date }}</td>
+                                <td>{{ $schoolyear->end_date }}</td>
                                 @if($schoolyear->status == 0)
                                     <td><p class="badge badge-danger">Tidak Aktif</p></td>
                                 @else

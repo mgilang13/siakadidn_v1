@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use App\Model\User;
 
 class DashboardController extends Controller
@@ -18,6 +19,8 @@ class DashboardController extends Controller
     {
         $id = Auth::user()->id;
         $user = User::findOrFail($id);
+
+        $teacher_subject = DB::table('teacher_subjects as ts')->where('id_teacher', $id)->get();
 
         // Dashboard Muhafidz
         $present_date = date('Y-m-d');
@@ -55,9 +58,17 @@ class DashboardController extends Controller
         // Dashboard Admin
         $dataFoundation = DB::select('call tahfidz_reportfoundation(?, ?)', array($past_date, $present_date));
         
+        $carbon = new Carbon();
         
+        $journalStudents = DB::select('call feedbackStudent(?)', array($id));
+        // dd($id);
+        
+        for($i = 0; $i<count($journalStudents); $i++) {
+            $journalStudents[$i]->created_at = Carbon::parse($journalStudents[$i]->created_at)->diffForHumans();
+        }
+
         return view('dashboard', compact('past_date','present_date', 'reportMuhafidz', 'reportMuhafidzSantri','user', 
         'tahfidz_report_murajaah', 'tahfidz_report_ziyadah', 'tgl_bln_ziyadah', 'total_line_ziyadah', 'tgl_bln_murajaah', 
-        'total_line_murajaah', 'dataFoundation'));
+        'total_line_murajaah', 'dataFoundation', 'journalStudents', 'teacher_subject'));
     }
 }

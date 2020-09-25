@@ -9,6 +9,8 @@ use App\Model\Manage\MgtClassDetail;
 use App\Model\Ref\RefClassroom;
 use App\Model\Ref\RefStudent;
 use App\Model\Ref\RefSchoolYear;
+use App\Model\Ref\RefLevel;
+use App\Model\Ref\RefLevelDetail;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -20,26 +22,41 @@ class MgtClassController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $qLevel = $request->query('id_level');
+        $qLevelDt = $request->query('id_level_detail');
+
         $mgtClassDetail = null;
         
         $managedClasses = DB::table('mgt_classes as mc')
+                            ->join('school_years as sch', 'sch.id', '=', 'mc.id_schoolyear')
                             ->join('classrooms as c', 'c.id', '=', 'mc.id_class')
                             ->join('users as u', 'u.id', '=', 'mc.id_teacher' )
                             ->join('teachers as t', 't.id_teacher', '=', 'mc.id_teacher')
-                            ->select('mc.id', 'c.name as className', 'u.name as teacherName', 't.*')
+                            ->where('c.id_level', 'like', '%'.$qLevel.'%')
+                            ->where('c.id_level_detail', 'like', '%'.$qLevelDt.'%')
+                            ->select('mc.id as idMC', 'c.name as className', 'c.*', 'u.name as teacherName', 't.*', 'sch.name as schyearName')
                             ->get();
 
-        $classrooms = RefClassroom::all();
-        $teachers = DB::table('users')
-                    ->join('teachers', 'users.id', '=', 'teachers.id_teacher')
-                    ->get();
+        $levels = RefLevel::all();
+        $level_details = RefLevelDetail::all();
+
+        $classrooms = DB::table('classrooms as c')
+                            ->where('c.id_level', 'like', '%'.$qLevel.'%')
+                            ->where('c.id_level_detail', 'like', '%'.$qLevelDt.'%')
+                            ->get();
+
+        // $teachers = DB::table('users')
+        //             ->join('teachers', 'users.id', '=', 'teachers.id_teacher')
+        // 
+                    // ->get();
+        $teachers = DB::select('select * from teachersView');
 
         $schoolyears = RefSchoolYear::all();
         $activeSchoolYear = DB::table('school_years')->where('status', '1')->get()->first();
 
-        return view('manage.class.index', compact('schoolyears', 'managedClasses', 'classrooms', 'teachers', 'activeSchoolYear', 'mgtClassDetail'));
+        return view('manage.class.index', compact('qLevel', 'qLevelDt', 'levels', 'level_details', 'schoolyears', 'managedClasses', 'classrooms', 'teachers', 'activeSchoolYear', 'mgtClassDetail'));
     }
 
     /**
@@ -76,18 +93,24 @@ class MgtClassController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        $qLevel = $request->query('id_level');
+        $qLevelDt = $request->query('id_level_detail');
+
         $mgtClassDetail = DB::table('mgt_class_details as mcd')
                                 ->join('users as u', 'u.id', '=', 'mcd.id_student')
                                 ->where('id_mgt_class', $id)
                                 ->get();
 
         $managedClasses = DB::table('mgt_classes as mc')
+                            ->join('school_years as sch', 'sch.id', '=', 'mc.id_schoolyear')
                             ->join('classrooms as c', 'c.id', '=', 'mc.id_class')
                             ->join('users as u', 'u.id', '=', 'mc.id_teacher' )
                             ->join('teachers as t', 't.id_teacher', '=', 'mc.id_teacher')
-                            ->select('mc.id', 'c.name as className', 'u.name as teacherName', 't.*')
+                            ->where('c.id_level', 'like', '%'.$qLevel.'%')
+                            ->where('c.id_level_detail', 'like', '%'.$qLevelDt.'%')
+                            ->select('mc.id as idMC', 'c.name as className', 'u.name as teacherName', 't.*', 'sch.name as schyearName')
                             ->get();
 
         $class = DB::table('mgt_classes as mc')
@@ -96,17 +119,20 @@ class MgtClassController extends Controller
                         ->select('mc.id as idMC', 'c.id as idClass', 'c.name as className')
                         ->get()
                         ->first();
+        $levels = RefLevel::all();
+        $level_details = RefLevelDetail::all();
 
         $schoolyears = RefSchoolYear::all();
 
         $classrooms = RefClassroom::all();
-        $teachers = DB::table('users')
-                    ->join('teachers', 'users.id', '=', 'teachers.id_teacher') 
-                    ->get();
+        // $teachers = DB::table('users')
+        //             ->join('teachers', 'users.id', '=', 'teachers.id_teacher') 
+        //             ->get();
+        $teachers = DB::select('select * from teachersView');
 
         $activeSchoolYear = DB::table('school_years')->where('status', '1')->get()->first();
         
-        return view('manage.class.index', compact('schoolyears', 'managedClasses', 'classrooms', 'teachers', 'activeSchoolYear', 'mgtClassDetail', 'class'));
+        return view('manage.class.index', compact('qLevel', 'qLevelDt','levels', 'level_details', 'schoolyears', 'managedClasses', 'classrooms', 'teachers', 'activeSchoolYear', 'mgtClassDetail', 'class'));
     }
 
     /**
@@ -152,8 +178,10 @@ class MgtClassController extends Controller
     public function destroy(MgtClass $class)
     {
         $class->delete();
-
-    return redirect()->route('manage.class.index')->with('success', 'Hapus Data Sukses');
+        $class_detail = MgtClassDetail::where('id_mgt_class', $class->id);
+        $class_detail->delete();
+        
+        return redirect()->route('manage.class.index')->with('success', 'Hapus Data Sukses');
     }
 
     public function showJson($id)

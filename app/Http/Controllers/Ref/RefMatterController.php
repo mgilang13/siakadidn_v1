@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ref;
 
 use App\Http\Controllers\Controller;
 use App\Model\Ref\RefMatter;
+use App\Model\Ref\RefMatterDetail;
 use App\Model\Ref\RefSubject;
 
 
@@ -20,14 +21,17 @@ class RefMatterController extends Controller
      */
     public function index()
     {
+        $matter_details = null;
+        $matter_show = null;
+
         $matters = DB::table('matters')
-                                ->join('subjects', 'matters.id_subject', '=', 'subjects.id')
-                                ->select('matters.*', 'subjects.id as subjectID', 'subjects.name as subjectName', 'subjects.description as subjectDesc')
-                                ->get();
+                        ->join('subjects', 'matters.id_subject', '=', 'subjects.id')
+                        ->select('matters.*', 'subjects.id as subjectID', 'subjects.name as subjectName', 'subjects.description as subjectDesc')
+                        ->get();
 
         $subjects = RefSubject::all();
 
-        return view('ref.matter.index', compact('matters', 'subjects'));
+        return view('ref.matter.index', compact('matters', 'subjects', 'matter_details', 'matter_show'));
     }
 
     /**
@@ -65,9 +69,24 @@ class RefMatterController extends Controller
      * @param  \App\Model\matter  $matter
      * @return \Illuminate\Http\Response
      */
-    public function show(matter $matter)
+    public function show(RefMatter $matter)
     {
-        //
+        $matter_details = DB::table('matter_details as md')
+                            ->join('matters as m', 'm.id', '=', 'md.id_matter')
+                            ->where('md.id_matter', $matter->id)
+                            ->select('md.name as name')
+                            ->orderBy('md.seq', 'asc')
+                            ->get();
+        // dd($matter_details);
+        $matters = DB::table('matters')
+                        ->join('subjects', 'matters.id_subject', '=', 'subjects.id')
+                        ->select('matters.*', 'subjects.id as subjectID', 'subjects.name as subjectName', 'subjects.description as subjectDesc')
+                        ->get();
+    
+        $subjects = RefSubject::all();
+        $matter_show = $matter;
+
+        return view('ref.matter.index', compact('matter_show', 'matters', 'subjects', 'matter_details'));
     }
 
     /**
@@ -118,5 +137,16 @@ class RefMatterController extends Controller
     {
         $matter = RefMatter::findOrFail($id);
         return $matter->toJson();
+    }
+
+    public function matterSubStore(Request $request)
+    {
+        $validateData = $request->validate([
+            'id_matter' => '',
+            'name' => '',
+            'seq' => ''
+        ]);
+        RefMatterDetail::create($validateData);
+        $request->session()->flash('success', 'Tambah Sub Materi Sukses');
     }
 }

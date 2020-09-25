@@ -107,8 +107,8 @@
                         <div class="col-4">
                             <select id="gender" name="gender" id="" class="form-control @error('role') @enderror">
                                 <option value="">-- Pilih Jenis Kelamin --</option>
-                                <option value="l" {{ (old('gender') ?? $user->gender) == "l" ? selected : '' }}>Laki-laki</option>
-                                <option value="p" {{ (old('gender') ?? $user->gender) == "p" ? selected : '' }}>Perempuan</option>
+                                <option value="l" {{ (old('gender') ?? $user->gender) == "l" ? 'selected' : '' }}>Laki-laki</option>
+                                <option value="p" {{ (old('gender') ?? $user->gender) == "p" ? 'selected' : '' }}>Perempuan</option>
                             </select>
                         </div>
                     </div>

@@ -23,7 +23,7 @@
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ mix('/css/main-mix.css') }}">
     <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
-    <link href="{{ asset('/css/main-print.css') }}" rel="stylesheet" media="print">
+    <link href="{{ asset('/css/main-mix-print.css') }}" rel="stylesheet" media="print">
     <link rel="stylesheet" href="{{ asset('css/mdb.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap-select.css') }}" />

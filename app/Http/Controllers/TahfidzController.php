@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Tahfidz;
+use App\Model\User;
 use App\Model\Ref\RefHalaqah;
 use App\Model\Ref\RefStudent;
 use App\Model\Ref\RefParents;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Auth;
+use PDF;
 
 class TahfidzController extends Controller
 {
@@ -110,8 +112,10 @@ class TahfidzController extends Controller
      */
     public function show($id)
     {
+        
+
         $student = RefStudent::findOrFail($id);
-        $tahfidzs = DB::table('tahfidzs')->where('id_student', $id)->paginate(20);
+        $tahfidzs = DB::table('tahfidzs')->where('id_student', $id)->orderBy('tanggal_setor', 'desc')->paginate(20);
         
         $teacher = DB::table('students as s')
                         ->join('halaqahs as h', 'h.id', '=', 's.id_halaqah')
@@ -130,6 +134,7 @@ class TahfidzController extends Controller
         
         // Untuk membuat grafik
         $tahfidz_report_ziyadah = DB::select('call tahfidz_report(?, ?)', array($id, 'ziyadah'));
+        
         $tgl_bln_ziyadah = array();
         $total_line_ziyadah = array();
         foreach($tahfidz_report_ziyadah as $tc){
@@ -138,6 +143,7 @@ class TahfidzController extends Controller
         }
 
         $tahfidz_report_murajaah = DB::select('call tahfidz_report(?, ?)', array($id, 'murajaah'));
+        
         $tgl_bln_murajaah = array();
         $total_line_murajaah = array();
         foreach($tahfidz_report_murajaah as $tc){
@@ -146,6 +152,7 @@ class TahfidzController extends Controller
         }
 
         $tahfidz_absensi = DB::select('call tahfidz_absensi_bu(?)', array($id));
+        
         $tahfidz_absensi = $tahfidz_absensi[0];
 
         $soorah_name = array();
@@ -204,7 +211,7 @@ class TahfidzController extends Controller
             'absen' => '' 
         ]);
 
-        DB::transaction(function () use ($request, $validateData) {
+        DB::transaction(function () use ($tahfidz, $request, $validateData) {
             $tahfidz->update($validateData);
             if(empty($request->input('page'))) {
                 $tahfidz->page = 0;
@@ -357,6 +364,63 @@ class TahfidzController extends Controller
         return response()->json([
             'tahfidz_check' => $tahfidz_check
         ]);
+    }
+
+    public function tahfidzPrint(Request $request, User $student) {        
+        $teacher = DB::table('students as s')
+                        ->join('halaqahs as h', 'h.id', '=', 's.id_halaqah')
+                        ->join('users as u', 'u.id', '=', 'h.id_teacher')
+                        ->where('s.id_student', $student->id)
+                        ->get();
+        $image64 = $request->imageurl;
+
+        $soorahs = Soorah::all();
+        
+        $tahfidz_total_ziyadah = DB::select('call tahfidz_total(?, ?)', array($student->id, 'ziyadah'));
+        $tahfidz_total_murajaah = DB::select('call tahfidz_total(?, ?)', array($student->id, 'murajaah'));
+        
+        // Untuk membuat grafik
+        $tahfidz_report_ziyadah = DB::select('call tahfidz_report(?, ?)', array($student->id, 'ziyadah'));
+        
+        $tgl_bln_ziyadah = array();
+        $total_line_ziyadah = array();
+        foreach($tahfidz_report_ziyadah as $tc){
+            array_push($tgl_bln_ziyadah, $tc->tgl_bln);
+            array_push($total_line_ziyadah, $tc->total_line);
+        }
+
+        $tahfidz_report_murajaah = DB::select('call tahfidz_report(?, ?)', array($student->id, 'murajaah'));
+        
+        $tgl_bln_murajaah = array();
+        $total_line_murajaah = array();
+        foreach($tahfidz_report_murajaah as $tc){
+            array_push($tgl_bln_murajaah, $tc->tgl_bln);
+            array_push($total_line_murajaah, $tc->total_line);
+        }
+
+        $tahfidz_absensi = DB::select('call tahfidz_absensi_bu(?)', array($student->id));
+        
+        $tahfidz_absensi = $tahfidz_absensi[0];
+
+        $tahfidzs = DB::table('tahfidzs')->where('id_student', $student->id)->get();
+        
+        $soorahs = Soorah::all();
+        $soorah_name = array();
+        foreach($tahfidzs as $tahfidz){
+            foreach($soorahs as $soorah) {
+                if($tahfidz->soorah_start == $soorah->id) {
+                    $tahfidz->soorah_start = $soorah->name;
+                }
+                if ($tahfidz->soorah_end == $soorah->id){
+                    $tahfidz->soorah_end = $soorah->name;
+                }
+            }
+        }
+
+        $pdf = PDF::loadView('tahfidz.tahfidz-pdf', compact('image64', 'student', 'tahfidzs', 'tahfidz_total_ziyadah', 'tahfidz_total_murajaah', 'tgl_bln_ziyadah', 'total_line_ziyadah', 'tgl_bln_murajaah', 'total_line_murajaah', 'tahfidz_absensi', 'teacher'));
+
+        // return $pdf->download('laporan-tahfidz-pdf');
+        return $pdf->stream();
     }
 
 }

@@ -1,10 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="content">
-        <h1 class="text-center text-md-left h1-responsive" name="top">Tahfidz / {{ $student->user->name }}</h1>
-        <h6 class="text-center text-md-left">Lembar Mutaba'ah</h6>
-        <div class="card mt-5 pt-2 ml-3 ml-md-0">
+    <div class="content" id="section-to-print">
+        <div id="section-title">
+            <h1 class="text-center text-md-left h1-responsive" name="top">Tahfidz / {{ $student->user->name }}</h1>
+            <h6 class="text-center text-md-left">Lembar Mutaba'ah</h6>
+        </div>
+        <div class="card mt-5 pt-2 ml-3 ml-md-0" id="documentPrintable">
             <div class="row mt-2">
                 <div class="w-100 d-flex justify-content-around flex-wrap">
                     <div class="col-md-6 col-lg-3 mb-3 stretch-card">
@@ -28,8 +30,8 @@
                             <div class="card-body">
                                 <h6 class="font-weight-normal">Total Ziyadah</h6>
                                 @foreach($tahfidz_total_ziyadah as $th)
-                                    @if($th->Total != null)
-                                    <h6 class="mb-0 font-weight-bold">{{ $th->Total }}</h6>
+                                    @if($th->total_ayat != null)
+                                    <h6 class="mb-0 font-weight-bold">{{ $th->total_ayat }}</h6>
                                     @else
                                     <h6 class="mb-0 font-weight-bold">Belum ada data</h6>
                                     @endif
@@ -42,8 +44,8 @@
                             <div class="card-body">
                                 <h6 class="font-weight-normal">Total Muraja'ah</h6>
                                 @foreach($tahfidz_total_murajaah as $th)
-                                    @if($th->Total != null)
-                                    <h6 class="mb-0 font-weight-bold">{{ $th->Total }}</h6>
+                                    @if($th->total_ayat != null)
+                                    <h6 class="mb-0 font-weight-bold">{{ $th->total_ayat }}</h6>
                                     @else
                                     <h6 class="mb-0 font-weight-bold">Belum ada data</h6>
                                     @endif
@@ -59,6 +61,7 @@
                 <div class="col-md-9 mb-2">
                     <canvas id="myChart"></canvas>
                 </div>
+                <img src="" alt="" id="imageFromCanvas">
                 <div class="d-flex flex-column col-md align-items-center" style="height:300px">
                     <div class="card shadow text-white bg-secondary">
                         <div class="card-header ">
@@ -78,6 +81,7 @@
                     </div>
                 </div>
             </div>
+            <img id= "image-grafik" src="" alt="">
             @include('layouts.notification')
                 <div class="table-responsive">
                     <table class="table table-sm">
@@ -90,7 +94,7 @@
                                 <th>Tipe Setoran</th>
                                 <th>Penilaian</th>
                                 <th>Absensi</th>
-                                <th>Action</th>
+                                <th class="hide">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -125,7 +129,7 @@
                                             <span class="badge badge-success">Hadir</span>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="hide">
                                         <div class="btn-action row">
                                             <a class="mr-2" href="{{ route('tahfidz.edit', $tahfidz->id) }}" title="Edit" >
                                                 <i data-feather="edit" class="text-primary" width="14"></i>
@@ -158,13 +162,18 @@
                     <p>Menampilkan {{ $tahfidzs->startNo }} - {{ $tahfidzs->currentTotal }} dari {{ $tahfidzs->total() }} data</p>
                     {{ $tahfidzs->onEachSide(1)->links() }}
                 </div>
-                <a href="#top" class="btn btn-mdb-color btn-sm mx-auto rounded-pill waves-effect waves-light col-6 col-md-2 d-flex justify-content-center">Kembali Ke Atas</a>
+                <form action="{{ route('tahfidz.print', $tahfidz->id_student) }}" method="POST">
+                @csrf
+                    <input type="hidden" id="image64" value="" name="imageurl">
+                    <button type="submit" class="btn btn-mdb-color btn-sm mx-auto rounded-pill waves-effect waves-light col-6 col-md-1 d-flex justify-content-center" data-url="" id="btn-print"><i class="fas fa-print mr-2 fa-lg"></i> Print</button>
+                </form>
             </div>
         </div>
     </div>
     
     <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
+        var canvas = document.getElementById('myChart');
+        var ctx = canvas.getContext('2d');
 
         var tgl_bln_ziyadah = {!! json_encode($tgl_bln_ziyadah) !!}
         var total_line_ziyadah = {!! json_encode($total_line_ziyadah) !!}
@@ -195,6 +204,11 @@
 
             // Configuration options go here
             options: {
+                animation: {
+                    onComplete: function() {
+                        document.getElementById('image64').setAttribute('value', chart.toBase64Image());
+                    }
+                },
                 scales: {
                     yAxes: [{
                         scaleLabel: {

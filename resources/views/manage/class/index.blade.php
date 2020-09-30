@@ -120,17 +120,16 @@
                                         <td>{{ $no++ }}</td>
                                         <td>{{ $student->name }}</td>
                                         <td>{{ $student->status }}</td>
-                                        <td>
-                                            <div class="btn-action d-flex justify-content-around">
-                                                <a href="#">
-                                                    <i width="14" color="#04396c" data-feather="edit"></i>
-                                                </a>
-                                                <a href="#">
+                                        <td> 
+                                            <form method="POST" action="{{ route('manage.class.detail.destroy', $student->id) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" title="Delete" class="btn btn-sm py-1 px-2">
                                                     <i width="14" color="red" data-feather="trash"></i>
-                                                </a>
-                                            </div>
+                                                </button>
+                                            </form>
                                         </td>
-                                    </tr>    
+                                    </tr>
                                     @empty
                                     <tr>
                                         <td colspan="3" class="text-center">Belum ada data</td>

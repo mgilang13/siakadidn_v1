@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use PDF;
 
+use Carbon\Carbon;
+
 class TahfidzController extends Controller
 {
     /**
@@ -112,11 +114,11 @@ class TahfidzController extends Controller
      */
     public function show($id)
     {
-        
-
         $student = RefStudent::findOrFail($id);
-        $tahfidzs = DB::table('tahfidzs')->where('id_student', $id)->orderBy('tanggal_setor', 'desc')->paginate(20);
         
+        // $tahfidzs1 = DB::table('tahfidzs')->where('id_student', $id)->orderBy('tanggal_setor', 'desc')->paginate(20);
+        $tahfidzs = Tahfidz::where('id_student', $id)->orderBy('tanggal_setor', 'desc')->paginate(20);
+       
         $teacher = DB::table('students as s')
                         ->join('halaqahs as h', 'h.id', '=', 's.id_halaqah')
                         ->join('users as u', 'u.id', '=', 'h.id_teacher')

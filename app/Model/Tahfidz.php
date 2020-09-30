@@ -17,7 +17,8 @@ class Tahfidz extends Model
     
     public function getTanggalSetorAttribute()
     {
+
         return \Carbon\Carbon::parse($this->attributes['tanggal_setor'])
-        ->format('d, M Y');
+        ->format('D, d M Y');
     }
 }

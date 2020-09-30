@@ -100,6 +100,7 @@ class MgtClassController extends Controller
 
         $mgtClassDetail = DB::table('mgt_class_details as mcd')
                                 ->join('users as u', 'u.id', '=', 'mcd.id_student')
+                                ->select('mcd.id as id', 'u.name as name', 'mcd.status as status')
                                 ->where('id_mgt_class', $id)
                                 ->get();
 
@@ -184,10 +185,24 @@ class MgtClassController extends Controller
         return redirect()->route('manage.class.index')->with('success', 'Hapus Data Sukses');
     }
 
+    public function detailDestroy($id)
+    {
+        $class_detail = MgtClassDetail::findOrFail($id);
+        $class_detail->delete();
+        
+        return redirect()->route('manage.class.index')->with('success', 'Hapus Data Sukses');
+    }
+
     public function showJson($id)
     {
         $mgtclass = MgtClass::findOrFail($id);
         return $mgtclass->toJson();
+    }
+
+    public function detailShowJson($id)
+    {
+        $mgtclassdetail = MgtClassDetail::findOrFail($id);
+        return $mgtclassdetail->toJson();
     }
 
     // Management of Ruang Kelas

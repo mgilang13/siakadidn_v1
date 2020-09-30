@@ -91,6 +91,7 @@
                                 <th>Tanggal Setor</th>
                                 <th>Surat</th>
                                 <th>Jumlah Hafalan</th>
+                                <th>Waktu Setoran</th>
                                 <th>Tipe Setoran</th>
                                 <th>Penilaian</th>
                                 <th>Absensi</th>
@@ -98,11 +99,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @php $no = 1 @endphp
+                        @php 
+                            $no = 1;
+                            setlocale(LC_TIME, 'id_ID'); 
+                        @endphp
                             @forelse($tahfidzs as $tahfidz)
                                 <tr>
                                     <td>{{ $tahfidzs->no++ }}</td>
-                                    <td>{{ $tahfidz->tanggal_setor == '' ? $tahfidz->created_at : $tahfidz->tanggal_setor }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($tahfidz->tanggal_setor)->formatLocalized('%A, %d %B %Y') }}</td>
                                     <td>
                                         @if($tahfidz->soorah_start == $tahfidz->soorah_end)
                                         {{ $tahfidz->soorah_start }} : {{ $tahfidz->verse_start }} - {{ $tahfidz->verse_end }}
@@ -110,6 +114,7 @@
                                         {{ $tahfidz->soorah_start }} : {{ $tahfidz->verse_start }} - {{ $tahfidz->soorah_end }} : {{ $tahfidz->verse_end }}</td>
                                         @endif
                                     <td>{{ $tahfidz->page == 0 ? '' : $tahfidz->page .' halaman' }} {{ $tahfidz->line .' baris'}}</td>
+                                    <td>{{ $tahfidz->type == 'murajaah' ? 'Maghrib' : 'Subuh'}}</td>
                                     <td class="text-capitalize">{{ $tahfidz->type }}</td>
                                     @if($tahfidz->assessment == "kl")
                                     <td class="text-capitalize">Kurang Lancar</td>
@@ -162,7 +167,7 @@
                     <p>Menampilkan {{ $tahfidzs->startNo }} - {{ $tahfidzs->currentTotal }} dari {{ $tahfidzs->total() }} data</p>
                     {{ $tahfidzs->onEachSide(1)->links() }}
                 </div>
-                <form action="{{ route('tahfidz.print', $tahfidz->id_student) }}" method="POST">
+                <form action="{{ route('tahfidz.print', $student->id_student) }}" method="POST">
                 @csrf
                     <input type="hidden" id="image64" value="" name="imageurl">
                     <button type="submit" class="btn btn-mdb-color btn-sm mx-auto rounded-pill waves-effect waves-light col-6 col-md-1 d-flex justify-content-center" data-url="" id="btn-print"><i class="fas fa-print mr-2 fa-lg"></i> Print</button>

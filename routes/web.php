@@ -79,6 +79,7 @@ Route::middleware(['auth', 'core'])->group(function () {
             Route::get('show-json/{id}', 'MgtClassController@showJson')->name('show-json');
             Route::get('add-student/{idMC}', 'MgtClassController@addStudent')->name('add-student');
             Route::post('add-student/add', 'MgtClassController@addStudentStore')->name('add-student.process');
+            Route::delete('detail/destroy/{id}', 'MgtClassController@detailDestroy')->name('detail.destroy');
         });
         Route::resource('class', 'MgtClassController');
 

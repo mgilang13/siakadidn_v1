@@ -53,7 +53,7 @@
                             <p class="font-italic font-small">(opsional)</p>
                         </div>
                         <div class="form-group">
-                            <textarea class="form-control" name="note" id="note"rows="3" placeholder="Catatan..."></textarea>
+                            <textarea class="form-control" name="note" id="note" rows="3" placeholder="Catatan..."></textarea>
                             <p class="font-italic font-small">(opsional)</p>
                         </div>
                     </div>

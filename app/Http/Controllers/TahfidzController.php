@@ -84,6 +84,7 @@ class TahfidzController extends Controller
             'id_halaqah' => '',
             'id_teacher' => '',
             'tanggal_setor' => '',
+            'deposit_time' => '',
             'soorah_start' => '', 
             'soorah_end' => '', 
             'verse_start' => '', 
@@ -92,7 +93,8 @@ class TahfidzController extends Controller
             'assessment' => '',
             'line' => '',
             'page' => '',
-            'absen' => '' 
+            'absen' => '',
+            'note' => '' 
         ]);
         
         $tahfidz_note = Tahfidz::create($validateData);
@@ -202,6 +204,7 @@ class TahfidzController extends Controller
             'id_halaqah' => '',
             'id_teacher' => '',
             'tanggal_setor' => '',
+            'deposit_time' => '',
             'soorah_start' => '', 
             'soorah_end' => '', 
             'verse_start' => '', 
@@ -210,7 +213,8 @@ class TahfidzController extends Controller
             'assessment' => '',
             'line' => '',
             'page' => '',
-            'absen' => '' 
+            'absen' => '',
+            'note' => ''
         ]);
 
         DB::transaction(function () use ($tahfidz, $request, $validateData) {

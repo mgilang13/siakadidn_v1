@@ -114,16 +114,18 @@
                                         {{ $tahfidz->soorah_start }} : {{ $tahfidz->verse_start }} - {{ $tahfidz->soorah_end }} : {{ $tahfidz->verse_end }}</td>
                                         @endif
                                     <td>{{ $tahfidz->page == 0 ? '' : $tahfidz->page .' halaman' }} {{ $tahfidz->line .' baris'}}</td>
-                                    <td>{{ $tahfidz->type == 'murajaah' ? 'Maghrib' : 'Subuh'}}</td>
+                                    <td>{{ $tahfidz->deposit_time == 's' ? 'Subuh' : 'Maghrib'}}</td>
                                     <td class="text-capitalize">{{ $tahfidz->type }}</td>
                                     @if($tahfidz->assessment == "kl")
                                     <td class="text-capitalize">Kurang Lancar</td>
                                     @elseif($tahfidz->assessment == "l")
                                     <td class="text-capitalize">Lancar</td>
+                                    @elseif($tahfidz->assessment == "u")
+                                    <td>Ulang</td>
                                     @else
-                                    <td>-</td>
+                                    <td></td>
                                     @endif
-                                    <td>
+                                    <td style="cursor:pointer" data-toggle="popover" title="Catatan" data-content="{{ $tahfidz->note }}">
                                         @if($tahfidz->absen == 'a')
                                             <span class="badge badge-danger">Alpha</span>
                                         @elseif($tahfidz->absen == 'i')
@@ -135,13 +137,15 @@
                                         @endif
                                     </td>
                                     <td class="hide">
-                                        <div class="btn-action row">
-                                            <a class="mr-2" href="{{ route('tahfidz.edit', $tahfidz->id) }}" title="Edit" >
+                                        <div class="btn-action d-flex justify-content-around">
+                                            <a class="mr-1" href="{{ route('tahfidz.edit', $tahfidz->id) }}" title="Edit" >
                                                 <i data-feather="edit" class="text-primary" width="14"></i>
                                             </a>
-
-                                            <a href="#" title="Delete" id="deleteData" data-toggle="modal" data-target="#deleteModal" data-id="{{ $tahfidz->id }}" class="text-danger" data-action="{{ route('tahfidz.destroy', $tahfidz->id) }}" >
+                                            <a href="#" title="Delete" id="deleteData" data-toggle="modal" data-target="#deleteModal" data-id="{{ $tahfidz->id }}" class="text-danger mr-1" data-action="{{ route('tahfidz.destroy', $tahfidz->id) }}" >
                                                 <i data-feather="trash" color="red" width="14"></i>
+                                            </a>
+                                            <a data-toggle="popover" title="Catatan" data-content="{{ $tahfidz->note }}" class="text-info font-weight-bold" >
+                                                <i data-feather="info" width="14"></i>
                                             </a>
                                         </div>
                                     </td>
@@ -175,6 +179,15 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover({
+                trigger:'hover',
+                placement: 'top',
+            })
+        })
+    </script>
     
     <script>
         var canvas = document.getElementById('myChart');

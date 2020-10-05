@@ -188,7 +188,9 @@ class MgtClassController extends Controller
     public function detailDestroy($id)
     {
         $class_detail = MgtClassDetail::findOrFail($id);
-        $class_detail->delete();
+        // dd($class_detail);
+        $class_detail->id_mgt_class = null;
+        $class_detail->save();
         
         return redirect()->route('manage.class.index')->with('success', 'Hapus Data Sukses');
     }
@@ -211,9 +213,9 @@ class MgtClassController extends Controller
         $students = DB::table('users as u')
                         ->join('students as s', 's.id_student', '=', 'u.id')
                         ->leftJoin('mgt_class_details as mcd', 'mcd.id_student', 's.id_student')
-                        ->where('mcd.id_mgt_class', null)
+                        ->orWhere('mcd.id_mgt_class', null)
+                        ->select('u.id as idUser', 'u.*', 's.*', 'mcd.*')
                         ->get();
-        
         return view('manage.class.add-student', compact('students', 'id'));
     }
 

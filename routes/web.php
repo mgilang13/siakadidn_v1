@@ -41,7 +41,7 @@ Route::middleware(['auth', 'core'])->group(function () {
         Route::get('report/feedback-student/{student}', 'JournalController@reportFeedbackStudent')->name('report.feedback-student');
         
         Route::get('sub/list/{id}', 'JournalController@listSubMatter')->name('list-submatter');
-        Route::get('list/{id}', 'JournalController@listMatter')->name('list-matter');
+        Route::get('list/{matter}', 'JournalController@listMatter')->name('list-matter');
         Route::get('teacher-schedule/{id}', 'JournalController@teacherSchedule')->name('teacher-schedule');
         Route::post('feedback/store', 'JournalController@feedbackStore')->name('feedback.store');
         Route::post('detail/response', 'JournalController@journalDetailResponse')->name('detail.response');

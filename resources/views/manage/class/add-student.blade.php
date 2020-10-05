@@ -35,7 +35,7 @@
                                 <tr>
                                     <td> 
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="id_student[]" value="{{ $student->id }}" id="student{{ $student->id }}">
+                                            <input class="form-check-input" type="checkbox" name="id_student[]" value="{{ $student->idUser }}" id="student{{ $student->idUser }}">
                                         </div>
                                     </td>
                                     <td>{{ $no++ }}</td>

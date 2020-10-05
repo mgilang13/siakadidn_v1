@@ -260,9 +260,12 @@ class JournalController extends Controller
         return $matter_detail->toJson();
     }
 
-    public function listMatter($id)
+    public function listMatter($matter)
     {
-        $matters = DB::table('matters')->where('id_subject', $id)->get();
+        $arrayMatter = explode(",", $matter);
+        $idSubject = $arrayMatter[0];
+        $idLevel = $arrayMatter[1];
+        $matters = DB::table('matters')->where('id_subject', $idSubject)->where('id_level', $idLevel)->get();
         return $matters->toJson();
     }
 

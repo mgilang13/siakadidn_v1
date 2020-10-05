@@ -36,7 +36,7 @@
                                                     data-id_schedule="{{ $value['idSchedule'] }}"
                                                     data-id_subject="{{ $value['idSubject'] }}"
                                                     data-subject_name="{{ $value['subjectName'] }}"
-                                                    data-matter = "{{ route('journal.list-matter', $value['idSubject']) }}"
+                                                    data-matter = "{{ $value['idSubject'] }},{{ $value['idLevel']}}"
                                                     data-toggle="modal" 
                                                     data-target="#modal" 
                                                     data-type="add" 
@@ -52,7 +52,9 @@
                                                 <script>
                                                 $("#journal-btn{{ $value['idSchedule']}}").on('click', function() {
                                                     $('select[name="id_matter"]').children().not(':first-child').remove();
-                                                    let url = $("#journal-btn{{ $value['idSchedule'] }}").data('matter');
+                                                    let matter = $("#journal-btn{{ $value['idSchedule'] }}").data('matter');
+                                                    let url = "{{ route('journal.list-matter', '') }}"+'/'+matter;
+                                                    console.log(matter);
                                                     console.log(url);
                                                     axios.get(url).then(result => {
                                                         let data = result.data;         

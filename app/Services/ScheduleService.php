@@ -20,7 +20,6 @@ class ScheduleService
                         ->select('ms.*', 'c.id_level', 'c.id_level_detail', 'c.grade', 's.name as subjectName')                    
                         ->get();
         $studytimes = RefStudyTime::all();
-        
         foreach($studytimes as $studytime) {
             $textStudyTime = $studytime->name;
             $scheduleData[$textStudyTime] = [];
@@ -28,23 +27,21 @@ class ScheduleService
             foreach($days as $index => $day) {
                 
                 $schedule = $schedules->where('id_day', $index)
-                                        ->where('id_studytime_start', $studytime->name)
+                                        ->where('id_studytime_start', $studytime->start)
                                         ->where('id_schoolyear', (int)$qSchoolYear)
                                         ->where('id_semester', (int)$qSemester)
-                                        ->where('id_level', (int)$qLevel)
-                                        ->where('id_level_detail', (int)$qLevelDetail)
-                                        ->where('grade', (int)$qGrade)
                                         ->where('id_class', (int)$qClass)
                                         ->first();
-
-                if($schedule) {
+                                        
+                if(isset($schedule)) {
                     array_push($scheduleData[$textStudyTime], [
                         'id' => $schedule->id,
                         'subjectName' => $schedule->subjectName,
-                        'rowspan' => ($schedule->id_studytime_end - $schedule->id_studytime_start)+1
+                        'rowspan' => (($schedule->id_studytime_end - $schedule->id_studytime_start) + 1)
                     ]);
                 }
-                else if(!$schedules->where('id_day', $index)->where('id_studytime_start', '<', $studytime->name)->where('id_studytime_end', '>=', $studytime->name)->count()) {
+                
+                else if(!$schedules->where('id_day', $index)->where('id_studytime_start', '<', $studytime->start)->where('id_studytime_end', '>=', ($studytime->end)-1)->where('id_schoolyear', (int)$qSchoolYear)->where('id_semester', (int)$qSemester)->where('id_level', (int)$qLevel)->where('id_level_detail', (int)$qLevelDetail)->where('grade', (int)$qGrade)->where('id_class', (int)$qClass)->count()) {
                     array_push($scheduleData[$textStudyTime], 1);
                 } else {
                     array_push($scheduleData[$textStudyTime], 0);

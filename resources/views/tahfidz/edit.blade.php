@@ -21,17 +21,24 @@
                 <div class="row mt-2 mt-md-4">
                     <div class="col">
                         <div class="row bg-primary rounded p-1">
-                            <div class="form-group col-md-5">
+                            <div class="form-group col-md-4">
                                 <label for="tanggal_setor" class="col-for-label text-light">Tanggal Setor</label>
                                 <input type="date" class="form-control" max="{{ $tanggal_sekarang }}" name="tanggal_setor" value="{{ old('tanggal_setor') ?? $tahfidz->created_at }}">
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-3">
                                 <label for="absen" class="col-for-label text-light font-weight">Absensi</label>
                                 <select name="absen" id="absen" class="form-control">
                                     <option value="h" class="alert alert-success pt-2" {{ (old('absen') ?? $tahfidz->absen) == 'h' ? 'selected' : '' }}>Hadir</option>
                                     <option value="a" class="alert alert-danger" {{ (old('absen') ?? $tahfidz->absen) == 'a' ? 'selected' : '' }}>Alpha</option>
                                     <option value="i" class="alert alert-warning" {{ (old('absen') ?? $tahfidz->absen) == 'i' ? 'selected' : '' }}>Izin</option>
                                     <option value="s" class="alert alert-info" {{ (old('absen') ?? $tahfidz->absen) == 's' ? 'selected' : '' }}>Sakit</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label for="deposit_time" class="col-for-label text-light font-weight">Waktu Setoran</label>
+                                <select name="deposit_time" id="deposit_time" class="form-control">
+                                    <option value="s" class="pt-2" {{ (old('deposit_time') ?? $tahfidz->deposit_time) == 's' ? 'selected' : '' }}>Subuh</option>
+                                    <option value="s" class="pt-2" {{ (old('deposit_time') ?? $tahfidz->deposit_time) == 'm' ? 'selected' : '' }}>Maghrib</option>
                                 </select>
                             </div>
                         </div>
@@ -50,9 +57,6 @@
                                     <label class="btn btn-indigo px-md-3 py-md-2">
                                         <input type="radio" name="type" value="tahsin" id="tahsin" autocomplete="off" {{ (old('type') ?? $tahfidz->type) == 'tahsin' ? 'checked' : ''}}> Tahsin
                                     </label>
-                                    <label class="btn btn-deep-orange px-md-3 py-md-2">
-                                        <input type="radio" name="type" value="ulang" id="ulang" autocomplete="off" {{ (old('type') ?? $tahfidz->type) == 'ulang' ? 'checked' : ''}}> Ulang
-                                    </label>
                                 </div>
                             </div>
                             <div class="mt-4">
@@ -63,6 +67,9 @@
                                     </label>
                                     <label class="btn btn-cyan px-md-3 py-md-2">
                                         <input type="radio" name="assessment" value="kl" id="kl" autocomplete="off" {{ (old('assessment') ?? $tahfidz->assessment) == 'kl' ? 'checked' : ''}}> Kurang Lancar
+                                    </label>
+                                    <label class="btn btn-deep-orange px-md-3 py-md-2">
+                                        <input type="radio" name="type" value="u" id="ulang" autocomplete="off" {{ (old('assessment') ?? $tahfidz->assessment) == 'u' ? 'checked' : ''}}> Ulang
                                     </label>
                                 </div>
                             </div>
@@ -117,6 +124,9 @@
                                 @endfor
                             </select>
                         </div>
+                    </div>
+                    <div class="form-group mt-2">
+                        <textarea name="note" id="note" cols="30" rows="2" class="form-control" placeholder="Catatan...">{{ old('note') ?? $tahfidz->note }}</textarea>
                     </div>  
                 </div>
             </div>

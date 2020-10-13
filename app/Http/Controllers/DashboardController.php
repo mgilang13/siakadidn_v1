@@ -20,8 +20,7 @@ class DashboardController extends Controller
         $id = Auth::user()->id;
         $user = User::findOrFail($id);
 
-        $teacher_subject = DB::table('teacher_subjects as ts')->where('id_teacher', $id)->get();
-
+        $teacher_subject = DB::table('teacher_subjects as ts')->where('id_teacher', $id)->first();
         // Dashboard Muhafidz
         $present_date = date('Y-m-d');
         $past_date = $request->query('past_date');

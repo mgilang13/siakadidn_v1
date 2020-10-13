@@ -94,7 +94,7 @@ class JournalController extends Controller
 
         $validateData = $request->validate([
             'id_schedule' => 'required',
-            'id_matter' => '',
+            'id_matter' => 'required',
             'result' => '',
             'obstacle' => '',
             'solution' => '',

@@ -261,6 +261,80 @@ class TahfidzController extends Controller
         return view('tahfidz.show-member', compact('listed_members', 'halaqah'));
     }
 
+    public function halaqahPreview(RefHalaqah $halaqah) {
+        $listed_members = DB::table('students as s')
+                                ->join('users as u', 'u.id', '=', 's.id_student')
+                                ->where('s.id_halaqah', $halaqah->id)
+                                ->select('u.id')
+                                ->get();
+        foreach($listed_members as $index => $value){
+            $id = $value->id;
+
+            $student = RefStudent::findOrFail($id);
+            $tahfidzs = Tahfidz::where('id_student', $id)->orderBy('tanggal_setor', 'desc')->paginate(20);
+            
+            $teacher = DB::table('students as s')
+                        ->join('halaqahs as h', 'h.id', '=', 's.id_halaqah')
+                        ->join('users as u', 'u.id', '=', 'h.id_teacher')
+                        ->where('s.id_student', $id)
+                        ->get();
+            $tahfidzs->currentTotal = ($tahfidzs->currentPage() - 1) * $tahfidzs->perPage() + $tahfidzs->count();
+            $tahfidzs->startNo = ($tahfidzs->currentPage() - 1) * $tahfidzs->perPage() + 1;
+            $tahfidzs->no = ($tahfidzs->currentPage() - 1) * $tahfidzs->perPage() + 1;
+
+            $soorahs = Soorah::all();
+        
+            $tahfidz_total_ziyadah = DB::select('call tahfidz_total(?, ?)', array($id, 'ziyadah'));
+            $tahfidz_total_murajaah = DB::select('call tahfidz_total(?, ?)', array($id, 'murajaah'));
+            dump($tahfidz_total_murajaah);
+            // Untuk membuat grafik
+            $tahfidz_report_ziyadah = DB::select('call tahfidz_report(?, ?)', array($id, 'ziyadah'));
+            
+            $tgl_bln_ziyadah = array();
+            $total_line_ziyadah = array();
+            foreach($tahfidz_report_ziyadah as $tc){
+                array_push($tgl_bln_ziyadah, $tc->tgl_bln);
+                array_push($total_line_ziyadah, $tc->total_line);
+            }
+
+            $tahfidz_report_murajaah = DB::select('call tahfidz_report(?, ?)', array($id, 'murajaah'));
+            
+            $tgl_bln_murajaah = array();
+            $total_line_murajaah = array();
+            foreach($tahfidz_report_murajaah as $tc){
+                array_push($tgl_bln_murajaah, $tc->tgl_bln);
+                array_push($total_line_murajaah, $tc->total_line);
+            }
+
+            $tahfidz_absensi = DB::select('call tahfidz_absensi_bu(?)', array($id));
+            
+            $tahfidz_absensi = $tahfidz_absensi[0];
+
+            $soorah_name = array();
+            foreach($tahfidzs as $tahfidz){
+                foreach($soorahs as $soorah) {
+                    if($tahfidz->soorah_start == $soorah->id) {
+                        $tahfidz->soorah_start = $soorah->name;
+                    }
+                    if ($tahfidz->soorah_end == $soorah->id){
+                        $tahfidz->soorah_end = $soorah->name;
+                    }
+                }
+            }
+
+        }
+        dd('hai');
+
+        // $tahfidzs1 = DB::table('tahfidzs')->where('id_student', $id)->orderBy('tanggal_setor', 'desc')->paginate(20);
+       
+        
+        
+
+        
+
+        
+    }
+
     public function addNotes($id)
     {
         $student = RefStudent::findOrFail($id);

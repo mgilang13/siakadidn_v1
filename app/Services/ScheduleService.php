@@ -19,6 +19,7 @@ class ScheduleService
                         ->leftJoin('school_years as sch', 'sch.id', '=', 'ms.id_schoolyear')
                         ->select('ms.*', 'c.id_level', 'c.id_level_detail', 'c.grade', 's.name as subjectName')                    
                         ->get();
+                        
         $studytimes = RefStudyTime::all();
         foreach($studytimes as $studytime) {
             $textStudyTime = $studytime->name;

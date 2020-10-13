@@ -61,6 +61,7 @@ Route::middleware(['auth', 'core'])->group(function () {
         Route::get('report-murid/{id}', 'TahfidzController@reportMurid')->name('report-murid');
         Route::get('show-json/{id}', 'TahfidzController@showJson')->name('show-json');
         
+        Route::get('halaqah-preview/{halaqah}', 'TahfidzController@halaqahPreview')->name('halaqah-preview');
         Route::post('print/{student}', 'TahfidzController@tahfidzPrint')->name('print');
 
         Route::name('report.')->prefix('/report')->group(function() {

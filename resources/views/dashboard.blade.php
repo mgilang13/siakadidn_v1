@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @if(Auth::user()->roles->first()->pivot->roles_id == 3 and $teacher_subject == null)
+    @if(Auth::user()->roles->first()->pivot->roles_id == 3 and $teacher_subject->id_subject == 1)
         @include('dashboard.muhafidz')
     @elseif(Auth::user()->roles->first()->pivot->roles_id == 4)
         @include('dashboard.murid')

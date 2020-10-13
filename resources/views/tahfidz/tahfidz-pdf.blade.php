@@ -18,7 +18,8 @@
         <p>
             <span class="font-weight-bold"> Hafalan Pra IDN </span>: {{ $student->hafalan_pra_idn == null ? '0' : $student->hafalan_pra_idn }} Juz <br>
             <span class="font-weight-bold">Target Hafalan Baru </span>: {{ $student->target_hafalan == null ? '0' : $student->target_hafalan }} Juz <br>
-            <span class="font-weight-bold">Total Ziyadah </span>: @foreach($tahfidz_total_ziyadah as $th)
+            <span class="font-weight-bold">Total Ziyadah </span>: 
+                            @foreach($tahfidz_total_ziyadah as $th)
                                 @if($th->total_ayat != null)
                                     {{ $th->total_ayat }}
                                 @else
@@ -26,7 +27,8 @@
                                 @endif
                             @endforeach
                             <br>
-            <span class="font-weight-bold"> Total Muraja'ah </span>: @foreach($tahfidz_total_murajaah as $th)
+            <span class="font-weight-bold"> Total Muraja'ah </span>: 
+                            @foreach($tahfidz_total_murajaah as $th)
                                 @if($th->total_ayat != null)
                                     {{ $th->total_ayat }}
                                 @else
@@ -55,14 +57,18 @@
                     <th>Tipe Setoran</th>
                     <th>Penilaian</th>
                     <th>Absensi</th>
+                    <th>Catatan</th>
                 </tr>
             </thead>
             <tbody>
-                @php $no = 1 @endphp
+                @php 
+                    $no = 1;
+                    setlocale(LC_TIME, 'id_ID');  
+                @endphp
                 @forelse($tahfidzs as $tahfidz)
                 <tr>
                     <td>{{ $no++ }}</td>
-                    <td>{{ $tahfidz->tanggal_setor == '' ? $tahfidz->created_at : $tahfidz->tanggal_setor }}</td>
+                    <td>{{ \Carbon\Carbon::parse($tahfidz->tanggal_setor)->formatLocalized('%A, %d %B %Y') }}</td>
                     <td>
                         @if($tahfidz->soorah_start == $tahfidz->soorah_end)
                         {{ $tahfidz->soorah_start }} : {{ $tahfidz->verse_start }} - {{ $tahfidz->verse_end }}
@@ -89,6 +95,7 @@
                             <span class="badge badge-success">Hadir</span>
                             @endif
                     </td>
+                    <td>{{ $tahfidz->note }}</td>
                 </tr>
                 @empty
                 <tr>

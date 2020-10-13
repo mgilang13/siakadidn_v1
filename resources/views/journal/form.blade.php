@@ -29,6 +29,9 @@
                         </div>
                         <p class="badge badge-primary px-3 px-1 mt-2" style="font-size:14px">Rincian Materi</p><br>
                         <p class="small text-danger">Jangan lupa untuk diisi!</p>
+                        @error('journal_details[]')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                         <div class="pl-4 shadow grey mb-3 rounded lighten-4">
                             <div class="md-form form-sm" id="journal_details_group">
                                 <!-- <input name="journal_details[]" type="text" class="form-control form-control-sm" placeholder="Sub Materi 1"> -->
@@ -39,6 +42,7 @@
                             </div>
                             <button type="button" id="add_sub_matter" class="btn btn-primary btn-sm px-2 rounded"><i class="fas fa-plus mr-2"></i>Sub Materi</button>
                             <button type="button" onclick="cancelSubMateri()" id="cancel_sub_materi" class="btn btn-warning btn-sm px-2 rounded"><i class="fas fa-trash mr-2"></i>Hapus</button>
+                        
                         </div>
                         <div class="form-group">
                             <textarea class="form-control" name="result" id="result"rows="3" placeholder="Hasil..."></textarea>

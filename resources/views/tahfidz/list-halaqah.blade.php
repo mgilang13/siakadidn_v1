@@ -32,6 +32,10 @@
                                         <i width="14" data-feather="list" class="text-white mr-1"></i>
                                         Daftar Anggota
                                     </a>
+                                    <a href="{{ route('tahfidz.halaqah-preview', $halaqah->id) }}" class="btn btn-default btn-sm">
+                                        <i width="14" data-feather="printer" class="text-white mr-1"></i>
+                                        Cetak Laporan
+                                    </a>
                                 </td>
                             </tr>
                            @empty

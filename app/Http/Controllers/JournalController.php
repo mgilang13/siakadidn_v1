@@ -336,12 +336,11 @@ class JournalController extends Controller
                                 ->whereBetween('teaching_date', array($start_date, $end_date))
                                 ->get();
 
-        $teachedGrade = DB::select('call journal_teached_grade(?)', array($student->id));
 
         $absensi = DB::select('call journal_absensi_siswa(?, ?, ?)', array($student->id, $start_date, $end_date));
         $absensi_total = DB::select('call journal_absensi_siswa_total(?, ?, ?)', array($student->id, $start_date, $end_date));
         
-        return view('journal.report.absensi-student', compact('subjects', 'start_date', 'end_date', 'student', 'absensi', 'absensi_total', 'teachedGrade', 'grade', 'id_level', 'id_level_detail','id_subject', 'absensi_detail'));
+        return view('journal.report.absensi-student', compact('subjects', 'start_date', 'end_date', 'student', 'absensi', 'absensi_total', 'grade', 'id_level', 'id_level_detail','id_subject', 'absensi_detail'));
     }
 
     public function reportFeedbackStudent(Request $request, User $student) {

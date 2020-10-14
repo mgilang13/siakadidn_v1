@@ -19,19 +19,23 @@ class RefMatterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $matter_details = null;
         $matter_show = null;
-
+        $q = $request->query('q') ?: '';
         $matters = DB::table('matters')
                         ->join('subjects', 'matters.id_subject', '=', 'subjects.id')
                         ->select('matters.*', 'subjects.id as subjectID', 'subjects.name as subjectName', 'subjects.description as subjectDesc')
-                        ->get();
-
+                        ->where('matters.name', 'like', '%'.$q.'%')
+                        ->paginate(20);;
+        
+        $matters->currentTotal = ($matters->currentPage() - 1) * $matters->perPage() + $matters->count();
+        $matters->startNo = ($matters->currentPage() - 1) * $matters->perPage() + 1;
+        $matters->no = ($matters->currentPage() - 1) * $matters->perPage() + 1;
+        
         $subjects = RefSubject::all();
-
-        return view('ref.matter.index', compact('matters', 'subjects', 'matter_details', 'matter_show'));
+        return view('ref.matter.index', compact('matters', 'subjects', 'matter_details', 'matter_show', 'q'));
     }
 
     /**
@@ -69,8 +73,9 @@ class RefMatterController extends Controller
      * @param  \App\Model\matter  $matter
      * @return \Illuminate\Http\Response
      */
-    public function show(RefMatter $matter)
+    public function show(Request $request, RefMatter $matter)
     {
+        $q = $request->query('q') ?: '';
         $matter_details = DB::table('matter_details as md')
                             ->join('matters as m', 'm.id', '=', 'md.id_matter')
                             ->where('md.id_matter', $matter->id)
@@ -81,12 +86,17 @@ class RefMatterController extends Controller
         $matters = DB::table('matters')
                         ->join('subjects', 'matters.id_subject', '=', 'subjects.id')
                         ->select('matters.*', 'subjects.id as subjectID', 'subjects.name as subjectName', 'subjects.description as subjectDesc')
-                        ->get();
+                        ->where('matters.name', 'like', '%'.$q.'%')
+                        ->paginate(20);
+
+        $matters->currentTotal = ($matters->currentPage() - 1) * $matters->perPage() + $matters->count();
+        $matters->startNo = ($matters->currentPage() - 1) * $matters->perPage() + 1;
+        $matters->no = ($matters->currentPage() - 1) * $matters->perPage() + 1;
     
         $subjects = RefSubject::all();
         $matter_show = $matter;
 
-        return view('ref.matter.index', compact('matter_show', 'matters', 'subjects', 'matter_details'));
+        return view('ref.matter.index', compact('matter_show', 'matters', 'subjects', 'matter_details', 'q'));
     }
 
     /**

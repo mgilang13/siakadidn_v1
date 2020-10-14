@@ -12,6 +12,14 @@
                                 <i width="14" class="mr-2" data-feather="plus"></i>Tambah Materi
                             </a>
                         </div>
+                        <form action="{{ route('ref.matter.index') }}" method="get">
+                            <div class="col-md-7 d-flex flex-wrap">
+                                <input class="form-control" id="q" type="text" name="q" placeholder="Cari Materi" value="{{ $q }}">
+                                <button class="btn btn-info btn-sm" type="submit">
+                                    <i width="14" class="" data-feather="search"></i>
+                                </button>
+                            </div>
+                        </form>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
@@ -24,10 +32,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @php $no = 1; @endphp
                                 @forelse ($matters as $matter)
                                     <tr>
-                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $matters->no++ }}</td>
                                         <td>{{ $matter->name }}</td>
                                         <td>{{ $matter->subjectName}}</td>
                                         <td>{{ $matter->description }}</td>
@@ -63,6 +70,10 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="table-footer">
+                            <p>Menampilkan {{ $matters->startNo }} - {{ $matters->currentTotal }} dari {{ $matters->total() }} data</p>
+                            {{ $matters->onEachSide(1)->links() }}
+                        </div>
                     </div>
                     <div class="col-5">
                         @if($matter_details == null and $matter_show == null)
@@ -80,7 +91,7 @@
                             </a>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-sm table-striped">
+                            <table class="table table-sm table-striped" id="dtsubmateri">
                                 <thead>
                                     <tr>
                                         <th>No.</th>
@@ -89,7 +100,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php $no = 1; @endphp
+                                    @php $no=1 @endphp
                                     @forelse($matter_details as $matter_detail)
                                     <tr>
                                         <td>{{ $no++ }}</td>
@@ -227,6 +238,16 @@
                     });
             }
         })
+    });
+</script>
+
+<script>
+$(document).ready(function (e) {
+        
+        $('#dtsubmateri').DataTable({
+            "paging":true,
+            "responsive":true
+        });
     });
 </script>
 @endsection

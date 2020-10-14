@@ -213,9 +213,11 @@ class MgtClassController extends Controller
         $students = DB::table('users as u')
                         ->join('students as s', 's.id_student', '=', 'u.id')
                         ->leftJoin('mgt_class_details as mcd', 'mcd.id_student', 's.id_student')
-                        ->orWhere('mcd.id_mgt_class', null)
+                        ->where('mcd.id_mgt_class', null)
                         ->select('u.id as idUser', 'u.*', 's.*', 'mcd.*')
                         ->get();
+
+        
         return view('manage.class.add-student', compact('students', 'id'));
     }
 

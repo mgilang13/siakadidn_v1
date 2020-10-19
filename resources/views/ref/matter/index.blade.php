@@ -12,14 +12,34 @@
                                 <i width="14" class="mr-2" data-feather="plus"></i>Tambah Materi
                             </a>
                         </div>
-                        <form action="{{ route('ref.matter.index') }}" method="get">
-                            <div class="col-md-7 d-flex flex-wrap">
-                                <input class="form-control" id="q" type="text" name="q" placeholder="Cari Materi" value="{{ $q }}">
-                                <button class="btn btn-info btn-sm" type="submit">
+                            <form action="{{ route('ref.matter.index') }}" method="get">
+                                <div class="col-md-6 form-group">
+                                    <input class="form-control-sm form-control" id="q" type="text" name="q" placeholder="Cari Materi" value="{{ old('q') ?? $q }}">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <select name="id_level" id="" class="form-control-sm form-control">
+                                        <option value="">-- Jenjang Pendidikan --</option>
+                                        @forelse($levels as $level)
+                                        <option value="{{ $level->id }}" {{ (old('id_level') ?? $level->id) == $qLevel ? 'selected' : '' }}>{{ $level->name }}</option>
+                                        @empty
+                                        <option value="">Belum ada data</option>
+                                        @endforelse
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <select name="id_subject" id="" class="form-control-sm form-control">
+                                        <option value="">-- Mata Pelajaran --</option>
+                                        @forelse($subjects as $subject)
+                                        <option value="{{ $subject->id }}" {{ (old('id_subject') ?? $subject->id) == $qSubject ? 'selected' : '' }}>{{ $subject->name }}</option>
+                                        @empty
+                                        <option value="">Belum ada data</option>
+                                        @endforelse
+                                    </select>
+                                </div>
+                                <button class="btn btn-info btn-sm ml-3" type="submit">
                                     <i width="14" class="" data-feather="search"></i>
                                 </button>
-                            </div>
-                        </form>
+                            </form>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>

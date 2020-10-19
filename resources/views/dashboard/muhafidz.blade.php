@@ -1,5 +1,9 @@
 <div class="content" id="section-to-print">
+        @if($reportMuhafidz != [])
         <h1 class="text-center text-md-left h1-responsive" name="top" id="section-title">Dashboard {{ $reportMuhafidz[0]->halaqoh }}</h1>
+        @else
+        <h1 class="text-center text-md-left h1-responsive" name="top" id="section-title">Dashboard Muhafidz</h1>
+        @endif
         
         <div class="card mt-3 pt-2 ml-3 ml-md-0" id="documentPrintable">
             <div class="row mt-2 mb-4 d-flex justify-content-center">
@@ -8,8 +12,13 @@
                         @include('layouts.form-periode', ['route' => 'dashboard', 'name' => 'past_date'])
                         <canvas id="report-muhafidz"></canvas>
                         <div class="d-flex justify-content-between mt-3">
+                            @if($reportMuhafidz != [])
                             <small>Persentase Pencapaian: <b>{{ round($reportMuhafidz[0]->persentase, 2)}} %</b> </small>    
                             <small><b>Total {{ $reportMuhafidz[0]->total }} Siswa</b></small>
+                            @else
+                            <small>Persentase Pencapaian: Kosong</small>
+                            <small><b>Total: Kosong</b></small>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-7 mb-3">
@@ -54,6 +63,7 @@
             </div>
         </div>
     </div>
+    @if($reportMuhafidz != [])
     <script>
         var ctxMuhafidz = document.getElementById('report-muhafidz').getContext('2d');
         var tidakTercapaiMuhafidz = parseInt({!! json_encode($reportMuhafidz[0]->tidaktercapai) !!});
@@ -90,3 +100,41 @@
             }
         });
     </script>
+    @else
+    <script>
+    var ctxMuhafidz = document.getElementById('report-muhafidz').getContext('2d');
+        var tidakTercapaiMuhafidz = 0;
+        var tercapaiMuhafidz = 0;
+        var melampauiMuhafidz = 0;
+        
+        var data = [tidakTercapaiMuhafidz, tercapaiMuhafidz, melampauiMuhafidz];
+        var labels = ["Tidak Tercapai", "Tercapai", "Melampaui"];
+
+        var chartMuhafidz = new Chart(ctxMuhafidz, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets:[
+                    {
+                        data:data,
+                        backgroundColor:[
+                            "#FF6384",
+                            "#36A2EB",
+                            "#27ae60"
+                        ],
+                    },
+                ]
+            },
+            options:{
+                title: {
+                    display: true,
+                    text: 'Laporan Tahfidz Halaqah'
+                },
+                legend:{
+                    display:true,
+                    position:'bottom'
+                }
+            }
+        });
+    </script>
+    @endif

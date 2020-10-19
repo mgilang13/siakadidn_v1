@@ -91,6 +91,9 @@
                                                             <input type="radio" class="custom-control-input" id="alpha{{ $student->id }}" name="status[{{ $student->id }}]" value="a">
                                                             <label class="custom-control-label" for="alpha{{ $student->id }}">Alpha</label>
                                                         </div>
+                                                        <div class="form-group col">
+                                                            <input type="text" class="form-control-sm form-control" name="note_attendance[{{ $student->id }}]" placeholder="Catatan Kehadiran">
+                                                        </div>
                                                     </div>
                                                 </fieldset>
                                             </td>

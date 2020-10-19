@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Model\Ref\RefMatter;
 use App\Model\Ref\RefMatterDetail;
 use App\Model\Ref\RefSubject;
+use App\Model\Ref\RefLevel;
 
 
 use Illuminate\Support\Facades\DB;
@@ -23,19 +24,28 @@ class RefMatterController extends Controller
     {
         $matter_details = null;
         $matter_show = null;
+
         $q = $request->query('q') ?: '';
+        $qLevel = $request->query('id_level') ?: '';
+        $qSubject = $request->query('id_subject') ?: '';
+
         $matters = DB::table('matters')
                         ->join('subjects', 'matters.id_subject', '=', 'subjects.id')
                         ->select('matters.*', 'subjects.id as subjectID', 'subjects.name as subjectName', 'subjects.description as subjectDesc')
                         ->where('matters.name', 'like', '%'.$q.'%')
-                        ->paginate(20);;
+                        ->where('matters.id_level','like', '%'.$qLevel)
+                        ->where('matters.id_subject', 'like', '%'.$qSubject)
+                        ->paginate(20);
         
+        $levels = RefLevel::all();
+        $subjects = RefSubject::all();
+
         $matters->currentTotal = ($matters->currentPage() - 1) * $matters->perPage() + $matters->count();
         $matters->startNo = ($matters->currentPage() - 1) * $matters->perPage() + 1;
         $matters->no = ($matters->currentPage() - 1) * $matters->perPage() + 1;
         
         $subjects = RefSubject::all();
-        return view('ref.matter.index', compact('matters', 'subjects', 'matter_details', 'matter_show', 'q'));
+        return view('ref.matter.index', compact('matters', 'subjects', 'matter_details', 'matter_show', 'q', 'levels', 'qLevel', 'qSubject'));
     }
 
     /**
@@ -60,6 +70,7 @@ class RefMatterController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'id_subject' => '',
+            'id_level' => '',
             'description' => '',
         ]);
         RefMatter::create($request->only(['name', 'id_subject', 'description']));
@@ -76,6 +87,9 @@ class RefMatterController extends Controller
     public function show(Request $request, RefMatter $matter)
     {
         $q = $request->query('q') ?: '';
+        $qLevel = $request->query('id_level') ?: '';
+        $qSubject = $request->query('id_subject') ?: '';
+
         $matter_details = DB::table('matter_details as md')
                             ->join('matters as m', 'm.id', '=', 'md.id_matter')
                             ->where('md.id_matter', $matter->id)
@@ -87,16 +101,20 @@ class RefMatterController extends Controller
                         ->join('subjects', 'matters.id_subject', '=', 'subjects.id')
                         ->select('matters.*', 'subjects.id as subjectID', 'subjects.name as subjectName', 'subjects.description as subjectDesc')
                         ->where('matters.name', 'like', '%'.$q.'%')
+                        ->where('matters.id_level', 'like', '%'.$qLevel)
+                        ->where('matters.id_subject','like', '%'.$qSubject)
                         ->paginate(20);
 
         $matters->currentTotal = ($matters->currentPage() - 1) * $matters->perPage() + $matters->count();
         $matters->startNo = ($matters->currentPage() - 1) * $matters->perPage() + 1;
         $matters->no = ($matters->currentPage() - 1) * $matters->perPage() + 1;
     
+        $levels = RefLevel::all();
         $subjects = RefSubject::all();
+
         $matter_show = $matter;
 
-        return view('ref.matter.index', compact('matter_show', 'matters', 'subjects', 'matter_details', 'q'));
+        return view('ref.matter.index', compact('matter_show', 'matters', 'subjects', 'matter_details', 'q', 'levels', 'qLevel', 'qSubject'));
     }
 
     /**

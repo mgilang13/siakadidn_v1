@@ -26,6 +26,15 @@
                         <div class="invalid-feedback" id="subject-message"></div>
                     </div>
                     <div class="form-group">
+                        <label for="id_level" class="col-form-label">Jenjang Pendidikan</label>
+                        <select name="id_level" id="id_level" class="form-control">
+                            @foreach($levels as $level)
+                                <option value="{{ $level->id }}" {{ old('id_level') == $level->id ? 'selected' : '' }}>{{ $level->name }}</option>
+                            @endforeach
+                        </select>
+                        <div class="invalid-feedback" id="subject-message"></div>
+                    </div>
+                    <div class="form-group">
                         <label for="description" class="col-form-label">Deskripsi</label>
                         <textarea name="description" id="description" rows="5" class="form-control"></textarea>
                         <div class="invalid-feedback" id="description-message"></div>

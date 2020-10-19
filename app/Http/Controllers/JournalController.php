@@ -107,9 +107,25 @@ class JournalController extends Controller
         $journal->save();
 
         $journal_attendances = $request->input('status');
+        $note_attendances = $request->input('note_attendance');
+        
         $journal_details = $request->input('journal_details');
 
-        if($journal_attendances != null) {
+        if($journal_attendances != null and $note_attendances != null) {
+            foreach($journal_attendances as $index => $journal_attendance) {
+                $journal_attend = JournalAttendance::create([
+                    'id_journal' => $journal->id,
+                    'id_student' => $index,
+                    'status' => $journal_attendance
+                ]);
+                foreach($note_attendances as $key => $na) {
+                    if($index == $key) {
+                        $journal_attend->note_attendance = $na;
+                        $journal_attend->save();
+                    }
+                }
+            }
+        } else if ($journal_attendances != null) {
             foreach($journal_attendances as $index => $journal_attendance) {
                 JournalAttendance::create([
                     'id_journal' => $journal->id,
@@ -118,6 +134,7 @@ class JournalController extends Controller
                 ]);
             }
         }
+        
 
         if($journal_details != null) {
             foreach($journal_details as $journal_detail) {

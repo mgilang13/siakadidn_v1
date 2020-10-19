@@ -78,7 +78,7 @@
                                         <td>{{ $student->name }}</td>
                                         <td class="text-center"><div class="badge p-1 aqua-gradient">{{ $student->sudahpaham != 0 ? $student->sudahpaham : '' }}{{ $student->persen_sudahpaham != 0 ? ' ('.round($student->persen_sudahpaham, 1).'%)' : '' }}</div></td>
                                         <td class="text-center">
-                                            @if($student->belumpaham != '')
+                                        @if($student->belumpaham != '')
                                             <div class="badge p-1 purple-gradient" data-toggle="popover" data-content="Belum Teratasi">
                                                 {{ $student->belumpaham != 0 ? $student->belumpaham : '' }}{{ $student->persen_belumpaham != 0 ? ' ('.round($student->persen_belumpaham, 1).'%)' : '' }}
                                             </div>

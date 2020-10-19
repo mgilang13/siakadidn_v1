@@ -35,14 +35,16 @@
                             {{ $noSubMateri++ }}. {{ $jd->matter_detail->name }}<br>
                         @endforeach
                         </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{ $journal->result }}</td>
+                        <td>{{ $journal->obstacle }}</td>
+                        <td>{{ $journal->solution }}</td>
                         <td>
                         @php $noAbsensi = 1 @endphp
-                        @foreach($journal->journal_attendance as $ja)
+                        @forelse($journal->journal_attendance as $ja)
                             {{ $noAbsensi++ }}. {{ $ja->user->name }} - @switch($ja->status) @case("s") Sakit @break @case("i") Izin @break @default Alpha @endswitch<br>
-                        @endforeach
+                        @empty
+                            Hadir Semua
+                        @endforelse
                         </td>
                         <td>
                         @php $sudahPaham = 0; $belumPaham = 0; @endphp

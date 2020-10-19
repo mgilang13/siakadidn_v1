@@ -17,10 +17,11 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
+        
         $id = Auth::user()->id;
         $user = User::findOrFail($id);
-
         $teacher_subject = DB::table('teacher_subjects as ts')->where('id_teacher', $id)->first();
+        
         // Dashboard Muhafidz
         $present_date = date('Y-m-d');
         $past_date = $request->query('past_date');
@@ -35,7 +36,7 @@ class DashboardController extends Controller
 
         $reportMuhafidz = DB::select('call tahfidz_reportmuhafidz(?, ?, ?)', array($id, $past_date, $present_date));
         $reportMuhafidzSantri = DB::select('call tahfidz_reportmuhafidzsantri(?, ?, ?)', array($id, $past_date, $present_date));
-
+        
         // Dashboard Murid
         // Untuk membuat grafik
         $tahfidz_report_ziyadah = DB::select('call tahfidz_report(?, ?)', array($id, 'ziyadah'));

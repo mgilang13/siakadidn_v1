@@ -29,6 +29,8 @@ use App\Model\Manage\MgtClassDetail;
 
 use App\Services\JournalService;
 
+use Illuminate\Support\Facades\Cache;
+
 class JournalController extends Controller
 {
     /**
@@ -110,43 +112,45 @@ class JournalController extends Controller
         $note_attendances = $request->input('note_attendance');
         
         $journal_details = $request->input('journal_details');
-
-        if($journal_attendances != null and $note_attendances != null) {
-            foreach($journal_attendances as $index => $journal_attendance) {
-                $journal_attend = JournalAttendance::create([
-                    'id_journal' => $journal->id,
-                    'id_student' => $index,
-                    'status' => $journal_attendance
-                ]);
-                foreach($note_attendances as $key => $na) {
-                    if($index == $key) {
-                        $journal_attend->note_attendance = $na;
-                        $journal_attend->save();
+        
+        DB::transaction(function () use ($journal, $journal_attendances, $note_attendances, $journal_details) {
+            if($journal_attendances != null and $note_attendances != null) {
+                foreach($journal_attendances as $index => $journal_attendance) {
+                    $journal_attend = JournalAttendance::create([
+                        'id_journal' => $journal->id,
+                        'id_student' => $index,
+                        'status' => $journal_attendance
+                    ]);
+                    foreach($note_attendances as $key => $na) {
+                        if($index == $key) {
+                            $journal_attend->note_attendance = $na;
+                            $journal_attend->save();
+                        }
                     }
                 }
-            }
-        } else if ($journal_attendances != null) {
-            foreach($journal_attendances as $index => $journal_attendance) {
-                JournalAttendance::create([
-                    'id_journal' => $journal->id,
-                    'id_student' => $index,
-                    'status' => $journal_attendance
-                ]);
-            }
-        }
-        
-
-        if($journal_details != null) {
-            foreach($journal_details as $journal_detail) {
-                if($journal_detail != null) {
-                    JournalDetail::create([
+            } else if ($journal_attendances != null) {
+                foreach($journal_attendances as $index => $journal_attendance) {
+                    JournalAttendance::create([
                         'id_journal' => $journal->id,
-                        'id_matter_detail' => $journal_detail
+                        'id_student' => $index,
+                        'status' => $journal_attendance
                     ]);
                 }
             }
-                
-        }
+            
+
+            if($journal_details != null) {
+                foreach($journal_details as $journal_detail) {
+                    if($journal_detail != null) {
+                        JournalDetail::create([
+                            'id_journal' => $journal->id,
+                            'id_matter_detail' => $journal_detail
+                        ]);
+                    }
+                }
+                    
+            }
+        });
 
         return redirect()->route('journal.index')->with('success', 'Tambah Jurnal Sukses');
 
@@ -184,18 +188,21 @@ class JournalController extends Controller
     public function edit(Journal $journal)
     {
         $tanggal_sekarang = date('Y-m-d');
-        $matters = RefMatter::all();
-        $studentClass = DB::table('journals as j')
-                            ->join('mgt_schedules as ms', 'ms.id', '=', 'j.id_schedule')
-                            ->join('mgt_classes as mc', 'mc.id_class', '=', 'ms.id_class')
-                            ->join('mgt_class_details as mcd', 'mc.id', '=', 'mcd.id_mgt_class')
-                            ->join('users as u', 'u.id', '=', 'mcd.id_student')
-                            ->select('u.id as id', 'u.name as name')
-                            ->where('j.id', $journal->id)
-                            ->get();
+        $matter = RefMatter::findOrFail($journal->id_matter);
+        // dd($matter);
+        $matter_details = RefMatterDetail::where('id_matter', $matter->id)->get();
+        // dd($matter_details);
+        $journal_details = JournalDetail::with('matter_detail')->where('id_journal', $journal->id)->get();
+
+        $submatter = RefMatterDetail::findOrFail($journal->id_matter);
+        // dd($submatter);
+        $matter_subjected = RefMatter::where('id_subject', $matter->id_subject)
+                                        ->where('id_level', $matter->id_level)
+                                        ->get();
         
+        $studentClass = DB::select('call journal_form_attendance(?)', array($journal->id));
         
-        return view('journal.edit', compact('journal', 'tanggal_sekarang', 'matters', 'studentClass'));
+        return view('journal.edit', compact('journal', 'tanggal_sekarang', 'matter_subjected', 'matter_details', 'journal_details', 'studentClass'));
     }
 
     /**
@@ -207,7 +214,75 @@ class JournalController extends Controller
      */
     public function update(Request $request, Journal $journal)
     {
-        //
+
+        $validateData = $request->validate([
+            'id_matter' => 'required',
+            'result' => '',
+            'obstacle' => '',
+            'solution' => '',
+            'note' => '',
+            'teaching_date' => ''
+            ]);
+        $journal->update($validateData);
+        
+        $journal = Journal::with(['journal_detail', 'journal_attendance'])->where('id', $journal->id)->first();
+        // dd($journal->journal_detail);
+        $journal_attendances = $request->input('status');
+        $note_attendances = $request->input('note_attendance');
+        $journal_details = $request->input('journal_details');
+
+        DB::transaction(function () use ($journal, $journal_attendances, $note_attendances, $journal_details) {
+            if($journal_attendances != null and $note_attendances != null and $journal->journal_attendance != null) {
+                foreach($journal_attendances as $index => $journal_attendance) {
+                    foreach($journal->journal_attendance as $jja) {
+                        $jja->delete();
+                    }
+
+                    $journal_attend = JournalAttendance::create([
+                        'id_journal' => $journal->id,
+                        'id_student' => $index,
+                        'status' => $journal_attendance
+                    ]);
+                    foreach($note_attendances as $key => $na) {
+                        if($index == $key) {
+                            $journal_attend->note_attendance = $na;
+                            $journal_attend->save();
+                        }
+                    }
+                }
+            } else if ($journal_attendances != null and $journal->journal_attendance != null) {
+                foreach($journal->journal_attendance as $jja) {
+                    $jja->delete();
+                }
+                foreach($journal_attendances as $index => $journal_attendance) {
+                    JournalAttendance::create([
+                        'id_journal' => $journal->id,
+                        'id_student' => $index,
+                        'status' => $journal_attendance
+                    ]);
+                }
+            } else if($journal_attendances == null) {
+                foreach($journal->journal_attendance as $jja) {
+                    $jja->delete();
+                }
+            }
+            
+
+            if($journal_details != null) {
+                foreach($journal->journal_detail as $jjd) {
+                    $jjd->delete();
+                }
+                foreach($journal_details as $journal_detail) {
+                    JournalDetail::create([
+                        'id_journal' => $journal->id,
+                        'id_matter_detail' => $journal_detail
+                    ]);
+                }  
+            }
+        });
+
+        return redirect()->route('journal.show', $journal->id_schedule);
+
     }
 
     /**
@@ -448,6 +523,73 @@ class JournalController extends Controller
         $absensi_class = DB::select('call journal_absensi_class(?, ?, ?, ?, ?, ?)', array($grade, $id_level, $id_level_detail, $id_subject, $start_date, $end_date));
         
         return view('journal.report.absensi-class', compact('absensi_class', 'subjects', 'grade', 'id_level', 'id_level_detail', 'id_subject', 'start_date', 'end_date', 'level_details'));
+    }
+
+    public function reportDetail(Request $request) {
+        $qTeacher = $request->query('id_teacher');
+        
+        $start_date = $request->query('start_date');
+        
+        if($start_date == null){
+            $start_date = date('Y-m-d',strtotime("-1 week"));
+        } else {
+            $start_date = $request->query('start_date');
+        }
+
+        $end_date = $request->query('end_date');
+
+        if($end_date == null) {
+            $end_date = date('Y-m-d');
+        } else {
+            $end_date = $request->query('end_date');
+        }
+
+        $teachers = DB::table('teacher_subjects as ts')
+                        ->join('users as u', 'u.id', '=', 'ts.id_teacher')
+                        ->select('u.name', 'u.id')
+                        ->get();
+
+        $journals = Journal::with(['journal_schedule.class', 'teacher', 'matter', 'journal_feedback', 'journal_attendance.user', 'journal_schedule.class', 'journal_detail.matter_detail' => function($query) {
+            $query->select( 'id', 'name');
+        }])->where('id_teacher', 'like', '%'.$qTeacher.'%')
+        ->whereBetween('teaching_date', [$start_date, $end_date])
+        ->get();
+        // dd($journals);
+        
+        return view('journal.report.detail', compact('teachers', 'qTeacher', 'start_date', 'end_date', 'journals'));
+    }
+
+    public function reportDetailAbsensi(Request $request) {
+        $qClass = $request->query('id_class');
+        if ($qClass == null) {
+            $qClass = 0;
+        }
+        $start_date = $request->query('start_date');
+        
+        if($start_date == null){
+            $start_date = date('Y-m-d',strtotime("-1 week"));
+        } else {
+            $start_date = $request->query('start_date');
+        }
+
+        $end_date = $request->query('end_date');
+
+        if($end_date == null) {
+            $end_date = date('Y-m-d');
+        } else {
+            $end_date = $request->query('end_date');
+        }
+
+        $students = DB::select('call journal_summary_all(?, ?, ?)', array($qClass, $start_date, $end_date));
+        Cache::put('students', $students, 10);
+        Cache::remember('students', 10, function() {
+            return DB::select('call journal_summary_all(?, ?, ?)', array($qClass, $start_date, $end_date));
+        });
+        $students = Cache::get('students');
+        
+        $classrooms = RefClassroom::all();
+
+        return view('journal.report.detail-absensi', compact('students', 'classrooms', 'qClass', 'start_date', 'end_date'));
     }
 
     public function feedbackTreat(Request $request, User $student) 

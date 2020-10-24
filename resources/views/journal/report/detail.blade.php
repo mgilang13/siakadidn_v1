@@ -1,35 +1,62 @@
 @extends('layouts.app')
+
 @section('content')
-<style>
-#more  {display:  none;}
-</style>
-<div class="content bg-white">
-    <h1>Laporan Jurnal Per Jadwal</h1>
-    <h2>Mapel {{ $schedule->name }}</h2>
-    <h5>Hari {{ $schedule->dayName }}, Jam Pelajaran {{ $schedule->id_studytime_start == $schedule->id_studytime_end ? $schedule->id_studytime_start : $schedule->id_studytime_start.' - '.$schedule->id_studytime_end }}</h5>
-    <div class="table-responsive">
-        <table class="table table-sm table-striped">
+<script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+<style>#more  {display:  none;}</style>
+<div class="content">
+    <h1 class="text-center text-md-left h1-responsive" name="top">Laporan Detail Jurnal</h1>
+    <div class="mt-5">
+    <a href="{{ route('journal.index') }}" class="btn btn-outline-primary mb-5">Kembali</a>
+        <form class="form-inline col" action="{{ route('journal.report.detail') }}">
+            <div class="form-group col-4">
+                <label class="col-3" for="id_teacher">Pilih Guru</label>
+                <select data-live-search="true" name="id_teacher" id="id_teacher" class="selectpicker form-control @error('id_teacher') is-invalid @enderror col">
+                    @forelse($teachers as $teacher)
+                    <option value="{{ $teacher->id }}" {{ (old('id_teacher') ?? $teacher->id) == $qTeacher ? 'selected' : '' }}>{{ $teacher->name }}</option>
+                    @empty
+                    <option value="">No data!</option>
+                    @endforelse
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="date" name="start_date" class="form-control mr-2" value="{{ $start_date }}">
+            </div>
+            <div class="form-group">
+                <input type="date" name="end_date" class="form-control mr-2" value="{{ $end_date }}">
+            </div>
+            <button type="submit" class="btn indigo btn-sm text-white"><i data-feather="search" class="mr-1" widthe="14"></i> Search</button>
+            <button type="button" onclick="printJournal()" class="btn special-color btn-sm text-white"><i data-feather="printer" width="14" class="mr-1"></i>Print</button>
+        </form>
+        
+    </div>
+    <div class="table-responsive" style="overflow-x:scroll">
+        <table class="table table-sm table-striped" style="width:1500px" id="journal-table">
                 <thead>
                     <tr>
                         <th>No.</th>
                         <th>Tanggal Mengajar</th>
+                        <th>Kelas (Jam Pelajaran)</th>
                         <th>Pengajar</th>
                         <th>Materi</th>
                         <th>Sub Materi</th>
                         <th>Hasil</th>
                         <th>Hambatan</th>
                         <th>Solusi</th>
-                        <th>Absensi Siswa</th>
+                        <th style="width:20%">Absensi Siswa</th>
                         <th>Tingkat Kepahaman</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php $no=1 @endphp
+                    @php 
+                        $no = 1;
+                        setlocale(LC_TIME, 'id_ID'); 
+                    @endphp
                     @forelse($journals as $journal)
                     <tr>
                         <td>{{ $no++ }}</td>
-                        <td>{{ $journal->teaching_date }}</td>
+                        <td>{{ \Carbon\Carbon::parse($journal->teaching_date)->formatLocalized('%A, %d %B %Y') }}</td>
+                        <td>{{ $journal->journal_schedule->class->name }} ({{ $journal->journal_schedule->id_studytime_start }} - {{ $journal->journal_schedule->id_studytime_end }})</td>
                         <td>{{ $journal->teacher->name }}</td>
                         <td>{{ $journal->matter->name }}</td>
                         <td>
@@ -68,14 +95,6 @@
                         Paham: {{ $sudahPaham }} <br>
                         Belum Paham: {{ $belumPaham }}
                         </td>
-                        <td>
-                            <div class="justify-content-around align-items-center d-flex flex-wrap">
-                                <a href="{{ route('journal.edit', $journal->id) }}">
-                                    <i width="14" data-feather="edit">Edit</i>
-                                </a>
-                                <a title="Hapus" id="deleteData" data-toggle="modal" data-target="#deleteModal" data-id="{{ $journal->id }}" href="#" class="text-danger" data-action="{{ route('journal.destroy', $journal->id) }}" class="text-danger"><i data-feather="trash" width="14"></i></a>
-                            </div>
-                        </td>
                         
                     </tr>
                     @empty
@@ -87,6 +106,21 @@
         </table>
     </div>
 </div>
+<script>
+function printJournal() {
+    var date_now = Date.now();
+
+    $("#journal-table").table2excel({
+        exclude: ".excludeThisClass",
+        name: "Laporan Jurnal Guru",
+        filename: "jurnal"+date_now+".ods", // do include extension
+        preserveColors: false // set to true if you want background colors and font colors preserved
+    });
+}
+</script>
+<script>
+    $('#id_teacher').selectpicker();
+</script>
 <script>
 function myFunction() {
     var dots = document.getElementById("dots");
@@ -104,14 +138,4 @@ function myFunction() {
     }
 }
 </script>
-<!-- Form Delete Journal  -->
-@include('layouts.form-delete', [
-        'method' => 'POST',
-        'methodx' => 'DELETE',
-        'bgDanger' => 'bg-danger',
-        'boxConfirmHeader' => '',
-        'textWhite' => 'text-white',
-        'title_modal' => 'Delete Data Permanently',
-        'showdata' => "journal.show-json",
-        'title_menu' => 'data journal'])
 @endsection

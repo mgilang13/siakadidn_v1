@@ -26,9 +26,9 @@ class Journal extends Model
         return $this->hasMany(\App\Model\JournalDetail::class, 'id_journal');
     }
 
-    public function matter_detail() {
-        return $this->belongsTo(\App\Model\Ref\RefMatterDetail::class, 'id_matter_detail');
-    }
+    // public function matter_detail() {
+    //     return $this->belongsTo(\App\Model\Ref\RefMatterDetail::class, 'id_matter_detail');
+    // }
 
     public function journal_attendance() {
         return $this->hasMany(\App\Model\JournalAttendance::class, 'id_journal');
@@ -36,6 +36,10 @@ class Journal extends Model
 
     public function journal_feedback() {
         return $this->hasMany(\App\Model\JournalFeedback::class, 'id_journal');
+    }
+
+    public function journal_schedule() {
+        return $this->belongsTo(\App\Model\Manage\MgtSchedule::class, 'id_schedule');
     }
 
 }

@@ -278,6 +278,7 @@ class TahfidzController extends Controller
                         ->join('users as u', 'u.id', '=', 'h.id_teacher')
                         ->where('s.id_student', $id)
                         ->get();
+                        
             $tahfidzs->currentTotal = ($tahfidzs->currentPage() - 1) * $tahfidzs->perPage() + $tahfidzs->count();
             $tahfidzs->startNo = ($tahfidzs->currentPage() - 1) * $tahfidzs->perPage() + 1;
             $tahfidzs->no = ($tahfidzs->currentPage() - 1) * $tahfidzs->perPage() + 1;
@@ -286,7 +287,7 @@ class TahfidzController extends Controller
         
             $tahfidz_total_ziyadah = DB::select('call tahfidz_total(?, ?)', array($id, 'ziyadah'));
             $tahfidz_total_murajaah = DB::select('call tahfidz_total(?, ?)', array($id, 'murajaah'));
-            dump($tahfidz_total_murajaah);
+            
             // Untuk membuat grafik
             $tahfidz_report_ziyadah = DB::select('call tahfidz_report(?, ?)', array($id, 'ziyadah'));
             

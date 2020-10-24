@@ -123,16 +123,14 @@ $(document).ready(function () {
         count++;
         let id_matter = $('#id_matter').val();
         let url = "{{ route('journal.list-submatter', '') }}"+"/"+id_matter;
-
-        axios.get(url).then(result => {
-            let data = result.data;         
-            data.map(function(data) {
-                $('#journal_details_group').append('<select id="journal_details" name="journal_details[]" id="" class="form-control form-control-sm">'+
-                    '<option value="">-- Pilih Sub Materi '+count+' --</option>' +
-                    '<option value="'+data.id+'">'+data.name+'</option>' +
-                '</select>');
-            });
-        });
+            axios.get(url).then(result => {
+                let data = result.data;
+                $('#journal_details_group').append('<select id="journal_details'+count+'" name="journal_details[]" id="" class="form-control form-control-sm">'+
+                    '<option value="">-- Pilih Sub Materi '+count+' --</option>');
+                        data.map(function(data) {
+                                $('#journal_details'+count+'').append('<option value="'+data.id+'">'+data.name+'</option>');
+                        })
+            })
     })
 });
 </script>

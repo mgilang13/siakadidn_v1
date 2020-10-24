@@ -31,14 +31,15 @@ Route::middleware(['auth', 'core'])->group(function () {
 
     // Journal Menu
     Route::name('journal.')->prefix('/journal')->group(function () {
-        
-        Route::get('report/absensi-class', 'JournalController@reportAbsensiClass')->name('report.absensi-class');
-        Route::get('report/feedback-class', 'JournalController@reportFeedbackClass')->name('report.feedback-class');
-        
-        Route::post('report/feedback-treat/{student}', 'JournalController@feedbackTreat')->name('report.feedback-treat');
-        
-        Route::get('report/absensi-student/{student}', 'JournalController@reportAbsensiStudent')->name('report.absensi-student');
-        Route::get('report/feedback-student/{student}', 'JournalController@reportFeedbackStudent')->name('report.feedback-student');
+        Route::name('report.')->prefix('/report')->group(function() {
+            Route::get('absensi-class', 'JournalController@reportAbsensiClass')->name('absensi-class');
+            Route::get('feedback-class', 'JournalController@reportFeedbackClass')->name('feedback-class');
+            Route::post('feedback-treat/{student}', 'JournalController@feedbackTreat')->name('feedback-treat');
+            Route::get('absensi-student/{student}', 'JournalController@reportAbsensiStudent')->name('absensi-student');
+            Route::get('feedback-student/{student}', 'JournalController@reportFeedbackStudent')->name('feedback-student');
+            Route::get('detail', 'JournalController@reportDetail')->name('detail');
+            Route::get('detail-absensi', 'JournalController@reportDetailAbsensi')->name('detail-absensi');
+        });
         
         Route::get('sub/list/{id}', 'JournalController@listSubMatter')->name('list-submatter');
         Route::get('list/{matter}', 'JournalController@listMatter')->name('list-matter');

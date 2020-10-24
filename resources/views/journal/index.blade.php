@@ -121,7 +121,9 @@
                 <div class="card-body">
                     <div class="d-flex flex-wrap">
                         <a class="btn btn-primary" href="{{ route('journal.report.absensi-class') }}">Laporan Absensi</a>
+                        <a class="btn btn-info" href="{{ route('journal.report.detail') }}">Laporan Detail Jurnal</a>
                         <a class="btn btn-secondary" href="{{ route('journal.report.feedback-class') }}">Laporan Feedback</a>
+                        <a class="btn primary-color text-white" href="{{ route('journal.report.detail-absensi') }}">Laporan Detail Absensi</a>
                     </div>
                 </div>
             </div>

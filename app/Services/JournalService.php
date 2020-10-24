@@ -8,7 +8,7 @@ use App\Model\Ref\RefStudyTime;
 
 class JournalService
 {
-    public function generateJournalService($idSchoolYear, $idSemester, $idClass) {
+    public function generateJournalService($qSchoolYear, $qSemester, $qClass) {
         $journalData = [];
         $days = RefDay::all();
         $journal_schedules = DB::table('mgt_schedules as ms')
@@ -18,6 +18,7 @@ class JournalService
                         ->leftJoin('school_years as sch', 'sch.id', '=', 'ms.id_schoolyear')
                         ->select('ms.*', 's.name as subjectName', 's.id as idSubject', 'c.id_level as idLevel')                    
                         ->get();
+
         $studytimes = RefStudyTime::all();
         
         foreach($studytimes as $studytime) {
@@ -28,9 +29,9 @@ class JournalService
                 
                 $journal_schedule = $journal_schedules->where('id_day', $index)
                                         ->where('id_studytime_start', $studytime->start)
-                                        ->where('id_schoolyear', (int)$idSchoolYear)
-                                        ->where('id_semester', (int)$idSemester)
-                                        ->where('id_class', (int)$idClass)
+                                        ->where('id_schoolyear', (int)$qSchoolYear)
+                                        ->where('id_semester', (int)$qSemester)
+                                        ->where('id_class', (int)$qClass)
                                         ->first();
                 if($journal_schedule) {
                     array_push($journalData[$textStudyTime], [
@@ -38,10 +39,10 @@ class JournalService
                         'idSubject' => $journal_schedule->idSubject,
                         'idLevel' => $journal_schedule->idLevel,
                         'subjectName' => $journal_schedule->subjectName,
-                        'rowspan' => ($journal_schedule->id_studytime_end - $journal_schedule->id_studytime_start) + 1
+                        'rowspan' => ($journal_schedule->id_studytime_end - $journal_schedule->id_studytime_start) +1
                     ]);
                 }
-                else if(!$journal_schedules->where('id_day', $index)->where('id_studytime_start', '<', $studytime->start)->where('id_studytime_end', '>=', ($studytime->end)-1)->count()) {
+                else if(!$journal_schedules->where('id_day', $index)->where('id_studytime_start', '<', $studytime->start)->where('id_studytime_end', '>=', ($studytime->end)-1)->where('id_schoolyear', (int)$qSchoolYear)->where('id_semester', (int)$qSemester)->where('id_class', (int)$qClass)->count()) {
                     array_push($journalData[$textStudyTime], 1);
                 } else {
                     array_push($journalData[$textStudyTime], 0);

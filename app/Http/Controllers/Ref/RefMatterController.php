@@ -93,7 +93,7 @@ class RefMatterController extends Controller
         $matter_details = DB::table('matter_details as md')
                             ->join('matters as m', 'm.id', '=', 'md.id_matter')
                             ->where('md.id_matter', $matter->id)
-                            ->select('md.name as name')
+                            ->select('md.name as name', 'md.id as id', 'md.seq')
                             ->orderBy('md.seq', 'asc')
                             ->get();
         // dd($matter_details);
@@ -176,5 +176,22 @@ class RefMatterController extends Controller
         ]);
         RefMatterDetail::create($validateData);
         $request->session()->flash('success', 'Tambah Sub Materi Sukses');
+    }
+
+    public function matterSubUpdate(Request $request, RefMatterDetail $matter_detail)
+    {
+        // validasi
+        $validateData = $request->validate([
+            'name' => 'required|string|max:255',
+            'seq' => ''
+        ]);
+
+        $matter_detail->update($validateData);
+        $request->session()->flash('success', 'Ubah Sub Materi Sukses');
+    }
+
+    public function matterSubDelete(Request $request, RefMatterDetail $matter_detail) {
+        $matter_detail->delete();
+        $request->session()->flash('success', 'Hapus Sub Materi Sukses');
     }
 }

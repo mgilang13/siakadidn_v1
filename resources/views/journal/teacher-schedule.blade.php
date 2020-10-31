@@ -116,21 +116,43 @@ $(document).ready(function () {
                     });
                 }
             });
+
+            $('#journal_details_group').append('<input id="journal_details_other" type="text" name="journal_details_other[]" class="form-control form-control-sm" placeholder="Lain-lain">');
         });
 
-
+    $('#journal_details').on('change', function() {
+        let journal_details = $('#journal_details').val();
+            console.log(journal_details);
+            if(journal_details === "") {
+                $('#journal_details_other').prop("disabled", false);
+            } else {
+                $('#journal_details_other').prop("disabled", true);
+            }
+    });
+    
     $('#add_sub_matter').on('click', function() {
         count++;
         let id_matter = $('#id_matter').val();
         let url = "{{ route('journal.list-submatter', '') }}"+"/"+id_matter;
             axios.get(url).then(result => {
                 let data = result.data;
-                $('#journal_details_group').append('<select id="journal_details'+count+'" name="journal_details[]" id="" class="form-control form-control-sm">'+
+                $('#journal_details_group').append('<select id="journal_details'+count+'" name="journal_details[]" class="form-control form-control-sm">'+
                     '<option value="">-- Pilih Sub Materi '+count+' --</option>');
                         data.map(function(data) {
                                 $('#journal_details'+count+'').append('<option value="'+data.id+'">'+data.name+'</option>');
-                        })
+                        });
+                        $('#journal_details_group').append('<input type="text" id="journal_details_other'+count+'" name="journal_details_other[]" class="form-control form-control-sm" placeholder="Lain-lain">');
+                        
+                        $('#journal_details'+count+'').on('change', function() {
+                            let journal_details = $('#journal_details'+count+'').val();
+                            if(journal_details === "") {
+                                $('#journal_details_other'+count+'').prop("disabled", false);
+                            } else {
+                                $('#journal_details_other'+count+'').prop("disabled", true);
+                            }
+                        });
             })
+        
     })
 });
 </script>

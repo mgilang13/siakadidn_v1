@@ -17,7 +17,7 @@
                     @forelse($journalStudents as $js)
                     <div class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-2 h5">{{ $js->name }} - {{ $js->subMateri }}</h5>
+                            <h5 class="mb-2 h5">{{ $js->name }} - {{ $js->subMateri ? $js->subMateri : $js->matter_detail_other }}</h5>
                             <h6>{{ $js->created_at }}</h6>
                         </div>
                         <p class="mb-2">Ustadz {{ $js->teacherName }}</p>

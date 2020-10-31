@@ -61,7 +61,7 @@ class DashboardController extends Controller
         $carbon = new Carbon();
         
         $journalStudents = DB::select('call feedbackStudent(?)', array($id));
-        
+
         for($i = 0; $i<count($journalStudents); $i++) {
             $journalStudents[$i]->created_at = Carbon::parse($journalStudents[$i]->created_at)->diffForHumans();
         }

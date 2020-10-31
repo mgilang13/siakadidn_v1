@@ -137,6 +137,8 @@ Route::middleware(['auth', 'core'])->group(function () {
         Route::name('matter.')->prefix('/matter')->group(function() {
             Route::get('show-json/{id}', 'RefMatterController@showJson')->name('show-json');
             Route::post('sub/store/', 'RefMatterController@matterSubStore')->name('sub.store');
+            Route::patch('sub/update/{matter_detail}', 'RefMatterController@matterSubUpdate')->name('sub.update');
+            Route::delete('sub/delete/{matter_detail}', 'RefMatterController@matterSubDelete')->name('sub.delete');
         });
         Route::resource('matter', 'RefMatterController');
         

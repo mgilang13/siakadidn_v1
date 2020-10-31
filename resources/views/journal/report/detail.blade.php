@@ -11,6 +11,7 @@
             <div class="form-group col-4">
                 <label class="col-3" for="id_teacher">Pilih Guru</label>
                 <select data-live-search="true" name="id_teacher" id="id_teacher" class="selectpicker form-control @error('id_teacher') is-invalid @enderror col">
+                    <option value="">No Selecting</option>
                     @forelse($teachers as $teacher)
                     <option value="{{ $teacher->id }}" {{ (old('id_teacher') ?? $teacher->id) == $qTeacher ? 'selected' : '' }}>{{ $teacher->name }}</option>
                     @empty
@@ -62,7 +63,7 @@
                         <td>
                         @php $noSubMateri=1 @endphp
                         @foreach($journal->journal_detail as $jd)
-                            {{ $noSubMateri++ }}. {{ $jd->matter_detail->name }}<br>
+                            {{ $noSubMateri++ }}. {{ $jd->id_matter_detail ? $jd->matter_detail->name : $jd->matter_detail_other }}<br>
                         @endforeach
                         </td>
                         <td>

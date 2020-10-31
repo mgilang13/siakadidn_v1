@@ -111,6 +111,7 @@
                             </a>
                         </div>
                         <div class="table-responsive">
+                        @include('layouts.notification')
                             <table class="table table-sm table-striped" id="dtsubmateri">
                                 <thead>
                                     <tr>
@@ -127,12 +128,13 @@
                                         <td>{{ $matter_detail->name }}</td>
                                         <td>
                                             <div class="btn-action d-flex justify-content-around">
-                                                <a href="#" >
-                                                    <i width="14" color="#04396c" data-feather="edit"></i>
+                                                <a href="{{ route('ref.matter.sub.update', $matter_detail->id) }}" data-toggle="modal" data-target="#modalSubMateri" data-type="edit" data-title="Ubah Sub Materi" data-method="patch">
+                                                    <i width="14" data-feather="edit"></i>
                                                 </a>
-                                                <a title="Delete" id="deleteDataDetail" data-toggle="modal" data-target="#deleteModalDetail" data-id="#" href="#" class="text-danger" data-action="#">
-                                                    <i width="14" color="red" data-feather="trash"></i>
+                                                <a href="{{ route('ref.matter.sub.delete', $matter_detail->id) }}" class="text-danger delete-sub-materi">
+                                                    <i width="14" data-feather="trash"></i>
                                                 </a>
+                                                <textarea class="jsons d-none">{{ json_encode($matter_detail) }}</textarea>
                                             </div>
                                         </td>
                                     </tr>
@@ -164,6 +166,13 @@
         $('#modalSubMateri').on('show.bs.modal', function (event) {
             const target = $(event.relatedTarget);
             // cek tipe
+            if (target.attr('data-type') == 'edit') {
+                // set data
+                var jsons = JSON.parse( target.closest('td').find('.jsons').val() );
+                $('#name').val(jsons.name);
+                $('#seq').val(jsons.seq);
+            }
+
             $('#modalSubMateriLabel').html(target.attr('data-title'));
             $('#modalSubMateri').closest('form').attr('action', target.attr('href'));
             $('#modalSubMateri').closest('form').attr('method', target.attr('data-method'));
@@ -194,6 +203,23 @@
                 })
                 .finally(() => submit.prop('disabled', false));
         });
+
+        $('.delete-sub-materi').click(function (event) {
+            event.preventDefault();
+            // get data
+            var jsons = JSON.parse( $(this).closest('td').find('.jsons').val() );
+            if (confirm(`Hapus Sub Materi ${jsons.name} ?`)) {
+                // ajax
+                axios
+                    .delete($(this).attr('href'))
+                    .then(result => window.location.reload())
+                    .catch(error => {
+                        try {
+                            alert(error.response.message)
+                        } catch (error) {}
+                    });
+            }
+        })
     })
 </script>
 <script>

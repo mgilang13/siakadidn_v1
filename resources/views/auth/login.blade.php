@@ -37,7 +37,7 @@
                     <div class="alert mt-3" role="alert" style="background-color:#ffecb3">
                         <ul class="list-group">
                             <li style="color:#37474f">Dianjurkan memakai Google Chrome versi terbaru.</li>
-                            <li style="color:#37474f">Apabila ada kendala hubungi <a href="http://wa.me/628996264549">Muhammad Gilang Nur Khoiri</a></li>
+                            <li style="color:#37474f">Apabila ada kendala kirim pesan ke <a href="mailto:muhammad.gilang.n.k@gmail.com?subject=IDN">IDN Dev</a></li>
                         </ul>
                     </div>
                 </div>

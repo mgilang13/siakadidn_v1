@@ -59,7 +59,7 @@ class JournalController extends Controller
         }
 
         $students = DB::select('call journal_summary_class(?, ?, ?)', array($qClass, $start_date, $end_date));
-        
+       
         $id_user = Auth::user()->id;
        
 
@@ -110,10 +110,11 @@ class JournalController extends Controller
 
         $journal_attendances = $request->input('status');
         $note_attendances = $request->input('note_attendance');
-        
+     
         $journal_details = $request->input('journal_details');
+        $journal_details_other = $request->input('journal_details_other');
         
-        DB::transaction(function () use ($journal, $journal_attendances, $note_attendances, $journal_details) {
+        DB::transaction(function () use ($journal, $journal_attendances, $note_attendances, $journal_details, $journal_details_other) {
             if($journal_attendances != null and $note_attendances != null) {
                 foreach($journal_attendances as $index => $journal_attendance) {
                     $journal_attend = JournalAttendance::create([
@@ -139,17 +140,43 @@ class JournalController extends Controller
             }
             
 
-            if($journal_details != null) {
-                foreach($journal_details as $journal_detail) {
-                    if($journal_detail != null) {
-                        JournalDetail::create([
-                            'id_journal' => $journal->id,
-                            'id_matter_detail' => $journal_detail
-                        ]);
+            if($journal_details != null and $journal_details_other != null ) {
+                foreach($journal_details as $index => $journal_detail) {
+                    foreach($journal_details_other as $key => $journal_detail_other) {
+                        if($index == $key) {
+                            if($journal_detail != null) {
+                                JournalDetail::create([
+                                    'id_journal' => $journal->id,
+                                    'id_matter_detail' => $journal_detail
+                                ]);
+                            } else if ($journal_detail_other != null) {
+                                JournalDetail::create([
+                                    'id_journal' => $journal->id,
+                                    'matter_detail_other' => $journal_detail_other
+                                ]);
+                            }
+                        }
                     }
                 }
-                    
             }
+            else if($journal_details != null) {
+                foreach($journal_details as $journal_detail) {
+                    JournalDetail::create([
+                        'id_journal' => $journal->id,
+                        'id_matter_detail' => $journal_detail
+                    ]);
+                }    
+            }
+            
+            else if($journal_details_other != null) {
+                foreach($journal_details_other as $journal_detail_other) {
+                    JournalDetail::create([
+                        'id_journal' => $journal->id,
+                        'matter_detail_other' => $journal_detail_other 
+                    ]);
+                }
+            }
+            
         });
 
         return redirect()->route('journal.index')->with('success', 'Tambah Jurnal Sukses');
@@ -490,7 +517,7 @@ class JournalController extends Controller
 
         
         $feedback_class = DB::select('call journal_feedback_class(?, ?, ?, ?, ?, ?)', array($grade, $id_level, $id_level_detail, $id_subject, $start_date, $end_date));
-       
+        
         return view('journal.report.feedback-class', compact('feedback_class', 'subjects', 'grade', 'id_level', 'id_level_detail', 'id_subject', 'start_date', 'end_date', 'level_details'));
     }
 
@@ -554,7 +581,6 @@ class JournalController extends Controller
         }])->where('id_teacher', 'like', '%'.$qTeacher.'%')
         ->whereBetween('teaching_date', [$start_date, $end_date])
         ->get();
-        // dd($journals);
         
         return view('journal.report.detail', compact('teachers', 'qTeacher', 'start_date', 'end_date', 'journals'));
     }

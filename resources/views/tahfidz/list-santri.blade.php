@@ -33,7 +33,7 @@
                                 <td>{{ $ush->santriName }}</td>
                                 <td>{{ $ush->halaqahName }}</td>
                                 <td>
-                                    <a class="btn btn-unique btn-sm" href="{{ route('tahfidz.show-member', $ush->id) }}" title="Lihat Mutaba'ah">
+                                    <a class="btn btn-unique btn-sm" href="{{ route('tahfidz.show', $ush->id_student) }}" title="Lihat Mutaba'ah">
                                         <i width="14" data-feather="list" class="text-white mr-1"></i>
                                         Lihat Mutaba'ah
                                     </a>

@@ -33,12 +33,13 @@ class ScheduleService
                                         ->where('id_semester', (int)$qSemester)
                                         ->where('id_class', (int)$qClass)
                                         ->first();
-                                        
+                
                 if(isset($schedule)) {
                     array_push($scheduleData[$textStudyTime], [
                         'id' => $schedule->id,
                         'subjectName' => $schedule->subjectName,
-                        'rowspan' => (($schedule->id_studytime_end - $schedule->id_studytime_start) + 1)
+                        'rowspan' => (($schedule->id_studytime_end - $schedule->id_studytime_start) + 1),
+                        'schedule_detail' => $schedule
                     ]);
                 }
                 
@@ -49,7 +50,7 @@ class ScheduleService
                 }
             }
         }
-
+        // dd($scheduleData);
         return $scheduleData;
     }
 }

@@ -17,9 +17,10 @@
                     @csrf
                         <div class="d-flex justify-content-end mb-3">
                             <a href="{{ route('manage.class.show', $id) }}" class="btn btn-outline-primary">Kembali</a>
-                            <button type="submit" class="btn btn-primary rounded" >Add Students</button>
+                            <button type="submit" class="btn btn-primary rounded" id="btn-save" >Add Students</button>
                         </div>
                         <input type="hidden" value="{{ $id }}" name="id_mgt_class">
+                        <input type="hidden" name="id_student_list" id="" value="">
                         <table class="table table-sm table-striped" id="dtsiswa">
                             <thead>
                                 <tr>
@@ -56,9 +57,14 @@
     </div>
 <script>
     $(document).ready(function () {
-        $('#dtsiswa').DataTable({
+        var table = $('#dtsiswa').DataTable({
             "paging":true,
         });
+
+        $('#btn-save').on('click', function() {
+            var data = table.$('input[name="id_student[]"]:checked').map(function(){return $(this).val();}).get();
+            $('input[name="id_student_list"]').val(data);
+        })
     });
 </script>
 <script>

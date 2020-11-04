@@ -169,9 +169,22 @@ class MgtScheduleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, MgtSchedule $schedule)
     {
-        //
+        $validateData = $request->validate([
+            'id_subject' => '',
+            'id_teacher' => '',
+            'id_class' => '',
+            'id_studytime_start' => '',
+            'id_studytime_end' => '',
+            'id_semester' => '',
+            'id_day' => '',
+            'id_schoolyear' => ''
+        ]);
+
+        $schedule->update($validateData);
+        
+        $request->session()->flash('success', 'Ubah Jadwal Sukses');
     }
 
     /**

@@ -223,14 +223,17 @@ class MgtClassController extends Controller
 
     public function addStudentStore(Request $request)
     {
-        $id_students = $request->input('id_student');
+        // $id_students = $request->input('id_student');
         $id_mgt_class = $request->input('id_mgt_class');
         
-        if($id_students != null){
-            foreach($id_students as $id_student) {
+        $id_student_list = $request->input('id_student_list');
+        $arrayIDStudent = explode(",", $id_student_list);
+        
+        if($arrayIDStudent != null){
+            foreach($arrayIDStudent as $id_student) {
                 MgtClassDetail::create([
                     'id_mgt_class' => $id_mgt_class,
-                    'id_student' => $id_student,
+                    'id_student' => (int)$id_student,
                     'status' => 1
                 ]);
             }

@@ -70,7 +70,20 @@ class JournalController extends Controller
                             ->select('c.name as className', 'mtc.id_class as id')
                             ->get();
 
-        return view('journal.index', compact('teachedClass', 'students', 'qClass', 'start_date', 'end_date'));
+        if($id_user != 1) {
+            $firstTeachedClass = DB::table('mgt_teachers as mt')
+                            ->join('mgt_teacher_classes as mtc', 'mtc.id_mgt_teacher', '=', 'mt.id')
+                            ->join('classrooms as c', 'c.id', '=', 'mtc.id_class')
+                            ->where('mt.id_teacher', $id_user)
+                            ->select('c.name as className', 'mtc.id_class as id')
+                            ->first();
+            $firstStudents = DB::select('call journal_summary_class(?, ?, ?)', array($firstTeachedClass->id, $start_date, $end_date));
+        } else {
+            $firstTeachedClass = null;
+            $firstStudents = null;
+        }
+
+        return view('journal.index', compact('teachedClass', 'students', 'qClass', 'start_date', 'end_date', 'firstTeachedClass', 'firstStudents'));
     }
 
     /**

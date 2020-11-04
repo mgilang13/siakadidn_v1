@@ -39,11 +39,20 @@
                             <div class="form-group">
                                 <select name="id_class" id="id_class" class="form-control mr-2">
                                     <option value="">Pilih Berdasarkan Kelas</option>
+                                    @if($qClass)
                                     @forelse($teachedClass as $tc)
                                     <option value="{{ $tc->id }}" {{ (old('id_class') ?? $tc->id) == $qClass ? 'selected' : '' }}>{{ $tc->className }}</option>
                                     @empty
                                     <option value="">No data!</option>
                                     @endforelse
+                                    <!-- Check bila pertama kali diakses -->
+                                    @else
+                                    @forelse($teachedClass as $tc)
+                                    <option value="{{ $tc->id }}" {{ (old('id_class') ?? $tc->id) == $firstTeachedClass->id ? 'selected' : '' }}>{{ $tc->className }}</option>
+                                    @empty
+                                    <option value="">No data!</option>
+                                    @endforelse
+                                    @endif
                                 </select>
                             </div>
                             <div class="form-group">
@@ -52,7 +61,7 @@
                             <div class="form-group">
                                 <input type="date" name="end_date" class="form-control mr-2" value="{{ $end_date }}">
                             </div>
-                            <button type="submit" class="btn indigo btn-sm text-white">Saarch</button>
+                            <button type="submit" class="btn indigo btn-sm text-white">Search</button>
                         </form>
                         <div class="table-responsive">
                             <table class="table table-sm table-striped">
@@ -72,7 +81,12 @@
                                 </thead>
                                 <tbody>
                                     @php $no=1; @endphp
-                                    @forelse($students as $student)
+                                    @if($qClass)
+                                    @php $studentsValue = $students @endphp
+                                    @else
+                                    @php $studentsValue = $firstStudents @endphp
+                                    @endif
+                                    @forelse($studentsValue as $student)
                                     <tr>
                                         <td>{{ $no++ }}</td>
                                         <td>{{ $student->name }}</td>

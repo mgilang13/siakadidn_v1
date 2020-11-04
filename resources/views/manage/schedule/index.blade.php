@@ -9,6 +9,7 @@
                     <i width="14" class="mr-2" data-feather="plus"></i>Tambah Jadwal
                 </a>
             </div>
+            @include('layouts.notification')
             <div class="card-body">
                 <form action="{{ route('manage.schedule.index') }}" class="mb-5" id="form-search">
                     <div class="d-flex flex-wrap col-md-10 align-items-center">
@@ -80,9 +81,13 @@
                                         @if(is_array($value))
                                             <td rowspan="{{ $value['rowspan'] }}" class="align-middle text-center blue lighten-4 border border-primary">
                                                 {{ $value['subjectName'] }} <br>
+                                                <a class="mr-2" href="{{ route('manage.schedule.update', $value['id']) }}" data-toggle="modal" data-target="#modal" data-type="edit" data-title="Ubah Jadwal" data-method="patch">
+                                                    <i width="14" data-feather="edit"></i>
+                                                </a>
                                                 <a href="#" title="Delete" id="deleteData" data-toggle="modal" data-target="#deleteModal" data-id="{{ $value['id'] }}" class="text-danger" data-action="{{ route('manage.schedule.destroy', $value['id']) }}" >
                                                     <i class="fas fa-times red-text"></i>
                                                 </a>
+                                                <textarea class="jsons d-none">{{ json_encode($value['schedule_detail']) }}</textarea>
                                             </td>
                                         @elseif ($value == 1)
                                             <td class="align-middle text-center">
@@ -225,30 +230,47 @@ $(document).ready(function () {
     });
     $('#modal').on('show.bs.modal', function (event) {
         const target = $(event.relatedTarget);
-
         $('#modalLabel').html(target.attr('data-title'));
         $('#id_day').val(target.attr('data-id_day')).css("pointer-events", "none");
         
         $('#id_studytime_start').val(target.attr('data-id_studytime_start')).css("pointer-events", "none");
-        let id_studytime_end = target.attr('data-id_studytime_start');
+        // let id_studytime_end = target.attr('data-id_studytime_start');
         
-        for(let i = id_studytime_end; i <=10; i++) {
-            console.log(i);
-            $('select[name="id_studytime_end"]').append('<option value="'+i+'">'+i+'</option>');
+        // for(let i = id_studytime_end; i <=10; i++) {
+        //     $('select[name="id_studytime_end"]').append('<option value="'+i+'">'+i+'</option>');
+        // }
+        // cek tipe
+        
+        if (target.attr('data-type') == 'edit') {
+            // set data
+            var jsons = JSON.parse( target.closest('td').find('.jsons').val() );
+            // console.log(jsons.id_studytime_end);
+            $('#name').val(jsons.name);
+            $('#id_day').attr('readonly', false);
+            $('#id_day').css('pointer-events', 'auto');
+            $('#id_day').val(jsons.id_day);
+
+            $('#id_studytime_start').attr('readonly', false);
+            $('#id_studytime_start').css('pointer-events', 'auto');
+            $('#id_studytime_start').val(jsons.id_studytime_start);
+
+            $('#id_studytime_end').val(jsons.id_studytime_end);
+            $('#id_subject').val(jsons.id_subject);
+            $('#id_semester').val(jsons.id_semester);
+            $('#id_schoolyear').val(jsons.id_schoolyear);
         }
 
         $('#modal').closest('form').attr('action', target.attr('href'));
         $('#modal').closest('form').attr('method', target.attr('data-method'));
     });
-    $('#modal').on('hidden.bs.modal', function() {
-        $('#id_studytime_end').empty();
-    })
+   
     $('#modal').closest('form').submit(function (event) {
         event.preventDefault();
         // elem
         const elem = $(this);
         const submit = elem.find('[type="submit"]');
         submit.prop('disabled', true);
+        
         // ajax
         axios({
             method: elem.attr('method'),

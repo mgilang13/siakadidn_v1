@@ -141,7 +141,7 @@
                                             <a class="mr-1" href="{{ route('tahfidz.edit', $tahfidz->id) }}" title="Edit" >
                                                 <i data-feather="edit" class="text-primary" width="14"></i>
                                             </a>
-                                            <a href="#" title="Delete" id="deleteData" data-toggle="modal" data-target="#deleteModal" data-id="{{ $tahfidz->id }}" class="text-danger mr-1" data-action="{{ route('tahfidz.destroy', $tahfidz->id) }}" >
+                                            <a href="{{ route('tahfidz.destroy', $tahfidz->id) }}" title="Delete" id="deleteData" data-toggle="modal" data-data_name="{{ \Carbon\Carbon::parse($tahfidz->tanggal_setor)->formatLocalized('%A, %d %B %Y') }}" data-target="#delete_modal" class="text-danger mr-1" >
                                                 <i data-feather="trash" color="red" width="14"></i>
                                             </a>
                                             <a data-toggle="popover" title="Catatan" data-content="{{ $tahfidz->note }}" class="text-info font-weight-bold" >
@@ -150,15 +150,6 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @include('layouts.form-delete-tahfidz', [
-                            'method' => 'POST',
-                            'methodx' => 'DELETE',
-                            'bgDanger' => 'bg-danger',
-                            'boxConfirmHeader' => '',
-                            'textWhite' => 'text-white',
-                            'title_modal' => 'Delete Data Permanently',
-                            'showdata' => "tahfidz.show-json",
-                            'title_menu' => 'data tahfidz'])
                             @empty
                                 <tr>
                                     <td colspan="7" class="text-center">Data kosong</td>
@@ -178,8 +169,11 @@
                 </form>
             </div>
         </div>
+        @include('layouts.form-delete-new')
     </div>
+@endsection
 
+@section('js')
     <script>
         $(function () {
             $('[data-toggle="popover"]').popover({
@@ -188,7 +182,17 @@
             })
         })
     </script>
-    
+
+    <script>
+     $('#delete_modal').on('show.bs.modal', function (event) {
+        const target = $(event.relatedTarget);
+        let data_deleted = target.data('data_name');
+
+        $('#data-deleted').text(data_deleted);
+        $('#form-delete').closest('form').attr('action', target.attr('href'));
+
+    });
+    </script>
     <script>
         var canvas = document.getElementById('myChart');
         var ctx = canvas.getContext('2d');
@@ -251,4 +255,4 @@
             }
         });
     </script>
-@endsection
+    @endsection

@@ -9,9 +9,6 @@
 
     <title>{{ config('app.name', 'Sistem Akademik IDN') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
 
@@ -22,4 +19,6 @@
 <body>
     @yield('content')
 </body>
+ <!-- Scripts -->
+ <script src="{{ mix('js/app.js') }}" defer></script>
 </html>

@@ -40,6 +40,9 @@ class JournalController extends Controller
      */
     public function index(Request $request)
     {
+        $id_user = Auth::user()->id;
+        $cek_wali_kelas = MgtClass::where('id_teacher', $id_user)->get();
+
         $qClass = $request->query('id_class');
         
         $start_date = $request->query('start_date');
@@ -83,7 +86,7 @@ class JournalController extends Controller
             $firstStudents = null;
         }
 
-        return view('journal.index', compact('teachedClass', 'students', 'qClass', 'start_date', 'end_date', 'firstTeachedClass', 'firstStudents'));
+        return view('journal.index', compact('teachedClass', 'students', 'qClass', 'start_date', 'end_date', 'firstTeachedClass', 'firstStudents', 'cek_wali_kelas'));
     }
 
     /**
@@ -381,7 +384,7 @@ class JournalController extends Controller
                             
         $matters = RefMatter::all();
         $matter_details = RefMatterDetail::all();
-
+        
 
         return view('journal.teacher-schedule', compact('teacher', 'journal_schedules', 'days', 'classroom', 'tanggal_sekarang', 'studentClass', 'matters', 'matter_details'));
     }
@@ -594,6 +597,7 @@ class JournalController extends Controller
         }])->where('id_teacher', 'like', '%'.$qTeacher.'%')
         ->whereBetween('teaching_date', [$start_date, $end_date])
         ->get();
+       
         
         return view('journal.report.detail', compact('teachers', 'qTeacher', 'start_date', 'end_date', 'journals'));
     }

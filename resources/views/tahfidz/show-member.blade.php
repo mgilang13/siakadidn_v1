@@ -17,6 +17,7 @@
                 </div>
             </div>
             <div class="card-body">
+            @include('layouts.notification')
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -36,6 +37,7 @@
                                 <td>{{ $listed_member->name }}</td>
                                 <td>
                                     <a href="{{ route('tahfidz.show', $listed_member->id) }}" class="btn btn-mdb-color btn-sm">Lembar Mutaba'ah</a>
+                                    <a href="{{ route('tahfidz.add-notes', $listed_member->id) }}" class="btn btn-dark-green btn-sm">Tambah</a>
                                 </td>
                             </tr>
                         @empty

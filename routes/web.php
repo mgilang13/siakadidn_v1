@@ -49,6 +49,9 @@ Route::middleware(['auth', 'core'])->group(function () {
         Route::get('show-json/{id}', 'JournalController@showJson')->name('show-json');
     });
     Route::resource('journal', 'JournalController');
+
+    // Portofolio Fitur
+    Route::resource('portofolio', 'PortofolioController');
     
     // Tahfidz Menu 
     Route::name('tahfidz.')->prefix('/tahfidz')->group(function () {
@@ -66,6 +69,8 @@ Route::middleware(['auth', 'core'])->group(function () {
         Route::post('print/{student}', 'TahfidzController@tahfidzPrint')->name('print');
 
         Route::name('report.')->prefix('/report')->group(function() {
+            Route::get('detail-student/{id_level}', 'TahfidzController@detailStudent')->name('detail-student');
+
             Route::get('parent/{id}', 'TahfidzController@reportParent')->name('parent');
             Route::get('smp', 'TahfidzController@reportKepalaTahfidzSMP')->name('smp');
             Route::get('smk', 'TahfidzController@reportKepalaTahfidzSMK')->name('smk');

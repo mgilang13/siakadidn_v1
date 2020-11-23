@@ -16,6 +16,10 @@ class RefStudent extends Model
         return $this->belongsTo(\App\Model\User::class, 'id_student', 'id');
     }
 
+    public function halaqah() {
+        return $this->belongsTo(\App\Model\Ref\RefHalaqah::class, 'id_halaqah');
+    }
+
     public function parents() {
         return $this->belongsTo(\App\Model\Ref\RefParents::class, 'id_student', 'id_student');
     }
@@ -25,4 +29,5 @@ class RefStudent extends Model
         return \Carbon\Carbon::parse($this->attributes['entry_date'])
         ->format('d M Y H:i');
     }
+
 }

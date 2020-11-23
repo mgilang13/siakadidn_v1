@@ -35,7 +35,7 @@
                         <td>
                         @php $noSubMateri=1 @endphp
                         @foreach($journal->journal_detail as $jd)
-                            {{ $noSubMateri++ }}. {{ $jd->matter_detail_other ? $jd->matter_detail_other : $jd->matter_detail->name }}<br>
+                            {{ $noSubMateri++ }}. {{ $jd->id_matter_detail ? $jd->matter_detail->name : $jd->matter_detail_other }}<br>
                         @endforeach
                         </td>
                         <td>

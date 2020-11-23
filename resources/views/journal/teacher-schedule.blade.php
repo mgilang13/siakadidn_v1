@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .show {
+        transition: opacity 0ms !important;
+    }
+</style>
     <div class="content">
         <div class="card">
             <div class="card-header bg-white">
@@ -30,6 +35,7 @@
                                         @if(is_array($value))
                                             <td rowspan="{{ $value['rowspan'] }}" class="align-middle text-center blue lighten-4 border border-primary">
                                                 <p>{{ $value['subjectName'] }}</p>
+                                                <p>{{ $value['idSchedule'] }}</p>
                                                 <a  href="{{ route('journal.store') }}"
                                                     id="journal-btn{{ $value['idSchedule'] }}"
                                                     class="px-2 btn btn-primary btn-sm" 
@@ -49,21 +55,7 @@
                                                     class="btn btn-secondary btn-sm px-2">
                                                     <i class="mr-2 fas fa-eye"></i>Jurnal
                                                 </a>
-                                                <script>
-                                                $("#journal-btn{{ $value['idSchedule']}}").on('click', function() {
-                                                    $('select[name="id_matter"]').children().not(':first-child').remove();
-                                                    let matter = $("#journal-btn{{ $value['idSchedule'] }}").data('matter');
-                                                    let url = "{{ route('journal.list-matter', '') }}"+'/'+matter;
-                                                    console.log(matter);
-                                                    console.log(url);
-                                                    axios.get(url).then(result => {
-                                                        let data = result.data;         
-                                                        data.map(function(data) {
-                                                            $('#id_matter').append('<option value="'+data.id+'">'+data.name+'</option>');
-                                                        });
-                                                    });
-                                                });
-                                                </script>
+                                                
                                             </td>
                                         @elseif ($value == 1)
                                             <td></td>
@@ -179,6 +171,8 @@ $(document).ready(function () {
     });
     $('#modal').on('show.bs.modal', function (event) {
         const target = $(event.relatedTarget);
+        let id_schedule = target.attr('data-id_schedule');
+        let matter = target.attr('data-matter');
 
         $('#modalLabel').html(target.attr('data-title'));
         $('#subjectName').html(target.attr('data-subject_name'));
@@ -187,6 +181,19 @@ $(document).ready(function () {
         
         $('#modal').closest('form').attr('action', target.attr('href'));
         $('#modal').closest('form').attr('method', target.attr('data-method'));
+        
+        
+        // Buat milih sub materi dan materi
+        $('select[name="id_matter"]').children().not(':first-child').remove();
+
+        let url = "{{ route('journal.list-matter', '') }}"+'/'+matter;
+        axios.get(url).then(result => {
+            let data = result.data;         
+            data.map(function(data) {
+                $('#id_matter').append('<option value="'+data.id+'">'+data.name+'</option>');
+            });
+        });
+
     });
 
     $('#modal').closest('form').submit(function (event) {

@@ -12,10 +12,10 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     
-    <!-- Scripts -->
     <script src="{{ mix('/js/app.js') }}" ></script>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
 
@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="{{ asset('css/mdb.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap-select.css') }}" />
+
     <script src="{{ asset('js/bootstrap-select.js') }}"></script>
 </head>
 <body>
@@ -87,6 +88,7 @@
                                 <a class="dropdown-item" href="{{ route('profile') }}">
                                     {{ __('Ubah Profil') }}
                                 </a>
+                                <a href="{{ route('portofolio.index') }}" class="dropdown-item">Portofolio</a>
                                 <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
                             </div>
                         </div>
@@ -98,7 +100,7 @@
                 </div>
         </div>
     </div>
-
+   
     <script>
         let dropdown = $('.sidebar').children();
         let dropdownChild = $('.sidebar-child').children();
@@ -126,6 +128,9 @@
             });
         }
     </script>
+    <!-- Scripts -->
+    
+
     <script src="{{ asset('theme/js/feather.min.js') }}"></script>
 
     <script src="{{ asset('theme/js/popper.min.js') }}"></script>
@@ -158,8 +163,8 @@
         window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
         feather.replace()
     </script>
-    @yield('js')
     <script src="{{ asset('js/mdb.min.js') }}"></script>
+    @yield('js')
     <script src="{{ asset('js/datatables.min.js') }}"></script>
     
 </body>

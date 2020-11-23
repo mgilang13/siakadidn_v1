@@ -103,7 +103,7 @@
                     </div>
                     <div class="form-group mt-2">
                         <div class="row">
-                            <input type="number" max="25" name="page" class="mr-4 col form-control" placeholder="Halaman">
+                            <input type="number" max="25" name="page" class="mr-4 col form-control" placeholder="Halaman" value="0">
                             <select name="line" id="line" class="form-control w-50">
                                 <option value="0">-- Jumlah Baris --</option>
                                 @for ($i = 1; $i<=15; $i++)

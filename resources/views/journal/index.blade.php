@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
     <div class="content">
         <h1 class="ml-2 h1-responsive">Jurnal</h1>
             @if(Auth::user()->roles->first()->pivot->roles_id == 3)

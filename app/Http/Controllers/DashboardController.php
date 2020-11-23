@@ -54,7 +54,7 @@ class DashboardController extends Controller
             array_push($tgl_bln_murajaah, $tc->tgl_bln);
             array_push($total_line_murajaah, $tc->total_line);
         }
-
+        
         // Dashboard Admin
         $dataFoundation = DB::select('call tahfidz_reportfoundation(?, ?)', array($past_date, $present_date));
         

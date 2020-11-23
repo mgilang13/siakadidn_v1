@@ -13,6 +13,10 @@ class RefHalaqah extends Model
         return $this->belongsTo(\App\Model\User::class, 'id_teacher', 'id');
     }
 
+    public function students() {
+        return $this->hasMany(\App\Model\Ref\RefStudent::class, 'id_halaqah');
+    }
+
     public function classroom()
     {
         return $this->belongsTo(\App\Model\Ref\RefClassroom::class, 'id_class', 'id');

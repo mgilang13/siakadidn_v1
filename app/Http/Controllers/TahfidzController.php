@@ -8,6 +8,8 @@ use App\Model\Ref\RefHalaqah;
 use App\Model\Ref\RefStudent;
 use App\Model\Ref\RefParents;
 use App\Model\Soorah;
+use App\Model\Ref\RefClassroom;
+use App\Model\Ref\RefLevel;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -57,7 +59,6 @@ class TahfidzController extends Controller
         $user_students->startNo = ($user_students->currentPage() - 1) * $user_students->perPage() + 1;
         $user_students->no = ($user_students->currentPage() - 1) * $user_students->perPage() + 1;
         
-
         return view('tahfidz.list-santri', compact('q', 'user_students'));
     }
 
@@ -98,14 +99,8 @@ class TahfidzController extends Controller
         ]);
         
         $tahfidz_note = Tahfidz::create($validateData);
-        if(empty($request->input('page'))) {
-            $tahfidz_note->page = 0;
-            $tahfidz_note->save();
-        }
-        $student = RefStudent::findOrFail($tahfidz_note->id_student);
-        $tahfidzs = Tahfidz::where('id_student', $tahfidz_note->student)->get();
         
-        return redirect()->route('tahfidz.show', $student->id_student)->with('success', 'Tambah Catatan sukses');
+        return redirect()->route('tahfidz.show', $tahfidz_note->id_student)->with('success', 'Tambah Catatan Hafalan  sukses');
     }
 
     /**
@@ -257,7 +252,7 @@ class TahfidzController extends Controller
                                 ->join('users', 'users.id', '=', 'students.id_student')
                                 ->where('students.id_halaqah', $halaqah->id)
                                 ->get();
-
+                                // dd($listed_members);
         return view('tahfidz.show-member', compact('listed_members', 'halaqah'));
     }
 
@@ -329,10 +324,7 @@ class TahfidzController extends Controller
         // $tahfidzs1 = DB::table('tahfidzs')->where('id_student', $id)->orderBy('tanggal_setor', 'desc')->paginate(20);
        
         
-        
-
-        
-
+    
         
     }
 
@@ -364,49 +356,133 @@ class TahfidzController extends Controller
     // Laporan SMP
     public function reportKepalaTahfidzSMP(Request $request)
     {
+        $qGrade = $request->query('grade');
+        $qClass = $request->query('id_class');
+        
+        $qTeacher = $request->query('id_teacher');
+        $qHalaqah = $request->query('id_halaqah');
+        
+        $past_date_check = $request->input('past_date_check');
+        
         $present_date = $request->query('present_date');
+        $present_date_check = $request->input('present_date_check');
 
-        if($present_date == null) {
+        if ($present_date == null and $present_date_check == null) {
             $present_date = date('Y-m-d');
-        } else {
+        } else if ($present_date == null and $present_date_check != null) {
+            $present_date = $present_date_check;
+        } 
+        else {
             $present_date = $request->query('present_date');
         }
-
+        
         $past_date = $request->query('past_date');
+        $past_date_check = $request->input('past_date_check');
 
-        if($past_date == null){
+        if($past_date == null and $past_date_check == null){
             $past_date = date('Y-m-d',strtotime("-1 week"));
-        } else {
+        } else if($past_date == null and $past_date_check != null) {
+            $past_date = $past_date_check;
+        }
+         else {
             $past_date = $request->query('past_date');
         }
-        $dataPerKelas = DB::select('call tahfidz_reportclass(?, ?, ?)', array(3, $past_date, $present_date));
-        $dataPerHalaqah = DB::select('call tahfidz_reportmuhafidzhead(?, ?, ?)', array(3, $past_date, $present_date));
 
-        return view('tahfidz.report.smp', compact('past_date','present_date', 'dataPerKelas', 'dataPerHalaqah'));
+        $dataPerKelas = DB::select('call tahfidz_reportclass(?, ?, ?)', array(3, $past_date, $present_date));
+        if($qGrade == null && $qClass == null) {
+            $dataPerHalaqah = DB::select('call tahfidz_reportmuhafidzhead(?, ?, ?)', array(3, $past_date, $present_date));
+         } else {
+             $dataPerHalaqah = DB::select('call tahfidz_reportkelas(?, ?, ?, ?)', array($qClass, $qGrade, $past_date, $present_date));
+         }
+
+         $class = RefClassroom::where('id_level', 3)->get();
+         $grade = RefClassroom::select('grade')->where('grade', '<=', 9)->groupBy('grade')->get();
+         
+         if($qHalaqah != null) {
+             $halaqah = RefHalaqah::find($qHalaqah);
+         } else {
+             $halaqah = null;
+         }
+
+        $check_tahfidz = DB::select('call tahfidz_reportmuhafidzsantri(?, ?, ?)', array($qTeacher, $past_date_check, $present_date_check));
+     
+         return view('tahfidz.report.smp', compact('past_date_check','present_date_check', 'qGrade', 'qClass', 'qHalaqah', 'halaqah', 'check_tahfidz', 'class', 'grade', 'past_date','present_date', 'dataPerKelas', 'dataPerHalaqah'));
     }
+
 
      // Laporan SMK
      public function reportKepalaTahfidzSMK(Request $request)
      {
-        $present_date = $request->query('present_date');
+        $qGrade = $request->query('grade');
+        $qClass = $request->query('id_class');
         
-        if($present_date == null) {
+        $qTeacher = $request->query('id_teacher');
+        $qHalaqah = $request->query('id_halaqah');
+        
+        $past_date_check = $request->input('past_date_check');
+        
+        $present_date = $request->query('present_date');
+        $present_date_check = $request->input('present_date_check');
+
+        if ($present_date == null and $present_date_check == null) {
             $present_date = date('Y-m-d');
-        } else {
+        } else if ($present_date == null and $present_date_check != null) {
+            $present_date = $present_date_check;
+        } 
+        else {
             $present_date = $request->query('present_date');
         }
+        
+        $past_date = $request->query('past_date');
+        $past_date_check = $request->input('past_date_check');
 
-         $past_date = $request->query('past_date');
- 
-         if($past_date == null){
-             $past_date = date('Y-m-d',strtotime("-1 week"));
+        if($past_date == null and $past_date_check == null){
+            $past_date = date('Y-m-d',strtotime("-1 week"));
+        } else if($past_date == null and $past_date_check != null) {
+            $past_date = $past_date_check;
+        }
+         else {
+            $past_date = $request->query('past_date');
+        }
+
+        $dataPerKelas = DB::select('call tahfidz_reportclass(?, ?, ?)', array(3, $past_date, $present_date));
+        if($qGrade == null && $qClass == null) {
+            $dataPerHalaqah = DB::select('call tahfidz_reportmuhafidzhead(?, ?, ?)', array(4, $past_date, $present_date));
          } else {
-             $past_date = $request->query('past_date');
+             $dataPerHalaqah = DB::select('call tahfidz_reportkelas(?, ?, ?, ?)', array($qClass, $qGrade, $past_date, $present_date));
          }
-         $dataPerKelas = DB::select('call tahfidz_reportclass(?, ?, ?)', array(4, $past_date, $present_date));
-         $dataPerHalaqah = DB::select('call tahfidz_reportmuhafidzhead(?, ?, ?)', array(4, $past_date, $present_date));
-       
-         return view('tahfidz.report.smk', compact('past_date','present_date', 'dataPerKelas', 'dataPerHalaqah'));
+
+         $class = RefClassroom::where('id_level', 3)->get();
+         $grade = RefClassroom::select('grade')->where('grade', '>=', 9)->groupBy('grade')->get();
+         
+         if($qHalaqah != null) {
+             $halaqah = RefHalaqah::find($qHalaqah);
+         } else {
+             $halaqah = null;
+         }
+
+        $check_tahfidz = DB::select('call tahfidz_reportmuhafidzsantri(?, ?, ?)', array($qTeacher, $past_date_check, $present_date_check));
+     
+         return view('tahfidz.report.smk', compact('past_date_check','present_date_check', 'qGrade', 'qClass', 'qHalaqah', 'halaqah', 'check_tahfidz', 'class', 'grade', 'past_date','present_date', 'dataPerKelas', 'dataPerHalaqah'));
+     }
+
+     public function detailStudent(Request $request, $id_level){
+        $qClass = $request->query('id_class');
+        $qGrade = $request->query('grade');
+
+        $class = RefClassroom::where('id_level', $id_level)->get();
+        $grade = RefClassroom::select('grade')->where('id_level', $id_level)->groupBy('grade')->get();
+        
+        $detailStudent = DB::select('call tahfidz_reportdetail_student(?, ?)', array($qGrade, $qClass));
+        
+        $gradeSelected = null;
+
+        if($qGrade == null) {
+            $gradeSelected = RefClassroom::select('grade')->where('id_level', $id_level)->groupBy('grade')->first();
+            $detailStudent = DB::select('call tahfidz_reportdetail_student(?, ?)', array($gradeSelected->grade, $qClass));
+        }
+
+        return view('tahfidz.report.detail-student', compact('detailStudent', 'gradeSelected', 'qClass','qGrade', 'class','grade', 'id_level'));
      }
 
      public function reportFoundation(Request $request)

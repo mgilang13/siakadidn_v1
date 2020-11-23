@@ -4,17 +4,16 @@
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
         <div class="modal-content box-confirm">
-        <div class="modal-header {{ $boxConfirmHeader }} {{ $bgDanger }}">
-            <h5 class="modal-title {{ $textWhite }}" id="deleteModalLabel" >{{ $title_modal }}</h5>
+        <div class="modal-header bg-danger">
+            <h5 class="modal-title {{ $textWhite }}" id="deleteModalLabel" >Form Delete</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
-            Are you sure to delete the <span id="meta-to-delete"></span> {{$title_menu}}?
+            Are you sure to delete the <span id="meta-to-delete"></span> <p id="data"></p>?
         </div>
         <div class="modal-footer">
-
                 <button title="Cancel" type="button" class="btn btn-confirm-cancel mr-1 rounded-circle" data-dismiss="modal">
                     <i width="20" data-feather="x-circle"></i>
                 </button>

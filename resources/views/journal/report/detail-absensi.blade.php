@@ -87,6 +87,9 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('js')
 <script>
 function printJournal() {
     var date_now = Date.now();

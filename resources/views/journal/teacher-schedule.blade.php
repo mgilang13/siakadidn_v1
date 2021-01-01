@@ -55,7 +55,6 @@
                                                     class="btn btn-secondary btn-sm px-2">
                                                     <i class="mr-2 fas fa-eye"></i>Jurnal
                                                 </a>
-                                                
                                             </td>
                                         @elseif ($value == 1)
                                             <td></td>
@@ -87,8 +86,6 @@
 var count = 1;
 
 $(document).ready(function () {
-   
-
     $('#id_matter').on('change', function(e) {
             $('select[name="journal_details[]"]').children().not(':first-child').remove();
             
@@ -114,7 +111,7 @@ $(document).ready(function () {
 
     $('#journal_details').on('change', function() {
         let journal_details = $('#journal_details').val();
-            console.log(journal_details);
+
             if(journal_details === "") {
                 $('#journal_details_other').prop("disabled", false);
             } else {
@@ -131,9 +128,10 @@ $(document).ready(function () {
                 $('#journal_details_group').append('<select id="journal_details'+count+'" name="journal_details[]" class="form-control form-control-sm">'+
                     '<option value="">-- Pilih Sub Materi '+count+' --</option>');
                         data.map(function(data) {
-                                $('#journal_details'+count+'').append('<option value="'+data.id+'">'+data.name+'</option>');
+                            $('#journal_details'+count+'').append('<option value="'+data.id+'">'+data.name+'</option>');
                         });
-                        $('#journal_details_group').append('<input type="text" id="journal_details_other'+count+'" name="journal_details_other[]" class="form-control form-control-sm" placeholder="Lain-lain">');
+                        $('#journal_details_group')
+                            .append('<input type="text" id="journal_details_other'+count+'" name="journal_details_other[]" class="form-control form-control-sm" placeholder="Lain-lain">');
                         
                         $('#journal_details'+count+'').on('change', function() {
                             let journal_details = $('#journal_details'+count+'').val();
@@ -182,7 +180,6 @@ $(document).ready(function () {
         $('#modal').closest('form').attr('action', target.attr('href'));
         $('#modal').closest('form').attr('method', target.attr('data-method'));
         
-        
         // Buat milih sub materi dan materi
         $('select[name="id_matter"]').children().not(':first-child').remove();
 
@@ -193,7 +190,6 @@ $(document).ready(function () {
                 $('#id_matter').append('<option value="'+data.id+'">'+data.name+'</option>');
             });
         });
-
     });
 
     $('#modal').closest('form').submit(function (event) {

@@ -91,13 +91,13 @@
                                                 <input type="text" class="form-control-sm form-control" id="note_attendance{{ $student->id }}" name="note_attendance[{{ $student->id }}]" placeholder="Catatan Kehadiran" value="{{ $student->note_attendance}}">
                                             </div>
                                             <a title="Reset" type="button" id="reset{{ $student->id }}">
-                                                <i data-feather="x-circle" width="14" color="red"></i>
+                                                <i class="fas fa-sync-alt mr-2 text-primary mt-2" ></i>
                                             </a>
                                             <script>
                                                 $('#reset{{ $student->id }}').on('click', function() {
-                                                    $('#sakit{{ $student->id }}').attr('checked', false);
-                                                    $('#izin{{ $student->id }}').attr('checked', false);
-                                                    $('#alpha{{ $student->id }}').attr('checked', false);
+                                                    $('#sakit{{ $student->id }}').prop('checked', false);
+                                                    $('#izin{{ $student->id }}').prop('checked', false);
+                                                    $('#alpha{{ $student->id }}').prop('checked', false);
                                                     $('#note_attendance{{ $student->id }}').val("");
                                                 })
                                             </script>
@@ -124,22 +124,26 @@ var count = 1;
 var count_init = 1;
 $(document).ready(function () {
     let journal_details = {!! json_encode($journal_details) !!}
-    console.log(journal_details);
     count_init++;
         let id_matter_init = $('#id_matter').val();
         let url_init = "{{ route('journal.list-submatter', '') }}"+"/"+id_matter_init;
             axios.get(url_init).then(result => {
+                
                 let data_init = result.data;
-                console.log(data_init);
+
                 journal_details.map(function(result_journal, index) {
-                index++;
-                $('#journal_details_group').append('<select id="journal_details'+index+'" name="journal_details[]" class="form-control form-control-sm">'+
-                    '<option value="">-- Pilih Sub Materi '+index+' --</option>');
-                        data_init.map(function(data_init) {
-                            $('#journal_details'+index+'').append('<option value="'+data_init.id+'"'+ (data_init.id === result_journal.id_matter_detail ? 'selected' : '')+'>'+data_init.name+'</option>');
-                        })
-                })
-            })
+                    index++;
+                    if(result_journal.id_matter_detail === null) {
+                        $('#journal_details_group').append('<input name="journal_details_other[]" type="text" value="'+result_journal.matter_detail_other+'" class="form-control form-control-sm" />');
+                    } else {
+                        $('#journal_details_group').append('<select id="journal_details'+index+'" name="journal_details[]" class="form-control form-control-sm">'+
+                            '<option value="">-- Pilih Sub Materi '+index+' --</option>');
+                                data_init.map(function(data_init) {
+                                    $('#journal_details'+index+'').append('<option value="'+data_init.id+'"'+ (data_init.id === result_journal.id_matter_detail ? 'selected' : '')+'>'+data_init.name+'</option>');
+                                });
+                            }
+                });
+            });
 
     $('#id_matter').on('change', function(e) {
 
@@ -161,6 +165,17 @@ $(document).ready(function () {
                 });
             }
         });
+        $('#journal_details_group').append('<input id="journal_details_other" type="text" name="journal_details_other[]" class="form-control form-control-sm" placeholder="Lain-lain">');
+    });
+
+    $('#journal_details').on('change', function() {
+        let journal_details = $('#journal_details').val();
+
+            if(journal_details === "") {
+                $('#journal_details_other').prop("disabled", false);
+            } else {
+                $('#journal_details_other').prop("disabled", true);
+            }
     });
 
     let next = journal_details.length;
@@ -174,9 +189,21 @@ $(document).ready(function () {
                     '<option value="">-- Pilih Sub Materi '+next+' --</option>');
                         data.map(function(data) {
                             $('#journal_details'+next+'').append('<option value="'+data.id+'">'+data.name+'</option>');
-                        })
-            })
-    })
+                        });
+
+                        $('#journal_details_group').append('<input type="text" id="journal_details_other'+count+'" name="journal_details_other[]" class="form-control form-control-sm" placeholder="Lain-lain">');
+                                    
+                        $('#journal_details'+count+'').on('change', function() {
+                            let journal_details = $('#journal_details'+count+'').val();
+                            if(journal_details === "") {
+                                $('#journal_details_other'+count+'').prop("disabled", false);
+                            } else {
+                                $('#journal_details_other'+count+'').prop("disabled", true);
+                            }
+                        });
+            });
+
+    });
 });
 </script>
 <script>

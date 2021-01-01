@@ -53,6 +53,21 @@ Route::middleware(['auth', 'core'])->group(function () {
     // Portofolio Fitur
     Route::resource('portofolio', 'PortofolioController');
     
+    // Target Menu
+    Route::name('target.')->prefix('/target')->group(function () {
+        Route::name('category.')->prefix('/category')->group(function() {
+            Route::get('index', 'TargetController@categoryIndex')->name('index');
+            Route::post('store', 'TargetController@categoryStore')->name('store');
+            Route::delete('delete/{id}', 'TargetController@categoryDelete')->name('delete');
+        });
+        Route::name('subcategory.')->prefix('/subcategory')->group(function() {
+            Route::post('store', 'TargetController@subCategoryStore')->name('store');
+            Route::delete('delete/{id}', 'TargetController@subCategoryDelete')->name('delete');
+        });
+        Route::patch('update/status', 'TargetController@updateTarget')->name('update.status');
+    });
+    Route::resource('target', 'TargetController');
+
     // Tahfidz Menu 
     Route::name('tahfidz.')->prefix('/tahfidz')->group(function () {
         Route::get('check/{halaqah}', 'TahfidzController@tahfidzCheck')->name('check');

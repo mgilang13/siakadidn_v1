@@ -445,7 +445,7 @@ class TahfidzController extends Controller
             $past_date = $request->query('past_date');
         }
 
-        $dataPerKelas = DB::select('call tahfidz_reportclass(?, ?, ?)', array(3, $past_date, $present_date));
+        $dataPerKelas = DB::select('call tahfidz_reportclass(?, ?, ?)', array(4, $past_date, $present_date));
         if($qGrade == null && $qClass == null) {
             $dataPerHalaqah = DB::select('call tahfidz_reportmuhafidzhead(?, ?, ?)', array(4, $past_date, $present_date));
          } else {

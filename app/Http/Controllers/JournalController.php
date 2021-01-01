@@ -210,7 +210,7 @@ class JournalController extends Controller
         $journals = Journal::with(['teacher', 'matter', 'journal_feedback', 'journal_attendance.user', 'journal_detail.matter_detail' => function($query) {
             $query->select('id', 'name');
         }])->where('id_schedule', $id)->get();
-
+       
         $schedule = DB::table('mgt_schedules as ms')
                         ->join('subjects as s', 's.id', '=', 'ms.id_subject')
                         ->join('matters as m', 'm.id_subject', '=', 'ms.id_subject')
@@ -218,7 +218,8 @@ class JournalController extends Controller
                         ->where('ms.id', $id)
                         ->select('s.name as name', 'm.name as matterName', 'd.name as dayName', 'ms.*')
                         ->first();
-       
+        
+        
         return view('journal.show', compact('journals', 'schedule'));
     }
 
@@ -234,9 +235,9 @@ class JournalController extends Controller
         $matter = RefMatter::findOrFail($journal->id_matter);
         // dd($matter);
         $matter_details = RefMatterDetail::where('id_matter', $matter->id)->get();
-        // dd($matter_details);
+        
         $journal_details = JournalDetail::with('matter_detail')->where('id_journal', $journal->id)->get();
-
+        
         $submatter = RefMatterDetail::findOrFail($journal->id_matter);
         // dd($submatter);
         $matter_subjected = RefMatter::where('id_subject', $matter->id_subject)
@@ -273,8 +274,9 @@ class JournalController extends Controller
         $journal_attendances = $request->input('status');
         $note_attendances = $request->input('note_attendance');
         $journal_details = $request->input('journal_details');
+        $journal_details_other = $request->input('journal_details_other');
 
-        DB::transaction(function () use ($journal, $journal_attendances, $note_attendances, $journal_details) {
+        DB::transaction(function () use ($journal, $journal_attendances, $note_attendances, $journal_details, $journal_details_other) {
             if($journal_attendances != null and $note_attendances != null and $journal->journal_attendance != null) {
                 foreach($journal_attendances as $index => $journal_attendance) {
                     foreach($journal->journal_attendance as $jja) {
@@ -321,6 +323,18 @@ class JournalController extends Controller
                         'id_matter_detail' => $journal_detail
                     ]);
                 }  
+            }
+
+            if($journal_details_other != null) {
+                foreach($journal->journal_detail as $jjd) {
+                    $jjd->delete();
+                }
+                foreach($journal_details_other as $jdo) {
+                    JournalDetail::create([
+                        'id_journal' => $journal->id,
+                        'matter_detail_other' => $jdo
+                    ]);
+                }
             }
         });
 
